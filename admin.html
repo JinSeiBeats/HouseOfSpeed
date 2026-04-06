@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | House of Speed</title>
+    <style>
+        /* HOS Theme */
+        :root {
+            --hos-black: #111111;
+            --hos-black-primary: #1a1a1a;
+            --hos-black-raised: #1f1f1f;
+            --hos-black-elevated: #1e1e1e;
+            --hos-black-card: #222222;
+            --hos-black-surface: #2a2a2a;
+            --hos-black-border: #333333;
+            --hos-black-divider: #3a3a3a;
+            --hos-black-muted: #444444;
+            --hos-gold: #c9a05b;
+            --hos-gold-light: #d4b06a;
+            --hos-gold-bright: #e8c874;
+            --hos-gold-dark: #b08a45;
+            --hos-gold-10: rgba(201, 160, 91, 0.1);
+            --hos-gold-15: rgba(201, 160, 91, 0.15);
+            --hos-gold-20: rgba(201, 160, 91, 0.2);
+            --hos-gold-30: rgba(201, 160, 91, 0.3);
+            --hos-gold-90: rgba(201, 160, 91, 0.9);
+            --hos-gray-500: #555555;
+            --hos-gray-600: #666666;
+            --hos-gray-700: #777777;
+            --hos-gray-800: #888888;
+            --hos-gray-900: #999999;
+            --hos-gray-a00: #aaaaaa;
+            --hos-gray-c00: #cccccc;
+            --hos-gray-d00: #dddddd;
+            --hos-gray-e00: #eeeeee;
+            --hos-text-primary: #ffffff;
+            --hos-text-secondary: #cccccc;
+            --hos-text-muted: #999999;
+            --hos-text-hint: #888888;
+            --hos-text-disabled: #666666;
+            --hos-text-on-gold: #1a1a1a;
+            --hos-status-green: #22c55e;
+            --hos-status-green-muted: #6fcf7f;
+            --hos-status-red: #ef4444;
+            --hos-status-red-light: #ff6b7a;
+            --hos-status-red-dark: #d63031;
+            --hos-status-green-dark: #2ea043;
+            --hos-status-yellow: #eab308;
+            --hos-status-blue: #3b82f6;
+            --hos-status-orange: #f97316;
+            --hos-status-purple: #a855f7;
+            --hos-status-gray: #6b7280;
+            --hos-error: #d32f2f;
+            --hos-success: #388e3c;
+            --hos-warning: #f9a825;
+            --hos-nav-bg: rgba(20, 20, 20, 0.95);
+            --hos-overlay: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body style="margin:0;padding:0;box-sizing:border-box;font-family:'Gill Sans','Gill Sans MT',Calibri,'Trebuchet MS',sans-serif;background-color:var(--hos-black-primary);color:var(--hos-text-primary);min-height:100vh;overflow:hidden;">
+
+<!-- Toast Container -->
+<div id="toast-container" style="position:fixed;top:80px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;"></div>
+
+<!-- Confirm Modal -->
+<div id="confirm-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--hos-overlay);z-index:9998;align-items:center;justify-content:center;">
+    <div style="background:var(--hos-black-card);border:1px solid var(--hos-black-border);border-radius:8px;padding:32px;max-width:400px;width:90%;text-align:center;">
+        <p id="confirm-message" style="margin-bottom:24px;font-size:16px;line-height:1.5;"></p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <button onclick="closeConfirm(false)" style="padding:10px 24px;background:var(--hos-black-border);color:var(--hos-text-primary);border:none;border-radius:4px;cursor:pointer;font-family:inherit;font-size:14px;">Cancel</button>
+            <button onclick="closeConfirm(true)" style="padding:10px 24px;background:var(--hos-gold);color:var(--hos-text-on-gold);border:none;border-radius:4px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav style="position:fixed;top:0;left:0;right:0;height:60px;background-color:var(--hos-black);border-bottom:1px solid var(--hos-black-surface);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;">
+    <div style="font-size:18px;font-weight:700;letter-spacing:4px;color:var(--hos-gold);">HOUSE OF SPEED ADMIN</div>
+    <div style="display:flex;align-items:center;gap:20px;">
+        <a href="/" style="color:var(--hos-text-muted);text-decoration:none;font-size:14px;" onmouseover="this.style.color='var(--hos-gold)'" onmouseout="this.style.color='var(--hos-text-muted)'">View Site</a>
+        <span id="user-name" style="color:var(--hos-text-secondary);font-size:14px;"></span>
+        <button onclick="handleLogout()" style="padding:8px 16px;background:transparent;border:1px solid var(--hos-gold);color:var(--hos-gold);border-radius:4px;cursor:pointer;font-family:inherit;font-size:13px;" onmouseover="this.style.background='var(--hos-gold)';this.style.color='var(--hos-text-on-gold)'" onmouseout="this.style.background='transparent';this.style.color='var(--hos-gold)'">Logout</button>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<aside id="sidebar" style="position:fixed;top:60px;left:0;bottom:0;width:240px;background-color:var(--hos-black);border-right:1px solid var(--hos-black-surface);overflow-y:auto;z-index:90;padding-top:16px;">
+    <div style="padding:0 16px 8px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--hos-text-disabled);text-transform:uppercase;">Overview</div>
+    <a class="nav-item" data-view="dashboard" onclick="loadView('dashboard')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Dashboard</a>
+
+    <div style="padding:16px 16px 8px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--hos-text-disabled);text-transform:uppercase;">Inventory</div>
+    <a class="nav-item" data-view="cars" onclick="loadView('cars')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Cars</a>
+    <a class="nav-item" data-view="add-car" onclick="loadView('add-car')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Add Car</a>
+
+    <div style="padding:16px 16px 8px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--hos-text-disabled);text-transform:uppercase;">Sales</div>
+    <a class="nav-item" data-view="inquiries" onclick="loadView('inquiries')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Inquiries</a>
+    <a class="nav-item" data-view="offers" onclick="loadView('offers')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Offers</a>
+    <a class="nav-item" data-view="sales" onclick="loadView('sales')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Sales</a>
+
+    <div style="padding:16px 16px 8px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--hos-text-disabled);text-transform:uppercase;">CRM</div>
+    <a class="nav-item" data-view="customers" onclick="loadView('customers')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Customers</a>
+
+    <div style="padding:16px 16px 8px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--hos-text-disabled);text-transform:uppercase;">Reports</div>
+    <a class="nav-item" data-view="analytics" onclick="loadView('analytics')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Analytics</a>
+
+    <div style="padding:16px 16px 8px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--hos-text-disabled);text-transform:uppercase;">System</div>
+    <a class="nav-item" data-view="settings" onclick="loadView('settings')" style="display:flex;align-items:center;gap:12px;padding:10px 16px;color:var(--hos-text-muted);text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent;transition:all 0.15s;">Settings</a>
+</aside>
+
+<!-- Main Content -->
+<main id="main-content" style="margin-left:240px;margin-top:60px;padding:24px;min-height:calc(100vh - 60px);overflow-y:auto;height:calc(100vh - 60px);">
+    <div id="view-container" style="max-width:1400px;margin:0 auto;"></div>
+</main>
+
+<script>
+// ============================================================
+// GLOBALS
+// ============================================================
+let currentView = 'dashboard';
+let currentUser = null;
+let confirmResolve = null;
+let editingCarId = null;
+let carFeatures = [];
+let carImages = [];
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function formatPrice(amount, currency) {
+    currency = currency || 'EUR';
+    if (amount == null) return '-';
+    return new Intl.NumberFormat('en-IE', { style: 'currency', currency: currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+}
+
+function formatDate(d) {
+    if (!d) return '-';
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function formatDateTime(d) {
+    if (!d) return '-';
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function timeAgo(d) {
+    if (!d) return '';
+    const now = new Date();
+    const dt = new Date(d);
+    const diff = Math.floor((now - dt) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    if (diff < 2592000) return Math.floor(diff / 86400) + 'd ago';
+    return formatDate(d);
+}
+
+function truncate(str, len) {
+    if (!str) return '';
+    return str.length > len ? str.substring(0, len) + '...' : str;
+}
+
+function daysBetween(d1, d2) {
+    if (!d1) return 0;
+    const a = new Date(d1);
+    const b = d2 ? new Date(d2) : new Date();
+    return Math.floor((b - a) / 86400000);
+}
+
+function statusBadge(status, colorMap) {
+    const color = colorMap[status] || '#666';
+    return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (status || 'unknown').replace(/_/g, ' ') + '</span>';
+}
+
+const carStatusColors = { available: '#22c55e', reserved: '#eab308', deposit_taken: '#3b82f6', sold: '#ef4444', consignment: '#a855f7', incoming: '#6b7280' };
+const inquiryStatusColors = { new: '#eab308', read: '#3b82f6', responded: '#22c55e', closed: '#6b7280' };
+const offerStatusColors = { pending: '#eab308', countered: '#3b82f6', accepted: '#22c55e', rejected: '#ef4444', expired: '#6b7280' };
+const paymentStatusColors = { pending: '#eab308', partial: '#f97316', paid: '#22c55e', refunded: '#ef4444' };
+const deliveryStatusColors = { pending: '#6b7280', in_transit: '#3b82f6', delivered: '#22c55e' };
+const customerStatusColors = { new: '#3b82f6', contacted: '#eab308', qualified: '#f97316', viewing_scheduled: '#a855f7', negotiation: '#c9a05b', deposit: '#22c55e', sold: '#22c55e', lost: '#ef4444', archived: '#6b7280' };
+
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+function showToast(message, type) {
+    type = type || 'success';
+    const bg = type === 'success' ? '#22c55e' : type === 'error' ? '#ef4444' : '#3b82f6';
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.style.cssText = 'padding:12px 20px;background:' + bg + ';color:var(--hos-text-primary);border-radius:6px;font-size:14px;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s;max-width:400px;';
+    toast.textContent = message;
+    container.appendChild(toast);
+    requestAnimationFrame(function() { toast.style.opacity = '1'; });
+    setTimeout(function() {
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.remove(); }, 300);
+    }, 3000);
+}
+
+// ============================================================
+// CONFIRM DIALOG
+// ============================================================
+function showConfirm(message) {
+    return new Promise(function(resolve) {
+        confirmResolve = resolve;
+        document.getElementById('confirm-message').textContent = message;
+        document.getElementById('confirm-modal').style.display = 'flex';
+    });
+}
+
+function closeConfirm(result) {
+    document.getElementById('confirm-modal').style.display = 'none';
+    if (confirmResolve) { confirmResolve(result); confirmResolve = null; }
+}
+
+// ============================================================
+// API HELPER
+// ============================================================
+async function api(url, options) {
+    options = options || {};
+    options.credentials = 'include';
+    if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+        options.headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+        options.body = JSON.stringify(options.body);
+    }
+    try {
+        const res = await fetch(url, options);
+        if (res.status === 401) { window.location.href = '/admin-login.html'; return null; }
+        const data = await res.json().catch(function() { return null; });
+        if (!res.ok) { showToast((data && data.error) || 'Request failed', 'error'); return null; }
+        return data;
+    } catch (e) {
+        showToast('Network error: ' + e.message, 'error');
+        return null;
+    }
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/auth/check', { credentials: 'include' });
+        if (!res.ok) { window.location.href = '/admin-login.html'; return; }
+        const data = await res.json();
+        if (!data || !data.authenticated) { window.location.href = '/admin-login.html'; return; }
+        currentUser = data.user || data;
+        document.getElementById('user-name').textContent = currentUser.name || currentUser.username || 'Admin';
+        loadView('dashboard');
+    } catch (e) {
+        window.location.href = '/admin-login.html';
+    }
+}
+
+async function handleLogout() {
+    await api('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/admin-login.html';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function setActiveNav(viewName) {
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+        if (item.dataset.view === viewName) {
+            item.style.color = 'var(--hos-gold)';
+            item.style.borderLeftColor = 'var(--hos-gold)';
+            item.style.background = 'rgba(201,160,91,0.05)';
+        } else {
+            item.style.color = 'var(--hos-text-muted)';
+            item.style.borderLeftColor = 'transparent';
+            item.style.background = 'transparent';
+        }
+    });
+}
+
+function loadView(viewName, params) {
+    currentView = viewName;
+    setActiveNav(viewName);
+    var container = document.getElementById('view-container');
+    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:60px;color:var(--hos-text-disabled);">Loading...</div>';
+    document.getElementById('main-content').scrollTop = 0;
+
+    switch (viewName) {
+        case 'dashboard': loadDashboard(); break;
+        case 'cars': loadCars(); break;
+        case 'add-car': loadCarForm(null); break;
+        case 'edit-car': loadCarForm(params); break;
+        case 'inquiries': loadInquiries(); break;
+        case 'offers': loadOffers(); break;
+        case 'sales': loadSales(); break;
+        case 'customers': loadCustomers(); break;
+        case 'customer-detail': loadCustomerDetail(params); break;
+        case 'analytics': loadAnalytics(); break;
+        case 'settings': loadSettings(); break;
+        default: loadDashboard();
+    }
+}
+
+// ============================================================
+// SHARED STYLES
+// ============================================================
+var cardStyle = 'background:var(--hos-black-card);border:1px solid var(--hos-black-border);border-radius:8px;padding:20px;';
+var tableStyle = 'width:100%;border-collapse:collapse;';
+var thStyle = 'text-align:left;padding:12px 16px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--hos-text-hint);border-bottom:1px solid var(--hos-black-border);';
+var tdStyle = 'padding:12px 16px;font-size:14px;border-bottom:1px solid var(--hos-black-surface);color:var(--hos-text-secondary);';
+var inputStyle = 'width:100%;padding:10px 12px;background:var(--hos-black-primary);border:1px solid var(--hos-black-border);border-radius:4px;color:var(--hos-text-primary);font-family:inherit;font-size:14px;outline:none;';
+var selectStyle = 'width:100%;padding:10px 12px;background:var(--hos-black-primary);border:1px solid var(--hos-black-border);border-radius:4px;color:var(--hos-text-primary);font-family:inherit;font-size:14px;outline:none;-webkit-appearance:none;';
+var btnPrimary = 'padding:10px 20px;background:var(--hos-gold);color:var(--hos-text-on-gold);border:none;border-radius:4px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;';
+var btnSecondary = 'padding:10px 20px;background:var(--hos-black-border);color:var(--hos-text-primary);border:1px solid var(--hos-black-muted);border-radius:4px;cursor:pointer;font-family:inherit;font-size:14px;';
+var btnDanger = 'padding:8px 16px;background:transparent;color:var(--hos-status-red);border:1px solid var(--hos-status-red);border-radius:4px;cursor:pointer;font-family:inherit;font-size:13px;';
+var btnSmall = 'padding:6px 12px;font-size:12px;border-radius:4px;cursor:pointer;font-family:inherit;border:none;';
+var labelStyle = 'display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:var(--hos-text-muted);';
+var fieldGroup = 'margin-bottom:16px;';
+
+function sectionHeader(title) {
+    return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;"><h2 style="font-size:24px;font-weight:600;color:var(--hos-text-primary);">' + title + '</h2>';
+}
+
+function tableRowHover() {
+    return ' onmouseover="this.style.background=\'var(--hos-black-surface)\'" onmouseout="this.style.background=\'transparent\'"';
+}
+
+// ============================================================
+// 1. DASHBOARD VIEW
+// ============================================================
+async function loadDashboard() {
+    var data = await api('/api/admin/dashboard');
+    if (!data) { document.getElementById('view-container').innerHTML = '<p style="color:var(--hos-text-muted);">Failed to load dashboard data.</p>'; return; }
+
+    var activity = data.recent_activity || data.recentActivity || [];
+
+    var totalCars = (data.cars && data.cars.total) || 0;
+    var statusBreakdown = (data.cars && data.cars.by_status) || {};
+    var availableCars = statusBreakdown.available || 0;
+    var totalCustomers = (data.customers && data.customers.total) || 0;
+    var inquiriesByStatus = (data.inquiries && data.inquiries.by_status) || {};
+    var newInquiries = inquiriesByStatus['new'] || 0;
+    var unreadCount = newInquiries;
+    var monthlySalesCount = (data.sales_this_month && data.sales_this_month.count) || 0;
+    var monthlyRevenue = (data.sales_this_month && data.sales_this_month.revenue) || 0;
+    var pendingOffers = data.pending_offers || 0;
+
+    var html = sectionHeader('Dashboard') + '</div>';
+
+    // Stats cards
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Total Cars</div>';
+    html += '<div style="font-size:32px;font-weight:700;color:var(--hos-gold);">' + totalCars + '</div>';
+    if (Object.keys(statusBreakdown).length) {
+        html += '<div style="margin-top:8px;font-size:12px;color:var(--hos-text-disabled);">';
+        for (var s in statusBreakdown) { html += '<span style="margin-right:10px;">' + s.replace(/_/g,' ') + ': ' + statusBreakdown[s] + '</span>'; }
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Available Cars</div>';
+    html += '<div style="font-size:32px;font-weight:700;color:var(--hos-status-green);">' + availableCars + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Total Customers</div>';
+    html += '<div style="font-size:32px;font-weight:700;color:var(--hos-status-blue);">' + totalCustomers + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">New Inquiries</div>';
+    html += '<div style="font-size:32px;font-weight:700;color:var(--hos-status-yellow);">' + newInquiries + '</div>';
+    html += '<div style="font-size:12px;color:var(--hos-text-hint);margin-top:4px;">' + unreadCount + ' unread</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Monthly Sales</div>';
+    html += '<div style="font-size:32px;font-weight:700;color:var(--hos-status-purple);">' + monthlySalesCount + '</div>';
+    html += '<div style="font-size:12px;color:var(--hos-text-hint);margin-top:4px;">Revenue: ' + formatPrice(monthlyRevenue) + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Pending Offers</div>';
+    html += '<div style="font-size:32px;font-weight:700;color:var(--hos-status-orange);">' + pendingOffers + '</div>';
+    html += '</div>';
+
+    html += '</div>';
+
+    // Quick actions and activity
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+
+    // Recent Activity
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="font-size:16px;font-weight:600;margin-bottom:16px;color:var(--hos-text-primary);">Recent Activity</h3>';
+    if (activity.length === 0) {
+        html += '<p style="color:var(--hos-text-disabled);font-size:14px;">No recent activity.</p>';
+    } else {
+        html += '<div style="display:flex;flex-direction:column;gap:12px;">';
+        activity.slice(0, 10).forEach(function(a) {
+            html += '<div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--hos-black-surface);">';
+            html += '<div style="width:8px;height:8px;border-radius:50%;background:var(--hos-gold);margin-top:6px;flex-shrink:0;"></div>';
+            html += '<div>';
+            html += '<div style="font-size:13px;color:var(--hos-text-secondary);">' + (a.description || a.message || a.action || '') + '</div>';
+            html += '<div style="font-size:11px;color:var(--hos-text-disabled);margin-top:2px;">' + timeAgo(a.created_at || a.date || a.timestamp) + '</div>';
+            html += '</div></div>';
+        });
+        html += '</div>';
+    }
+    html += '</div>';
+
+    // Quick Actions
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="font-size:16px;font-weight:600;margin-bottom:16px;color:var(--hos-text-primary);">Quick Actions</h3>';
+    html += '<div style="display:flex;flex-direction:column;gap:12px;">';
+    html += '<button onclick="loadView(\'add-car\')" style="' + btnPrimary + 'width:100%;text-align:center;">Add New Car</button>';
+    html += '<button onclick="loadView(\'inquiries\')" style="' + btnSecondary + 'width:100%;text-align:center;">View Inquiries</button>';
+    html += '</div>';
+    html += '</div>';
+
+    html += '</div>';
+
+    document.getElementById('view-container').innerHTML = html;
+}
+
+// ============================================================
+// 2. CARS LIST VIEW
+// ============================================================
+async function loadCars() {
+    var data = await api('/api/admin/cars');
+    if (!data) return;
+    var cars = Array.isArray(data) ? data : (data.cars || data.data || []);
+
+    var html = sectionHeader('Cars');
+    html += '<div style="display:flex;gap:12px;align-items:center;">';
+    html += '<input id="car-search" type="text" placeholder="Search cars..." oninput="filterCarsTable()" style="' + inputStyle + 'width:300px;">';
+    html += '<button onclick="loadView(\'add-car\')" style="' + btnPrimary + '">Add New Car</button>';
+    html += '</div></div>';
+
+    html += '<div style="' + cardStyle + 'overflow-x:auto;">';
+    html += '<table style="' + tableStyle + '" id="cars-table">';
+    html += '<thead><tr>';
+    html += '<th style="' + thStyle + 'width:60px;">Image</th>';
+    html += '<th style="' + thStyle + '">Title</th>';
+    html += '<th style="' + thStyle + '">Brand</th>';
+    html += '<th style="' + thStyle + '">Year</th>';
+    html += '<th style="' + thStyle + '">Price</th>';
+    html += '<th style="' + thStyle + '">Status</th>';
+    html += '<th style="' + thStyle + '">Views</th>';
+    html += '<th style="' + thStyle + '">Inquiries</th>';
+    html += '<th style="' + thStyle + '">Days Listed</th>';
+    html += '<th style="' + thStyle + '">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    cars.forEach(function(car) {
+        var img = car.primary_image || car.primaryImage || (car.images && car.images.length ? (car.images[0].thumbnail_url || car.images[0].url || car.images[0]) : '');
+        var imgHtml = img ? '<img src="' + img + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">' : '<div style="width:60px;height:40px;background:var(--hos-black-border);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--hos-text-disabled);font-size:10px;">No img</div>';
+        var daysListed = daysBetween(car.created_at || car.createdAt || car.listed_date);
+
+        html += '<tr style="cursor:pointer;" ' + tableRowHover() + ' onclick="loadView(\'edit-car\', ' + car.id + ')">';
+        html += '<td style="' + tdStyle + '">' + imgHtml + '</td>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-text-primary);font-weight:500;">' + (car.title || '') + '</td>';
+        html += '<td style="' + tdStyle + '">' + (car.brand || '') + '</td>';
+        html += '<td style="' + tdStyle + '">' + (car.year || '') + '</td>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-gold);font-weight:600;">' + formatPrice(car.price, car.price_currency) + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(car.status, carStatusColors) + '</td>';
+        html += '<td style="' + tdStyle + '">' + (car.views_count || car.views || car.view_count || 0) + '</td>';
+        html += '<td style="' + tdStyle + '">' + (car.inquiry_count || car.inquiries_count || 0) + '</td>';
+        html += '<td style="' + tdStyle + '">' + daysListed + '</td>';
+        html += '<td style="' + tdStyle + '" onclick="event.stopPropagation()">';
+        html += '<button onclick="loadView(\'edit-car\', ' + car.id + ')" style="' + btnSmall + 'background:var(--hos-black-border);color:var(--hos-text-primary);margin-right:6px;">Edit</button>';
+        html += '<button onclick="deleteCar(' + car.id + ')" style="' + btnSmall + 'background:transparent;color:var(--hos-status-red);border:1px solid var(--hos-status-red);">Delete</button>';
+        html += '</td></tr>';
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('view-container').innerHTML = html;
+}
+
+function filterCarsTable() {
+    var q = document.getElementById('car-search').value.toLowerCase();
+    var rows = document.querySelectorAll('#cars-table tbody tr');
+    rows.forEach(function(row) { row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+}
+
+async function deleteCar(id) {
+    var yes = await showConfirm('Are you sure you want to delete this car? This action cannot be undone.');
+    if (!yes) return;
+    var res = await api('/api/admin/cars/' + id, { method: 'DELETE' });
+    if (res !== null) { showToast('Car deleted successfully'); loadCars(); }
+}
+
+// ============================================================
+// 3. ADD/EDIT CAR FORM
+// ============================================================
+async function loadCarForm(carId) {
+    editingCarId = carId || null;
+    carFeatures = [];
+    carImages = [];
+    var car = {};
+
+    if (editingCarId) {
+        var data = await api('/api/admin/cars/' + editingCarId);
+        if (!data) return;
+        car = data.car || data;
+        carFeatures = car.features || [];
+        if (typeof carFeatures === 'string') { try { carFeatures = JSON.parse(carFeatures); } catch(e) { carFeatures = []; } }
+        carImages = car.images || [];
+    }
+
+    setActiveNav(editingCarId ? 'cars' : 'add-car');
+
+    var html = sectionHeader(editingCarId ? 'Edit Car' : 'Add New Car');
+    html += '<button onclick="loadView(\'cars\')" style="' + btnSecondary + '">Back to Cars</button></div>';
+
+    html += '<form id="car-form" onsubmit="saveCar(event)" style="display:flex;flex-direction:column;gap:16px;">';
+
+    // --- Basic Info ---
+    html += collapsibleSection('basic-info', 'Basic Information', true,
+        formRow([
+            formField('Title', 'text', 'title', car.title, true),
+        ]) +
+        formRow([
+            formField('Brand', 'text', 'brand', car.brand, true),
+            formField('Model', 'text', 'model', car.model, true),
+            formField('Variant / Trim', 'text', 'variant_trim', car.variant_trim),
+        ]) +
+        formRow([
+            formField('Year', 'number', 'year', car.year, true),
+            formField('Production Year', 'number', 'production_year', car.production_year),
+            formSelect('Body Type', 'body_type', ['','Coupe','Sedan','Convertible','SUV','Hatchback','Wagon','Van','Truck','Roadster','Targa','Shooting Brake','Limousine','Other'], car.body_type),
+        ]) +
+        formRow([
+            formField('Doors', 'number', 'doors', car.doors),
+            formField('Seats', 'number', 'seats', car.seats),
+            { html: '<div style="flex:1;"></div>', toString: function() { return this.html; } },
+        ])
+    );
+
+    // --- Engine & Performance ---
+    html += collapsibleSection('engine', 'Engine & Performance', false,
+        formRow([
+            formSelect('Fuel Type', 'fuel_type', ['','Petrol','Diesel','Electric','Hybrid','Hydrogen'], car.fuel_type),
+            formSelect('Transmission', 'transmission', ['','Manual','Automatic','Semi-auto','DCT','CVT','Sequential'], car.transmission),
+            formSelect('Drivetrain', 'drivetrain', ['','FWD','RWD','AWD'], car.drivetrain),
+        ]) +
+        formRow([
+            formField('Engine Type', 'text', 'engine_type', car.engine_type),
+            formField('Displacement', 'text', 'engine_displacement', car.engine_displacement),
+            formField('Cylinders', 'number', 'engine_cylinders', car.engine_cylinders),
+        ]) +
+        formRow([
+            formField('Configuration', 'text', 'engine_configuration', car.engine_configuration),
+            formField('Aspiration', 'text', 'engine_aspiration', car.engine_aspiration),
+        ]) +
+        formRow([
+            formField('Horsepower', 'number', 'horsepower', car.horsepower),
+            formField('Torque (Nm)', 'number', 'torque', car.torque),
+            formField('Top Speed (km/h)', 'number', 'top_speed', car.top_speed),
+            formField('0-100 km/h (s)', 'text', 'acceleration_0_100', car.acceleration_0_100),
+        ])
+    );
+
+    // --- Pricing ---
+    html += collapsibleSection('pricing', 'Pricing', false,
+        formRow([
+            formField('Price', 'number', 'price', car.price, true),
+            formSelect('Currency', 'price_currency', ['EUR','GBP','USD','CHF'], car.price_currency || 'EUR'),
+            formSelect('Price Qualifier', 'price_qualifier', ['','fixed','negotiable','poa'], car.price_qualifier),
+        ]) +
+        formRow([
+            formField('Reserve Price', 'number', 'reserve_price', car.reserve_price),
+            formField('Acquisition Cost', 'number', 'acquisition_cost', car.acquisition_cost),
+        ]) +
+        formRow([
+            formSelect('VAT Status', 'vat_status', ['','standard','margin','qualifying','none'], car.vat_status),
+            formField('VAT Rate (%)', 'number', 'vat_rate', car.vat_rate),
+        ])
+    );
+
+    // --- Exterior & Interior ---
+    html += collapsibleSection('exterior', 'Exterior & Interior', false,
+        formRow([
+            formField('Exterior Colour', 'text', 'color_exterior', car.color_exterior),
+            formField('Exterior Colour Code', 'text', 'color_exterior_code', car.color_exterior_code),
+        ]) +
+        formRow([
+            formField('Interior Colour', 'text', 'color_interior', car.color_interior),
+            formSelect('Interior Material', 'interior_material', ['','Leather','Alcantara','Cloth','Vinyl','Wood'], car.interior_material),
+        ])
+    );
+
+    // --- Condition & History ---
+    html += collapsibleSection('condition', 'Condition & History', false,
+        formRow([
+            formSelect('Condition Rating', 'condition_rating', ['','1 - Concours','2 - Excellent','3 - Good','4 - Fair','5 - Project'], car.condition_rating),
+            formField('Mileage', 'number', 'mileage', car.mileage),
+            formSelect('Mileage Unit', 'mileage_unit', ['km','miles'], car.mileage_unit || 'km'),
+        ]) +
+        formRow([
+            formField('Owners Count', 'number', 'owners_count', car.owners_count),
+            formField('VIN', 'text', 'vin', car.vin),
+            formField('Registration Number', 'text', 'registration_number', car.registration_number),
+        ]) +
+        formRow([
+            formSelect('Service History', 'service_history', ['','full','partial','none'], car.service_history),
+            formField('MOT Status', 'text', 'mot_status', car.mot_status),
+            formField('MOT Expiry', 'date', 'mot_expiry', car.mot_expiry ? car.mot_expiry.substring(0,10) : ''),
+        ]) +
+        formRow([
+            formCheckbox('Matching Numbers', 'matching_numbers', car.matching_numbers),
+            formField('Production Number', 'text', 'production_number', car.production_number),
+        ])
+    );
+
+    // --- Provenance ---
+    html += collapsibleSection('provenance', 'Provenance', false,
+        formTextarea('Provenance', 'provenance', car.provenance) +
+        formTextarea('Restoration History', 'restoration_history', car.restoration_history) +
+        formTextarea('Concours History', 'concours_history', car.concours_history) +
+        formTextarea('Racing History', 'racing_history', car.racing_history)
+    );
+
+    // --- Description ---
+    html += collapsibleSection('description', 'Description', editingCarId ? false : true,
+        '<div style="' + fieldGroup + '">' +
+        '<label style="' + labelStyle + '">Description</label>' +
+        '<textarea id="field-description" style="' + inputStyle + 'min-height:200px;resize:vertical;" oninput="updateCharCount()">' + (car.description || '') + '</textarea>' +
+        '<div id="char-count" style="text-align:right;font-size:12px;color:var(--hos-text-disabled);margin-top:4px;">0 characters</div>' +
+        '</div>'
+    );
+
+    // --- Features ---
+    html += collapsibleSection('features', 'Features', false,
+        '<div style="' + fieldGroup + '">' +
+        '<label style="' + labelStyle + '">Add features (press Enter to add)</label>' +
+        '<input id="feature-input" type="text" style="' + inputStyle + '" onkeydown="addFeatureOnEnter(event)" placeholder="Type a feature and press Enter">' +
+        '</div>' +
+        '<div id="features-container" style="display:flex;flex-wrap:wrap;gap:8px;"></div>'
+    );
+
+    // --- Status ---
+    html += collapsibleSection('status-section', 'Status & Location', true,
+        formRow([
+            formSelect('Status', 'status', ['available','reserved','deposit_taken','sold','consignment','incoming'], car.status || 'available'),
+        ]) +
+        formRow([
+            formCheckbox('Featured', 'featured', car.featured),
+            formCheckbox('Just Arrived', 'just_arrived', car.just_arrived),
+            formCheckbox('Price Reduced', 'price_reduced', car.price_reduced),
+        ]) +
+        formRow([
+            formField('City', 'text', 'location_city', car.location_city),
+            formField('Country', 'text', 'location_country', car.location_country),
+        ])
+    );
+
+    // --- Images ---
+    html += collapsibleSection('images', 'Images', editingCarId ? true : false,
+        '<div id="image-upload-area" style="border:2px dashed var(--hos-black-muted);border-radius:8px;padding:40px;text-align:center;cursor:pointer;margin-bottom:16px;color:var(--hos-text-disabled);" onclick="document.getElementById(\'image-file-input\').click()" ondragover="event.preventDefault();this.style.borderColor=\'var(--hos-gold)\'" ondragleave="this.style.borderColor=\'var(--hos-black-muted)\'" ondrop="handleImageDrop(event)">' +
+        '<div style="font-size:14px;">Drop images here or click to upload</div>' +
+        '<div style="font-size:12px;margin-top:4px;">JPG, PNG, WebP</div>' +
+        '<input type="file" id="image-file-input" multiple accept="image/*" style="display:none;" onchange="handleImageUpload(this.files)">' +
+        '</div>' +
+        '<div id="image-preview-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;"></div>'
+    );
+
+    // --- Documents ---
+    html += collapsibleSection('documents', 'Documents', false,
+        '<div style="display:flex;gap:12px;margin-bottom:16px;align-items:flex-end;">' +
+        '<div style="flex:1;"><label style="' + labelStyle + '">Document Type</label>' +
+        '<select id="doc-type-select" style="' + selectStyle + '"><option value="service_record">Service Record</option><option value="inspection_report">Inspection Report</option><option value="registration">Registration</option><option value="invoice">Invoice</option><option value="certificate">Certificate</option><option value="other">Other</option></select></div>' +
+        '<div><input type="file" id="doc-file-input" accept=".pdf,.doc,.docx,.txt,.jpg,.png" style="display:none;" onchange="handleDocUpload(this.files)">' +
+        '<button type="button" onclick="document.getElementById(\'doc-file-input\').click()" style="' + btnSecondary + '">Upload Document</button></div>' +
+        '</div>' +
+        '<div id="documents-list"></div>'
+    );
+
+    html += '<div style="display:flex;gap:12px;margin-top:8px;padding-top:16px;border-top:1px solid var(--hos-black-border);">';
+    html += '<button type="submit" style="' + btnPrimary + '">' + (editingCarId ? 'Update Car' : 'Create Car') + '</button>';
+    html += '<button type="button" onclick="loadView(\'cars\')" style="' + btnSecondary + '">Cancel</button>';
+    html += '</div>';
+
+    html += '</form>';
+
+    document.getElementById('view-container').innerHTML = html;
+
+    // Render features and images after DOM is ready
+    renderFeatures();
+    renderCarImages();
+    if (car.documents) renderDocuments(car.documents);
+    updateCharCount();
+}
+
+function collapsibleSection(id, title, open, content) {
+    return '<div style="' + cardStyle + 'margin-bottom:0;">' +
+        '<div onclick="toggleSection(\'' + id + '\')" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin:-20px;padding:16px 20px;border-radius:8px;">' +
+        '<h3 style="font-size:16px;font-weight:600;color:var(--hos-gold);">' + title + '</h3>' +
+        '<span id="chevron-' + id + '" style="color:var(--hos-text-hint);font-size:18px;transition:transform 0.2s;">' + (open ? '\u25B2' : '\u25BC') + '</span>' +
+        '</div>' +
+        '<div id="section-' + id + '" style="margin-top:20px;' + (open ? '' : 'display:none;') + '">' + content + '</div>' +
+        '</div>';
+}
+
+function toggleSection(id) {
+    var section = document.getElementById('section-' + id);
+    var chevron = document.getElementById('chevron-' + id);
+    if (section.style.display === 'none') {
+        section.style.display = '';
+        chevron.textContent = '\u25B2';
+    } else {
+        section.style.display = 'none';
+        chevron.textContent = '\u25BC';
+    }
+}
+
+function formRow(fields) {
+    var html = '<div style="display:grid;grid-template-columns:repeat(' + fields.length + ',1fr);gap:16px;">';
+    fields.forEach(function(f) { html += (typeof f === 'string' ? f : f.toString ? f.toString() : f); });
+    html += '</div>';
+    return html;
+}
+
+function formField(label, type, name, value, required) {
+    var val = value != null ? value : '';
+    return '<div style="' + fieldGroup + '">' +
+        '<label style="' + labelStyle + '">' + label + (required ? ' <span style="color:var(--hos-status-red);">*</span>' : '') + '</label>' +
+        '<input type="' + type + '" id="field-' + name + '" name="' + name + '" value="' + String(val).replace(/"/g, '&quot;') + '" style="' + inputStyle + '"' + (required ? ' required' : '') + '>' +
+        '</div>';
+}
+
+function formSelect(label, name, options, selected) {
+    var html = '<div style="' + fieldGroup + '">' +
+        '<label style="' + labelStyle + '">' + label + '</label>' +
+        '<select id="field-' + name + '" name="' + name + '" style="' + selectStyle + '">';
+    options.forEach(function(opt) {
+        var val = typeof opt === 'string' ? opt : opt.value;
+        var lbl = typeof opt === 'string' ? opt : opt.label;
+        var sel = (selected && String(selected) === String(val)) ? ' selected' : '';
+        html += '<option value="' + val + '"' + sel + '>' + (lbl || '-- Select --') + '</option>';
+    });
+    html += '</select></div>';
+    return html;
+}
+
+function formTextarea(label, name, value) {
+    return '<div style="' + fieldGroup + '">' +
+        '<label style="' + labelStyle + '">' + label + '</label>' +
+        '<textarea id="field-' + name + '" name="' + name + '" style="' + inputStyle + 'min-height:100px;resize:vertical;">' + (value || '') + '</textarea>' +
+        '</div>';
+}
+
+function formCheckbox(label, name, checked) {
+    return '<div style="' + fieldGroup + 'display:flex;align-items:center;gap:8px;padding-top:22px;">' +
+        '<input type="checkbox" id="field-' + name + '" name="' + name + '"' + (checked ? ' checked' : '') + ' style="width:18px;height:18px;accent-color:var(--hos-gold);cursor:pointer;">' +
+        '<label for="field-' + name + '" style="font-size:14px;color:var(--hos-text-secondary);cursor:pointer;">' + label + '</label>' +
+        '</div>';
+}
+
+function updateCharCount() {
+    var el = document.getElementById('field-description');
+    var counter = document.getElementById('char-count');
+    if (el && counter) counter.textContent = (el.value || '').length + ' characters';
+}
+
+// Features
+function addFeatureOnEnter(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        var input = document.getElementById('feature-input');
+        var val = input.value.trim();
+        if (val && carFeatures.indexOf(val) === -1) {
+            carFeatures.push(val);
+            renderFeatures();
+        }
+        input.value = '';
+    }
+}
+
+function removeFeature(index) {
+    carFeatures.splice(index, 1);
+    renderFeatures();
+}
+
+function renderFeatures() {
+    var container = document.getElementById('features-container');
+    if (!container) return;
+    container.innerHTML = carFeatures.map(function(f, i) {
+        return '<span onclick="removeFeature(' + i + ')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--hos-gold-10);color:var(--hos-gold);border:1px solid var(--hos-gold-30);border-radius:16px;font-size:13px;cursor:pointer;" title="Click to remove">' + f + ' &times;</span>';
+    }).join('');
+}
+
+// Images
+function handleImageDrop(e) {
+    e.preventDefault();
+    e.currentTarget.style.borderColor = 'var(--hos-black-muted)';
+    if (e.dataTransfer.files.length) handleImageUpload(e.dataTransfer.files);
+}
+
+async function handleImageUpload(files) {
+    if (!editingCarId) { showToast('Please save the car first before uploading images.', 'info'); return; }
+    for (var i = 0; i < files.length; i++) {
+        var fd = new FormData();
+        fd.append('images', files[i]);
+        var res = await api('/api/admin/cars/' + editingCarId + '/images', { method: 'POST', body: fd });
+        if (res) {
+            var img = res.image || res;
+            carImages.push(img);
+        }
+    }
+    renderCarImages();
+    showToast('Images uploaded');
+}
+
+function renderCarImages() {
+    var container = document.getElementById('image-preview-grid');
+    if (!container) return;
+    container.innerHTML = carImages.map(function(img, i) {
+        var url = img.thumbnail_url || img.url || img;
+        var isPrimary = img.is_primary || img.isPrimary || i === 0;
+        return '<div style="position:relative;border-radius:8px;overflow:hidden;border:2px solid ' + (isPrimary ? 'var(--hos-gold)' : 'var(--hos-black-border)') + ';">' +
+            '<img src="' + url + '" style="width:100%;height:100px;object-fit:cover;display:block;">' +
+            '<div style="position:absolute;top:0;right:0;display:flex;gap:2px;">' +
+            '<button type="button" onclick="setImagePrimary(' + (img.id || i) + ')" title="Set as primary" style="background:rgba(0,0,0,0.7);color:var(--hos-gold);border:none;padding:4px 6px;cursor:pointer;font-size:12px;">' + (isPrimary ? '\u2605' : '\u2606') + '</button>' +
+            '<button type="button" onclick="deleteImage(' + (img.id || i) + ', ' + i + ')" title="Delete" style="background:rgba(0,0,0,0.7);color:var(--hos-status-red);border:none;padding:4px 6px;cursor:pointer;font-size:12px;">&times;</button>' +
+            '</div>' +
+            (isPrimary ? '<div style="position:absolute;bottom:0;left:0;right:0;background:var(--hos-gold-90);text-align:center;font-size:10px;padding:2px;color:var(--hos-text-on-gold);font-weight:600;">PRIMARY</div>' : '') +
+            '</div>';
+    }).join('');
+}
+
+async function setImagePrimary(imageId) {
+    if (!editingCarId) return;
+    await api('/api/admin/cars/' + editingCarId + '/images/' + imageId, { method: 'PUT', body: { is_primary: true } });
+    var data = await api('/api/admin/cars/' + editingCarId);
+    if (data) { carImages = (data.car || data).images || []; renderCarImages(); }
+}
+
+async function deleteImage(imageId, index) {
+    if (!editingCarId) { carImages.splice(index, 1); renderCarImages(); return; }
+    var yes = await showConfirm('Delete this image?');
+    if (!yes) return;
+    await api('/api/admin/cars/' + editingCarId + '/images/' + imageId, { method: 'DELETE' });
+    carImages.splice(index, 1);
+    renderCarImages();
+    showToast('Image deleted');
+}
+
+// Documents
+async function handleDocUpload(files) {
+    if (!editingCarId) { showToast('Please save the car first before uploading documents.', 'info'); return; }
+    var docType = document.getElementById('doc-type-select').value;
+    for (var i = 0; i < files.length; i++) {
+        var fd = new FormData();
+        fd.append('documents', files[i]);
+        fd.append('document_type', docType);
+        await api('/api/admin/cars/' + editingCarId + '/documents', { method: 'POST', body: fd });
+    }
+    showToast('Document(s) uploaded');
+    var data = await api('/api/admin/cars/' + editingCarId);
+    if (data) renderDocuments((data.car || data).documents || []);
+}
+
+function renderDocuments(docs) {
+    var container = document.getElementById('documents-list');
+    if (!container) return;
+    if (!docs || !docs.length) { container.innerHTML = '<p style="color:var(--hos-text-disabled);font-size:13px;">No documents uploaded.</p>'; return; }
+    container.innerHTML = docs.map(function(doc) {
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--hos-black-primary);border:1px solid var(--hos-black-border);border-radius:4px;margin-bottom:8px;">' +
+            '<div><span style="color:var(--hos-text-secondary);font-size:14px;">' + (doc.original_name || doc.filename || 'Document') + '</span>' +
+            '<span style="margin-left:8px;font-size:12px;color:var(--hos-text-hint);">(' + (doc.document_type || doc.type || 'other').replace(/_/g, ' ') + ')</span></div>' +
+            '<button type="button" onclick="deleteDocument(' + doc.id + ')" style="' + btnSmall + 'background:transparent;color:var(--hos-status-red);border:1px solid var(--hos-status-red);">Delete</button>' +
+            '</div>';
+    }).join('');
+}
+
+async function deleteDocument(docId) {
+    if (!editingCarId) return;
+    var yes = await showConfirm('Delete this document?');
+    if (!yes) return;
+    await api('/api/admin/cars/' + editingCarId + '/documents/' + docId, { method: 'DELETE' });
+    showToast('Document deleted');
+    var data = await api('/api/admin/cars/' + editingCarId);
+    if (data) renderDocuments((data.car || data).documents || []);
+}
+
+// Save car
+async function saveCar(e) {
+    e.preventDefault();
+    var form = document.getElementById('car-form');
+    var body = {};
+    var fields = ['title','brand','model','variant_trim','year','production_year','body_type','doors','seats',
+        'fuel_type','transmission','drivetrain','engine_type','engine_displacement','engine_cylinders','engine_configuration','engine_aspiration',
+        'horsepower','torque','top_speed','acceleration_0_100',
+        'price','price_currency','price_qualifier','reserve_price','acquisition_cost','vat_status','vat_rate',
+        'color_exterior','color_exterior_code','color_interior','interior_material',
+        'condition_rating','mileage','mileage_unit','owners_count','vin','registration_number',
+        'service_history','mot_status','mot_expiry','production_number',
+        'provenance','restoration_history','concours_history','racing_history',
+        'description','status','location_city','location_country'];
+    var checkboxes = ['matching_numbers','featured','just_arrived','price_reduced'];
+    var numberFields = ['year','production_year','doors','seats','engine_cylinders','horsepower','torque','top_speed',
+        'price','reserve_price','acquisition_cost','vat_rate','mileage','owners_count'];
+
+    fields.forEach(function(name) {
+        var el = document.getElementById('field-' + name);
+        if (el) {
+            var val = el.value;
+            if (val !== '' && val !== undefined) {
+                body[name] = numberFields.indexOf(name) !== -1 ? Number(val) : val;
+            }
+        }
+    });
+    checkboxes.forEach(function(name) {
+        var el = document.getElementById('field-' + name);
+        if (el) body[name] = el.checked;
+    });
+    body.features = carFeatures;
+
+    var url = editingCarId ? '/api/admin/cars/' + editingCarId : '/api/admin/cars';
+    var method = editingCarId ? 'PUT' : 'POST';
+    var res = await api(url, { method: method, body: body });
+    if (res) {
+        showToast(editingCarId ? 'Car updated successfully' : 'Car created successfully');
+        if (!editingCarId && (res.car || res).id) {
+            editingCarId = (res.car || res).id;
+            loadView('edit-car', editingCarId);
+        }
+    }
+}
+
+// ============================================================
+// 4. INQUIRIES VIEW
+// ============================================================
+async function loadInquiries() {
+    var data = await api('/api/admin/inquiries');
+    if (!data) return;
+    var inquiries = Array.isArray(data) ? data : (data.inquiries || data.data || []);
+
+    var html = sectionHeader('Inquiries') + '</div>';
+
+    // Filters
+    html += '<div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">';
+    html += '<select id="inq-status-filter" onchange="filterInquiries()" style="' + selectStyle + 'width:auto;min-width:140px;"><option value="">All Status</option><option value="new">New</option><option value="read">Read</option><option value="responded">Responded</option><option value="closed">Closed</option></select>';
+    html += '<input type="text" id="inq-search" placeholder="Search..." oninput="filterInquiries()" style="' + inputStyle + 'width:250px;">';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + 'overflow-x:auto;">';
+    html += '<table style="' + tableStyle + '" id="inquiries-table"><thead><tr>';
+    html += '<th style="' + thStyle + '">Date</th>';
+    html += '<th style="' + thStyle + '">Customer</th>';
+    html += '<th style="' + thStyle + '">Car</th>';
+    html += '<th style="' + thStyle + '">Type</th>';
+    html += '<th style="' + thStyle + '">Message</th>';
+    html += '<th style="' + thStyle + '">Status</th>';
+    html += '<th style="' + thStyle + '">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    inquiries.forEach(function(inq) {
+        var customerName = inq.customer_name || ((inq.customer_first_name || '') + ' ' + (inq.customer_last_name || '')).trim() || (inq.customer ? (inq.customer.first_name + ' ' + inq.customer.last_name) : (inq.name || 'Unknown'));
+        var carTitle = inq.car_title || (inq.car ? inq.car.title : '') || '';
+        html += '<tr data-id="' + inq.id + '" data-status="' + (inq.status || '') + '" ' + tableRowHover() + '>';
+        html += '<td style="' + tdStyle + '">' + formatDate(inq.created_at || inq.date) + '</td>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-text-primary);">' + customerName + '</td>';
+        html += '<td style="' + tdStyle + '">' + carTitle + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(inq.inquiry_type || inq.type || 'general', { general: '#3b82f6', viewing: '#a855f7', test_drive: '#a855f7', offer: '#c9a05b', trade_in: '#f97316', finance: '#22c55e', callback: '#eab308' }) + '</td>';
+        html += '<td style="' + tdStyle + 'max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + truncate(inq.message, 60) + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(inq.status, inquiryStatusColors) + '</td>';
+        html += '<td style="' + tdStyle + '">';
+        html += '<button onclick="toggleInquiryDetail(' + inq.id + ')" style="' + btnSmall + 'background:var(--hos-black-border);color:var(--hos-text-primary);">View</button>';
+        html += '</td></tr>';
+        // Expandable detail row
+        html += '<tr id="inq-detail-' + inq.id + '" style="display:none;"><td colspan="7" style="padding:16px;background:var(--hos-black-primary);border-bottom:1px solid var(--hos-black-border);">';
+        html += '<div style="margin-bottom:12px;"><strong style="color:var(--hos-text-hint);">Full Message:</strong><p style="color:var(--hos-text-secondary);margin-top:4px;line-height:1.5;">' + (inq.message || '') + '</p></div>';
+        if (inq.response) html += '<div style="margin-bottom:12px;"><strong style="color:var(--hos-text-hint);">Previous Response:</strong><p style="color:var(--hos-text-secondary);margin-top:4px;line-height:1.5;">' + inq.response + '</p></div>';
+        html += '<div style="margin-bottom:12px;">';
+        html += '<label style="' + labelStyle + '">Quick Response</label>';
+        html += '<textarea id="inq-response-' + inq.id + '" style="' + inputStyle + 'min-height:80px;resize:vertical;" placeholder="Type your response..."></textarea>';
+        html += '</div>';
+        html += '<div style="display:flex;gap:8px;align-items:center;">';
+        html += '<button onclick="respondToInquiry(' + inq.id + ')" style="' + btnPrimary + 'padding:8px 16px;">Send Response</button>';
+        html += '<select onchange="updateInquiryStatus(' + inq.id + ', this.value)" style="' + selectStyle + 'width:auto;min-width:130px;">';
+        ['new','read','responded','closed'].forEach(function(s) {
+            html += '<option value="' + s + '"' + (inq.status === s ? ' selected' : '') + '>' + s + '</option>';
+        });
+        html += '</select>';
+        html += '</div></td></tr>';
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('view-container').innerHTML = html;
+}
+
+function toggleInquiryDetail(id) {
+    var row = document.getElementById('inq-detail-' + id);
+    row.style.display = row.style.display === 'none' ? '' : 'none';
+}
+
+function filterInquiries() {
+    var status = document.getElementById('inq-status-filter').value;
+    var q = document.getElementById('inq-search').value.toLowerCase();
+    document.querySelectorAll('#inquiries-table tbody tr:not([id])').forEach(function(row) {
+        var matchStatus = !status || row.dataset.status === status;
+        var matchSearch = !q || row.textContent.toLowerCase().includes(q);
+        row.style.display = matchStatus && matchSearch ? '' : 'none';
+        // Also hide the detail row
+        var detailRow = row.nextElementSibling;
+        if (detailRow && detailRow.id && detailRow.id.startsWith('inq-detail-')) {
+            if (!(matchStatus && matchSearch)) detailRow.style.display = 'none';
+        }
+    });
+}
+
+async function respondToInquiry(id) {
+    var textarea = document.getElementById('inq-response-' + id);
+    if (!textarea || !textarea.value.trim()) { showToast('Please enter a response', 'error'); return; }
+    var res = await api('/api/admin/inquiries/' + id, { method: 'PUT', body: { response: textarea.value.trim(), status: 'responded' } });
+    if (res) { showToast('Response sent'); loadInquiries(); }
+}
+
+async function updateInquiryStatus(id, status) {
+    await api('/api/admin/inquiries/' + id, { method: 'PUT', body: { status: status } });
+    showToast('Status updated');
+}
+
+// ============================================================
+// 5. OFFERS VIEW
+// ============================================================
+async function loadOffers() {
+    var data = await api('/api/admin/offers');
+    if (!data) return;
+    var offers = Array.isArray(data) ? data : (data.offers || data.data || []);
+
+    var html = sectionHeader('Offers') + '</div>';
+
+    html += '<div style="' + cardStyle + 'overflow-x:auto;">';
+    html += '<table style="' + tableStyle + '"><thead><tr>';
+    html += '<th style="' + thStyle + '">Date</th>';
+    html += '<th style="' + thStyle + '">Customer</th>';
+    html += '<th style="' + thStyle + '">Car</th>';
+    html += '<th style="' + thStyle + '">Offer Amount</th>';
+    html += '<th style="' + thStyle + '">Counter Amount</th>';
+    html += '<th style="' + thStyle + '">Trade-in</th>';
+    html += '<th style="' + thStyle + '">Status</th>';
+    html += '<th style="' + thStyle + '">Valid Until</th>';
+    html += '<th style="' + thStyle + '">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    offers.forEach(function(offer) {
+        var customerName = offer.customer_name || ((offer.customer_first_name || '') + ' ' + (offer.customer_last_name || '')).trim() || (offer.customer ? (offer.customer.first_name + ' ' + offer.customer.last_name) : 'Unknown');
+        var carTitle = offer.car_title || (offer.car ? offer.car.title : '') || '';
+        html += '<tr ' + tableRowHover() + '>';
+        html += '<td style="' + tdStyle + '">' + formatDate(offer.created_at || offer.date) + '</td>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-text-primary);">' + customerName + '</td>';
+        html += '<td style="' + tdStyle + '">' + carTitle + '</td>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-gold);font-weight:600;">' + formatPrice(offer.offer_amount || offer.amount) + '</td>';
+        html += '<td style="' + tdStyle + '">' + (offer.counter_amount ? formatPrice(offer.counter_amount) : '-') + '</td>';
+        html += '<td style="' + tdStyle + '">' + (offer.trade_in_vehicle ? 'Yes' : 'No') + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(offer.status, offerStatusColors) + '</td>';
+        html += '<td style="' + tdStyle + '">' + formatDate(offer.valid_until || offer.expires_at) + '</td>';
+        html += '<td style="' + tdStyle + '">';
+        if (offer.status === 'pending' || offer.status === 'countered') {
+            html += '<button onclick="counterOffer(' + offer.id + ')" style="' + btnSmall + 'background:var(--hos-status-blue);color:var(--hos-text-primary);margin-right:4px;" title="Counter">Counter</button>';
+            html += '<button onclick="acceptOffer(' + offer.id + ')" style="' + btnSmall + 'background:var(--hos-status-green);color:var(--hos-text-primary);margin-right:4px;" title="Accept">Accept</button>';
+            html += '<button onclick="rejectOffer(' + offer.id + ')" style="' + btnSmall + 'background:var(--hos-status-red);color:var(--hos-text-primary);" title="Reject">Reject</button>';
+        } else {
+            html += '<span style="color:var(--hos-text-disabled);font-size:12px;">' + (offer.status || '') + '</span>';
+        }
+        html += '</td></tr>';
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('view-container').innerHTML = html;
+}
+
+async function counterOffer(id) {
+    var amount = prompt('Enter counter-offer amount (EUR):');
+    if (!amount || isNaN(amount)) return;
+    var res = await api('/api/admin/offers/' + id, { method: 'PUT', body: { counter_amount: Number(amount), status: 'countered' } });
+    if (res) { showToast('Counter-offer sent'); loadOffers(); }
+}
+
+async function acceptOffer(id) {
+    var yes = await showConfirm('Accept this offer? This will create a reservation for the car.');
+    if (!yes) return;
+    var res = await api('/api/admin/offers/' + id + '/accept', { method: 'PUT' });
+    if (res) { showToast('Offer accepted'); loadOffers(); }
+}
+
+async function rejectOffer(id) {
+    var yes = await showConfirm('Reject this offer?');
+    if (!yes) return;
+    var res = await api('/api/admin/offers/' + id, { method: 'PUT', body: { status: 'rejected' } });
+    if (res) { showToast('Offer rejected'); loadOffers(); }
+}
+
+// ============================================================
+// 6. SALES VIEW
+// ============================================================
+async function loadSales() {
+    var data = await api('/api/admin/sales');
+    if (!data) return;
+    var sales = Array.isArray(data) ? data : (data.sales || data.data || []);
+
+    var html = sectionHeader('Sales') + '</div>';
+
+    html += '<div style="' + cardStyle + 'overflow-x:auto;">';
+    html += '<table style="' + tableStyle + '"><thead><tr>';
+    html += '<th style="' + thStyle + '">Invoice #</th>';
+    html += '<th style="' + thStyle + '">Date</th>';
+    html += '<th style="' + thStyle + '">Car</th>';
+    html += '<th style="' + thStyle + '">Customer</th>';
+    html += '<th style="' + thStyle + '">Sale Price</th>';
+    html += '<th style="' + thStyle + '">Payment</th>';
+    html += '<th style="' + thStyle + '">Delivery</th>';
+    html += '<th style="' + thStyle + '">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    sales.forEach(function(sale) {
+        var customerName = sale.customer_name || ((sale.customer_first_name || '') + ' ' + (sale.customer_last_name || '')).trim() || (sale.customer ? (sale.customer.first_name + ' ' + sale.customer.last_name) : 'Unknown');
+        var carTitle = sale.car_title || (sale.car ? sale.car.title : '') || '';
+        html += '<tr ' + tableRowHover() + '>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-text-primary);font-weight:500;">' + (sale.invoice_number || sale.id || '-') + '</td>';
+        html += '<td style="' + tdStyle + '">' + formatDate(sale.sale_date || sale.created_at) + '</td>';
+        html += '<td style="' + tdStyle + '">' + carTitle + '</td>';
+        html += '<td style="' + tdStyle + '">' + customerName + '</td>';
+        html += '<td style="' + tdStyle + 'color:var(--hos-gold);font-weight:600;">' + formatPrice(sale.sale_price || sale.amount) + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(sale.payment_status, paymentStatusColors) + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(sale.delivery_status, deliveryStatusColors) + '</td>';
+        html += '<td style="' + tdStyle + '">';
+        html += '<button onclick="viewSaleDetail(' + sale.id + ')" style="' + btnSmall + 'background:var(--hos-black-border);color:var(--hos-text-primary);">View</button>';
+        html += '</td></tr>';
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('view-container').innerHTML = html;
+}
+
+async function viewSaleDetail(id) {
+    var data = await api('/api/admin/sales/' + id);
+    if (!data) return;
+    var sale = data.sale || data;
+
+    var html = sectionHeader('Sale Details');
+    html += '<button onclick="loadView(\'sales\')" style="' + btnSecondary + '">Back to Sales</button></div>';
+
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Sale Information</h3>';
+    html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+    html += '<div><span style="color:var(--hos-text-hint);">Invoice:</span> <span style="color:var(--hos-text-primary);">' + (sale.invoice_number || sale.id) + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Date:</span> <span style="color:var(--hos-text-primary);">' + formatDate(sale.sale_date || sale.created_at) + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Sale Price:</span> <span style="color:var(--hos-gold);font-weight:600;">' + formatPrice(sale.sale_price || sale.amount) + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Payment Status:</span> ' + statusBadge(sale.payment_status, paymentStatusColors) + '</div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Delivery Status:</span> ' + statusBadge(sale.delivery_status, deliveryStatusColors) + '</div>';
+    html += '</div></div>';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Customer</h3>';
+    var cust = sale.customer || {};
+    html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+    html += '<div><span style="color:var(--hos-text-hint);">Name:</span> <span style="color:var(--hos-text-primary);">' + (sale.customer_name || (cust.first_name || '') + ' ' + (cust.last_name || '')) + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Email:</span> <span style="color:var(--hos-text-primary);">' + (cust.email || '-') + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Phone:</span> <span style="color:var(--hos-text-primary);">' + (cust.phone || '-') + '</span></div>';
+    html += '</div></div>';
+
+    html += '</div>';
+
+    // Update status
+    html += '<div style="' + cardStyle + 'margin-top:16px;">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Update Sale</h3>';
+    html += '<div style="display:flex;gap:16px;align-items:flex-end;">';
+    html += '<div><label style="' + labelStyle + '">Payment Status</label>';
+    html += '<select id="sale-payment-status" style="' + selectStyle + 'width:auto;min-width:150px;">';
+    ['pending','partial','paid','refunded'].forEach(function(s) {
+        html += '<option value="' + s + '"' + (sale.payment_status === s ? ' selected' : '') + '>' + s + '</option>';
+    });
+    html += '</select></div>';
+    html += '<div><label style="' + labelStyle + '">Delivery Status</label>';
+    html += '<select id="sale-delivery-status" style="' + selectStyle + 'width:auto;min-width:150px;">';
+    ['pending','in_transit','delivered'].forEach(function(s) {
+        html += '<option value="' + s + '"' + (sale.delivery_status === s ? ' selected' : '') + '>' + s + '</option>';
+    });
+    html += '</select></div>';
+    html += '<button onclick="updateSale(' + sale.id + ')" style="' + btnPrimary + '">Update</button>';
+    html += '</div></div>';
+
+    document.getElementById('view-container').innerHTML = html;
+}
+
+async function updateSale(id) {
+    var body = {
+        payment_status: document.getElementById('sale-payment-status').value,
+        delivery_status: document.getElementById('sale-delivery-status').value
+    };
+    var res = await api('/api/admin/sales/' + id, { method: 'PUT', body: body });
+    if (res) showToast('Sale updated');
+}
+
+// ============================================================
+// 7. CUSTOMERS VIEW
+// ============================================================
+async function loadCustomers() {
+    var data = await api('/api/admin/customers');
+    if (!data) return;
+    var customers = Array.isArray(data) ? data : (data.customers || data.data || []);
+
+    var html = sectionHeader('Customers') + '</div>';
+
+    // Filters
+    html += '<div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">';
+    html += '<input type="text" id="cust-search" placeholder="Search customers..." oninput="filterCustomers()" style="' + inputStyle + 'width:300px;">';
+    html += '<select id="cust-status-filter" onchange="filterCustomers()" style="' + selectStyle + 'width:auto;min-width:140px;"><option value="">All Status</option><option value="new">New</option><option value="contacted">Contacted</option><option value="qualified">Qualified</option><option value="viewing_scheduled">Viewing Scheduled</option><option value="negotiation">Negotiation</option><option value="deposit">Deposit</option><option value="sold">Sold</option><option value="lost">Lost</option><option value="archived">Archived</option></select>';
+    html += '<select id="cust-type-filter" onchange="filterCustomers()" style="' + selectStyle + 'width:auto;min-width:140px;"><option value="">All Types</option><option value="private">Private</option><option value="trade">Trade</option><option value="collector">Collector</option><option value="investor">Investor</option></select>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + 'overflow-x:auto;">';
+    html += '<table style="' + tableStyle + '" id="customers-table"><thead><tr>';
+    html += '<th style="' + thStyle + '">Name</th>';
+    html += '<th style="' + thStyle + '">Email</th>';
+    html += '<th style="' + thStyle + '">Phone</th>';
+    html += '<th style="' + thStyle + '">Type</th>';
+    html += '<th style="' + thStyle + '">Status</th>';
+    html += '<th style="' + thStyle + '">Lead Score</th>';
+    html += '<th style="' + thStyle + '">Inquiries</th>';
+    html += '<th style="' + thStyle + '">Purchases</th>';
+    html += '<th style="' + thStyle + '">Last Contact</th>';
+    html += '<th style="' + thStyle + '">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    customers.forEach(function(cust) {
+        var name = (cust.first_name || '') + ' ' + (cust.last_name || '');
+        var score = cust.lead_score || 0;
+        var scoreColor = score >= 70 ? '#22c55e' : score >= 40 ? '#eab308' : '#ef4444';
+        html += '<tr data-status="' + (cust.status || '') + '" data-type="' + (cust.customer_type || cust.type || '') + '" style="cursor:pointer;" ' + tableRowHover() + ' onclick="loadView(\'customer-detail\', ' + cust.id + ')">';
+        html += '<td style="' + tdStyle + 'color:var(--hos-text-primary);font-weight:500;">' + name.trim() + '</td>';
+        html += '<td style="' + tdStyle + '">' + (cust.email || '-') + '</td>';
+        html += '<td style="' + tdStyle + '">' + (cust.phone || '-') + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(cust.customer_type || cust.type || 'private', { private: '#3b82f6', trade: '#a855f7', collector: '#c9a05b', investor: '#22c55e' }) + '</td>';
+        html += '<td style="' + tdStyle + '">' + statusBadge(cust.status, customerStatusColors) + '</td>';
+        html += '<td style="' + tdStyle + '"><div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:6px;background:var(--hos-black-border);border-radius:3px;overflow:hidden;"><div style="width:' + score + '%;height:100%;background:' + scoreColor + ';border-radius:3px;"></div></div><span style="font-size:12px;color:' + scoreColor + ';">' + score + '</span></div></td>';
+        html += '<td style="' + tdStyle + '">' + (cust.inquiries_count || 0) + '</td>';
+        html += '<td style="' + tdStyle + '">' + (cust.purchases_count || 0) + '</td>';
+        html += '<td style="' + tdStyle + '">' + formatDate(cust.last_contact_at || cust.last_contact || cust.last_activity) + '</td>';
+        html += '<td style="' + tdStyle + '" onclick="event.stopPropagation()">';
+        html += '<button onclick="loadView(\'customer-detail\', ' + cust.id + ')" style="' + btnSmall + 'background:var(--hos-black-border);color:var(--hos-text-primary);">View</button>';
+        html += '</td></tr>';
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('view-container').innerHTML = html;
+}
+
+function filterCustomers() {
+    var q = document.getElementById('cust-search').value.toLowerCase();
+    var status = document.getElementById('cust-status-filter').value;
+    var type = document.getElementById('cust-type-filter').value;
+    document.querySelectorAll('#customers-table tbody tr').forEach(function(row) {
+        var matchQ = !q || row.textContent.toLowerCase().includes(q);
+        var matchStatus = !status || row.dataset.status === status;
+        var matchType = !type || row.dataset.type === type;
+        row.style.display = matchQ && matchStatus && matchType ? '' : 'none';
+    });
+}
+
+// ============================================================
+// CUSTOMER DETAIL VIEW
+// ============================================================
+async function loadCustomerDetail(id) {
+    var data = await api('/api/admin/customers/' + id);
+    if (!data) return;
+    var cust = data.customer || data;
+    setActiveNav('customers');
+
+    var html = sectionHeader((cust.first_name || '') + ' ' + (cust.last_name || ''));
+    html += '<button onclick="loadView(\'customers\')" style="' + btnSecondary + '">Back to Customers</button></div>';
+
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">';
+
+    // Contact details
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Contact Details</h3>';
+    html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+    html += '<div><span style="color:var(--hos-text-hint);">Email:</span> <span style="color:var(--hos-text-primary);">' + (cust.email || '-') + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Phone:</span> <span style="color:var(--hos-text-primary);">' + (cust.phone || '-') + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Address:</span> <span style="color:var(--hos-text-primary);">' + (cust.address || '-') + '</span></div>';
+    html += '<div><span style="color:var(--hos-text-hint);">Type:</span> ' + statusBadge(cust.customer_type || cust.type || 'private', { private: '#3b82f6', trade: '#a855f7', collector: '#c9a05b', investor: '#22c55e' }) + '</div>';
+    html += '<div style="margin-top:8px;">';
+    html += '<label style="' + labelStyle + '">Status</label>';
+    html += '<select onchange="updateCustomerStatus(' + id + ', this.value)" style="' + selectStyle + 'width:auto;min-width:140px;">';
+    ['new','contacted','qualified','viewing_scheduled','negotiation','deposit','sold','lost','archived'].forEach(function(s) {
+        html += '<option value="' + s + '"' + (cust.status === s ? ' selected' : '') + '>' + s + '</option>';
+    });
+    html += '</select></div>';
+    html += '</div></div>';
+
+    // Stats
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Stats</h3>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+    html += '<div style="background:var(--hos-black-primary);padding:12px;border-radius:6px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--hos-gold);">' + (cust.inquiries_count || 0) + '</div><div style="font-size:12px;color:var(--hos-text-hint);">Inquiries</div></div>';
+    html += '<div style="background:var(--hos-black-primary);padding:12px;border-radius:6px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--hos-status-green);">' + (cust.purchases_count || 0) + '</div><div style="font-size:12px;color:var(--hos-text-hint);">Purchases</div></div>';
+    html += '<div style="background:var(--hos-black-primary);padding:12px;border-radius:6px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--hos-status-blue);">' + (cust.offers_count || 0) + '</div><div style="font-size:12px;color:var(--hos-text-hint);">Offers</div></div>';
+    var score = cust.lead_score || 0;
+    html += '<div style="background:var(--hos-black-primary);padding:12px;border-radius:6px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--hos-status-yellow);">' + score + '</div><div style="font-size:12px;color:var(--hos-text-hint);">Lead Score</div></div>';
+    html += '</div></div>';
+
+    html += '</div>';
+
+    // Load timeline
+    html += '<div style="' + cardStyle + 'margin-bottom:16px;">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Activity Timeline</h3>';
+    html += '<div id="customer-timeline"><span style="color:var(--hos-text-disabled);">Loading...</span></div>';
+    html += '</div>';
+
+    // Inquiry history
+    if (cust.inquiries && cust.inquiries.length) {
+        html += '<div style="' + cardStyle + 'margin-bottom:16px;">';
+        html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Inquiry History</h3>';
+        cust.inquiries.forEach(function(inq) {
+            html += '<div style="padding:10px;border-bottom:1px solid var(--hos-black-surface);display:flex;justify-content:space-between;">';
+            html += '<div><span style="color:var(--hos-text-primary);">' + (inq.car_title || 'General') + '</span><span style="color:var(--hos-text-disabled);margin-left:8px;font-size:12px;">' + formatDate(inq.created_at) + '</span></div>';
+            html += statusBadge(inq.status, inquiryStatusColors);
+            html += '</div>';
+        });
+        html += '</div>';
+    }
+
+    // Purchase history
+    if (cust.purchases && cust.purchases.length) {
+        html += '<div style="' + cardStyle + 'margin-bottom:16px;">';
+        html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Purchase History</h3>';
+        cust.purchases.forEach(function(p) {
+            html += '<div style="padding:10px;border-bottom:1px solid var(--hos-black-surface);display:flex;justify-content:space-between;">';
+            html += '<div><span style="color:var(--hos-text-primary);">' + (p.car_title || '') + '</span><span style="color:var(--hos-text-disabled);margin-left:8px;font-size:12px;">' + formatDate(p.sale_date || p.created_at) + '</span></div>';
+            html += '<span style="color:var(--hos-gold);font-weight:600;">' + formatPrice(p.sale_price || p.amount) + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+    }
+
+    // Notes section
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Notes</h3>';
+    html += '<div id="customer-notes">';
+    if (cust.notes && cust.notes.length) {
+        cust.notes.forEach(function(note) {
+            html += '<div style="padding:10px;background:var(--hos-black-primary);border-radius:4px;margin-bottom:8px;">';
+            html += '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--hos-text-hint);font-size:12px;">' + (note.author || 'Admin') + '</span><span style="color:var(--hos-text-disabled);font-size:12px;">' + formatDateTime(note.created_at) + '</span></div>';
+            html += '<p style="color:var(--hos-text-secondary);font-size:14px;line-height:1.4;">' + (note.content || note.note || '') + '</p>';
+            html += '</div>';
+        });
+    }
+    html += '</div>';
+    html += '<div style="margin-top:12px;">';
+    html += '<textarea id="new-customer-note" style="' + inputStyle + 'min-height:80px;resize:vertical;margin-bottom:8px;" placeholder="Add a note..."></textarea>';
+    html += '<button onclick="addCustomerNote(' + id + ')" style="' + btnPrimary + '">Add Note</button>';
+    html += '</div></div>';
+
+    document.getElementById('view-container').innerHTML = html;
+
+    // Load timeline async
+    loadCustomerTimeline(id);
+}
+
+async function loadCustomerTimeline(id) {
+    var data = await api('/api/admin/customers/' + id + '/timeline');
+    var container = document.getElementById('customer-timeline');
+    if (!container) return;
+    var timeline = data ? (Array.isArray(data) ? data : (data.timeline || data.events || [])) : [];
+    if (!timeline.length) { container.innerHTML = '<p style="color:var(--hos-text-disabled);font-size:13px;">No activity yet.</p>'; return; }
+    container.innerHTML = timeline.map(function(e) {
+        return '<div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--hos-black-surface);">' +
+            '<div style="width:8px;height:8px;border-radius:50%;background:var(--hos-gold);margin-top:6px;flex-shrink:0;"></div>' +
+            '<div><div style="font-size:13px;color:var(--hos-text-secondary);">' + (e.description || e.message || e.action || '') + '</div>' +
+            '<div style="font-size:11px;color:var(--hos-text-disabled);margin-top:2px;">' + formatDateTime(e.created_at || e.date) + '</div></div></div>';
+    }).join('');
+}
+
+async function updateCustomerStatus(id, status) {
+    var res = await api('/api/admin/customers/' + id + '/status', { method: 'PUT', body: { status: status } });
+    if (res) showToast('Customer status updated');
+}
+
+async function addCustomerNote(id) {
+    var textarea = document.getElementById('new-customer-note');
+    if (!textarea || !textarea.value.trim()) { showToast('Please enter a note', 'error'); return; }
+    var res = await api('/api/admin/customers/' + id + '/note', { method: 'POST', body: { note: textarea.value.trim() } });
+    if (res) { showToast('Note added'); loadView('customer-detail', id); }
+}
+
+// ============================================================
+// 8. ANALYTICS VIEW
+// ============================================================
+async function loadAnalytics() {
+    var html = sectionHeader('Analytics') + '</div>';
+
+    // Tabs
+    html += '<div style="display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--hos-black-border);">';
+    html += '<button id="tab-inventory" onclick="switchAnalyticsTab(\'inventory\')" style="padding:12px 24px;background:transparent;color:var(--hos-gold);border:none;border-bottom:2px solid var(--hos-gold);cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;">Inventory</button>';
+    html += '<button id="tab-sales" onclick="switchAnalyticsTab(\'sales\')" style="padding:12px 24px;background:transparent;color:var(--hos-text-hint);border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:14px;">Sales</button>';
+    html += '<button id="tab-leads" onclick="switchAnalyticsTab(\'leads\')" style="padding:12px 24px;background:transparent;color:var(--hos-text-hint);border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:14px;">Leads</button>';
+    html += '</div>';
+
+    html += '<div id="analytics-content"><span style="color:var(--hos-text-disabled);">Loading...</span></div>';
+
+    document.getElementById('view-container').innerHTML = html;
+    switchAnalyticsTab('inventory');
+}
+
+async function switchAnalyticsTab(tab) {
+    ['inventory','sales','leads'].forEach(function(t) {
+        var btn = document.getElementById('tab-' + t);
+        if (btn) {
+            btn.style.color = t === tab ? 'var(--hos-gold)' : 'var(--hos-text-hint)';
+            btn.style.borderBottomColor = t === tab ? 'var(--hos-gold)' : 'transparent';
+            btn.style.fontWeight = t === tab ? '600' : '400';
+        }
+    });
+
+    var container = document.getElementById('analytics-content');
+    container.innerHTML = '<span style="color:var(--hos-text-disabled);">Loading...</span>';
+
+    if (tab === 'inventory') await loadAnalyticsInventory(container);
+    else if (tab === 'sales') await loadAnalyticsSales(container);
+    else if (tab === 'leads') await loadAnalyticsLeads(container);
+}
+
+async function loadAnalyticsInventory(container) {
+    var data = await api('/api/admin/analytics/inventory');
+    if (!data) { container.innerHTML = '<p style="color:var(--hos-text-disabled);">Failed to load data.</p>'; return; }
+
+    var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">';
+
+    html += '<div style="' + cardStyle + 'text-align:center;">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Total Stock Value</div>';
+    html += '<div style="font-size:28px;font-weight:700;color:var(--hos-gold);">' + formatPrice(data.stock_value || data.total_stock_value || 0) + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + 'text-align:center;">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Average Days on Market</div>';
+    html += '<div style="font-size:28px;font-weight:700;color:var(--hos-status-blue);">' + Math.round(data.avg_days_on_market || data.average_days_on_market || 0) + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + 'text-align:center;">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Total Cars</div>';
+    html += '<div style="font-size:28px;font-weight:700;color:var(--hos-status-green);">' + (data.stock_count || data.total_cars || 0) + '</div>';
+    html += '</div>';
+
+    html += '</div>';
+
+    // Aging breakdown
+    var aging = data.aging_breakdown || data.agingBreakdown || {};
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Aging Breakdown</h3>';
+    var agingRanges = [
+        { label: '0-30 days', key: 'under_30', color: '#22c55e' },
+        { label: '31-60 days', key: 'days_30_60', color: '#eab308' },
+        { label: '61-90 days', key: 'days_60_90', color: '#f97316' },
+        { label: '90+ days', key: 'over_90', color: '#ef4444' }
+    ];
+    agingRanges.forEach(function(r) {
+        var count = aging[r.key] || aging[r.label] || 0;
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hos-black-surface);">';
+        html += '<div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:' + r.color + ';"></div><span style="color:var(--hos-text-secondary);">' + r.label + '</span></div>';
+        html += '<span style="color:var(--hos-text-primary);font-weight:600;">' + count + '</span>';
+        html += '</div>';
+    });
+    html += '</div>';
+
+    // Brand distribution (backend returns array of {brand, count, total_value})
+    var brandsRaw = data.brand_distribution || data.brandDistribution || [];
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Brand Distribution</h3>';
+    var brandEntries = Array.isArray(brandsRaw) ? brandsRaw.sort(function(a, b) { return b.count - a.count; }) : Object.entries(brandsRaw).map(function(e) { return { brand: e[0], count: e[1] }; });
+    if (brandEntries.length === 0) {
+        html += '<p style="color:var(--hos-text-disabled);font-size:13px;">No data available.</p>';
+    } else {
+        brandEntries.forEach(function(entry) {
+            html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--hos-black-surface);">';
+            html += '<span style="color:var(--hos-text-secondary);">' + (entry.brand || entry[0] || '') + '</span>';
+            html += '<span style="color:var(--hos-gold);font-weight:600;">' + (entry.count || entry[1] || 0) + '</span>';
+            html += '</div>';
+        });
+    }
+    html += '</div>';
+
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+async function loadAnalyticsSales(container) {
+    var data = await api('/api/admin/analytics/sales');
+    if (!data) { container.innerHTML = '<p style="color:var(--hos-text-disabled);">Failed to load data.</p>'; return; }
+
+    var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">';
+
+    html += '<div style="' + cardStyle + 'text-align:center;">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Total Revenue This Year</div>';
+    html += '<div style="font-size:28px;font-weight:700;color:var(--hos-gold);">' + formatPrice((data.this_year && data.this_year.revenue) || data.total_revenue_year || 0) + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + 'text-align:center;">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Average Sale Price</div>';
+    html += '<div style="font-size:28px;font-weight:700;color:var(--hos-status-blue);">' + formatPrice((data.this_year && data.this_year.avg_price) || data.average_sale_price || 0) + '</div>';
+    html += '</div>';
+
+    html += '<div style="' + cardStyle + 'text-align:center;">';
+    html += '<div style="font-size:13px;color:var(--hos-text-hint);margin-bottom:8px;">Conversion Rate</div>';
+    html += '<div style="font-size:28px;font-weight:700;color:var(--hos-status-green);">' + (Number(data.conversion_rate) || 0).toFixed(1) + '%</div>';
+    html += '<div style="font-size:12px;color:var(--hos-text-disabled);margin-top:4px;">Inquiries to Sales</div>';
+    html += '</div>';
+
+    html += '</div>';
+
+    // Monthly Revenue
+    var monthly = data.monthly_sales || data.monthly_revenue || data.monthlyRevenue || [];
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Monthly Revenue (Last 6 Months)</h3>';
+    if (!monthly.length) {
+        html += '<p style="color:var(--hos-text-disabled);">No sales data available.</p>';
+    } else {
+        var maxRev = Math.max.apply(null, monthly.map(function(m) { return m.revenue || m.amount || 0; }));
+        monthly.forEach(function(m) {
+            var rev = m.revenue || m.amount || 0;
+            var pct = maxRev > 0 ? (rev / maxRev * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--hos-black-surface);">';
+            html += '<span style="color:var(--hos-text-hint);width:80px;font-size:13px;">' + (m.month || m.label || '') + '</span>';
+            html += '<div style="flex:1;height:20px;background:var(--hos-black-primary);border-radius:4px;overflow:hidden;">';
+            html += '<div style="width:' + pct + '%;height:100%;background:linear-gradient(90deg,var(--hos-gold),var(--hos-gold-bright));border-radius:4px;"></div></div>';
+            html += '<span style="color:var(--hos-text-primary);font-weight:600;width:120px;text-align:right;font-size:13px;">' + formatPrice(rev) + '</span>';
+            html += '<span style="color:var(--hos-text-disabled);font-size:12px;width:40px;text-align:right;">' + (m.count || 0) + '</span>';
+            html += '</div>';
+        });
+    }
+    html += '</div>';
+
+    container.innerHTML = html;
+}
+
+async function loadAnalyticsLeads(container) {
+    var data = await api('/api/admin/analytics/leads');
+    if (!data) { container.innerHTML = '<p style="color:var(--hos-text-disabled);">Failed to load data.</p>'; return; }
+
+    var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+
+    // Leads by source (backend returns array of {lead_source, count})
+    var sourcesRaw = data.by_source || data.leads_by_source || data.leadsBySource || [];
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Leads by Source</h3>';
+    var sourceEntries = Array.isArray(sourcesRaw) ? sourcesRaw.sort(function(a, b) { return b.count - a.count; }) : Object.entries(sourcesRaw).map(function(e) { return { lead_source: e[0], count: e[1] }; });
+    if (sourceEntries.length === 0) {
+        html += '<p style="color:var(--hos-text-disabled);font-size:13px;">No data available.</p>';
+    } else {
+        sourceEntries.forEach(function(entry) {
+            html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hos-black-surface);">';
+            html += '<span style="color:var(--hos-text-secondary);">' + (entry.lead_source || entry[0] || '') + '</span>';
+            html += '<span style="color:var(--hos-gold);font-weight:600;">' + (entry.count || entry[1] || 0) + '</span>';
+            html += '</div>';
+        });
+    }
+    html += '</div>';
+
+    // Conversion funnel
+    var funnel = data.funnel || data.conversion_funnel || data.conversionFunnel || {};
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:16px;">Conversion Funnel</h3>';
+    var funnelSteps = [
+        { label: 'New', key: 'new', color: '#3b82f6' },
+        { label: 'Contacted', key: 'contacted', color: '#eab308' },
+        { label: 'Qualified', key: 'qualified', color: '#f97316' },
+        { label: 'Sold', key: 'sold', color: '#22c55e' }
+    ];
+    var totalNew = funnel['new'] || funnel.new_count || 0;
+    funnelSteps.forEach(function(step) {
+        var count = funnel[step.key] || funnel[step.key + '_count'] || 0;
+        var pct = totalNew > 0 ? (count / totalNew * 100).toFixed(1) : 0;
+        html += '<div style="margin-bottom:12px;">';
+        html += '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">';
+        html += '<span style="color:var(--hos-text-secondary);font-size:14px;">' + step.label + '</span>';
+        html += '<span style="color:var(--hos-text-primary);font-weight:600;">' + count + ' <span style="color:var(--hos-text-hint);font-weight:400;font-size:12px;">(' + pct + '%)</span></span>';
+        html += '</div>';
+        html += '<div style="height:24px;background:var(--hos-black-primary);border-radius:4px;overflow:hidden;">';
+        html += '<div style="width:' + (totalNew > 0 ? (count / totalNew * 100) : 0) + '%;height:100%;background:' + step.color + ';border-radius:4px;transition:width 0.3s;"></div>';
+        html += '</div></div>';
+    });
+    html += '</div>';
+
+    html += '</div>';
+
+    // Follow-ups due
+    var followups = data.followups_due || data.followupsDue || 0;
+    html += '<div style="' + cardStyle + 'margin-top:16px;display:flex;align-items:center;justify-content:space-between;">';
+    html += '<div><h3 style="color:var(--hos-gold);font-size:16px;">Follow-ups Due</h3><p style="color:var(--hos-text-hint);font-size:13px;margin-top:4px;">Customers requiring follow-up</p></div>';
+    html += '<div style="font-size:36px;font-weight:700;color:var(--hos-status-yellow);">' + followups + '</div>';
+    html += '</div>';
+
+    container.innerHTML = html;
+}
+
+// ============================================================
+// 9. SETTINGS VIEW
+// ============================================================
+async function loadSettings() {
+    var data = await api('/api/admin/settings');
+    if (!data) return;
+    // The backend returns {key: {value, updated_at}} - flatten to {key: value}
+    var raw = data.settings || data;
+    var settings = {};
+    for (var k in raw) {
+        if (raw[k] && typeof raw[k] === 'object' && raw[k].value !== undefined) {
+            settings[k] = raw[k].value;
+        } else {
+            settings[k] = raw[k];
+        }
+    }
+
+    var html = sectionHeader('Settings') + '</div>';
+
+    html += '<form id="settings-form" onsubmit="saveSettings(event)" style="max-width:700px;">';
+    html += '<div style="' + cardStyle + '">';
+    html += '<h3 style="color:var(--hos-gold);font-size:16px;margin-bottom:20px;">Dealership Information</h3>';
+
+    html += formField('Dealership Name', 'text', 'setting-dealership_name', settings.dealership_name);
+    html += formField('Address', 'text', 'setting-address', settings.address);
+
+    html += formRow([
+        formField('City', 'text', 'setting-city', settings.city),
+        formField('Postal Code', 'text', 'setting-postal_code', settings.postal_code),
+        formField('Country', 'text', 'setting-country', settings.country),
+    ]);
+
+    html += formRow([
+        formField('Phone', 'text', 'setting-phone', settings.phone),
+        formField('Email', 'email', 'setting-email', settings.email),
+    ]);
+
+    html += formField('Website', 'text', 'setting-website', settings.website);
+
+    html += formRow([
+        formField('VAT Rate (%)', 'number', 'setting-vat_rate', settings.vat_rate),
+        formSelect('Currency', 'setting-currency', ['EUR','GBP','USD','CHF'], settings.currency || 'EUR'),
+    ]);
+
+    html += '</div>';
+
+    html += '<div style="margin-top:16px;">';
+    html += '<button type="submit" style="' + btnPrimary + '">Save Settings</button>';
+    html += '</div>';
+
+    html += '</form>';
+
+    document.getElementById('view-container').innerHTML = html;
+}
+
+async function saveSettings(e) {
+    e.preventDefault();
+    var settingFields = ['dealership_name','address','city','postal_code','country','phone','email','website','vat_rate','currency'];
+    var body = {};
+    settingFields.forEach(function(name) {
+        var el = document.getElementById('field-setting-' + name);
+        if (el) body[name] = name === 'vat_rate' ? Number(el.value) : el.value;
+    });
+    var res = await api('/api/admin/settings', { method: 'PUT', body: body });
+    if (res) showToast('Settings saved successfully');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+checkAuth();
+</script>
+</body>
+</html>

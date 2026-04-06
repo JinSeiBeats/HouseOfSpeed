@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse luxury and classic cars for sale at House Of Speed. Ferrari, Rolls-Royce, Lotus, and more premium vehicles available.">
+    <meta name="keywords" content="luxury cars for sale, classic cars, Ferrari, Rolls-Royce, Lotus, House Of Speed">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Cars for Sale - House Of Speed">
+    <meta property="og:description" content="Browse luxury and classic cars for sale at House Of Speed.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://houseofspeed.dk/cars.html">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cars for Sale - House Of Speed">
+    <meta name="twitter:description" content="Browse luxury and classic cars for sale at House Of Speed.">
+
+    <title>Cars for Sale | House Of Speed</title>
+    <link rel="canonical" href="https://houseofspeed.dk/cars.html">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* HOS Theme (matches main styles.css) */
+        :root {
+            --hos-black: #111111;
+            --hos-black-primary: #1a1a1a;
+            --hos-black-raised: #1f1f1f;
+            --hos-black-elevated: #1e1e1e;
+            --hos-black-card: #222222;
+            --hos-black-surface: #2a2a2a;
+            --hos-black-border: #333333;
+            --hos-black-divider: #3a3a3a;
+            --hos-black-muted: #444444;
+            --hos-gold: #c9a05b;
+            --hos-gold-light: #d4b06a;
+            --hos-gold-bright: #e8c874;
+            --hos-gold-dark: #b08a45;
+            --hos-gold-10: rgba(201, 160, 91, 0.1);
+            --hos-gold-15: rgba(201, 160, 91, 0.15);
+            --hos-gold-20: rgba(201, 160, 91, 0.2);
+            --hos-gold-30: rgba(201, 160, 91, 0.3);
+            --hos-gold-90: rgba(201, 160, 91, 0.9);
+            --hos-gray-500: #555555;
+            --hos-gray-600: #666666;
+            --hos-gray-700: #777777;
+            --hos-gray-800: #888888;
+            --hos-gray-900: #999999;
+            --hos-gray-a00: #aaaaaa;
+            --hos-gray-c00: #cccccc;
+            --hos-gray-d00: #dddddd;
+            --hos-gray-e00: #eeeeee;
+            --hos-text-primary: #ffffff;
+            --hos-text-secondary: #cccccc;
+            --hos-text-muted: #999999;
+            --hos-text-hint: #888888;
+            --hos-text-disabled: #666666;
+            --hos-text-on-gold: #1a1a1a;
+            --hos-status-green: #22c55e;
+            --hos-status-green-muted: #6fcf7f;
+            --hos-status-red: #ef4444;
+            --hos-status-red-light: #ff6b7a;
+            --hos-status-red-dark: #d63031;
+            --hos-status-green-dark: #2ea043;
+            --hos-status-yellow: #eab308;
+            --hos-status-blue: #3b82f6;
+            --hos-status-orange: #f97316;
+            --hos-status-purple: #a855f7;
+            --hos-status-gray: #6b7280;
+            --hos-error: #d32f2f;
+            --hos-success: #388e3c;
+            --hos-warning: #f9a825;
+            --hos-nav-bg: rgba(20, 20, 20, 0.95);
+            --hos-nav-bg-solid: rgba(20, 20, 20, 0.98);
+            --hos-overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        /* ── Hero ── */
+        .cars-hero {
+            position: relative;
+            height: 40vh;
+            min-height: 280px;
+            background: url('assets/images/ferari3.jpg') center center / cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+        .cars-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .cars-hero h1,
+        .cars-hero p {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: var(--hos-text-primary);
+        }
+        .cars-hero h1 {
+            font-size: 3rem;
+            letter-spacing: 0.3em;
+            margin: 0;
+        }
+        .cars-hero p {
+            font-size: 1.1rem;
+            color: var(--hos-text-secondary);
+            letter-spacing: 0.08em;
+            margin: 0;
+        }
+
+        /* ── Stats Bar ── */
+        .stats-bar {
+            background: var(--hos-black-card);
+            border-bottom: 1px solid var(--hos-gold);
+            padding: 0.9rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            color: var(--hos-text-secondary);
+        }
+        .stats-bar .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .stats-bar .stat-value {
+            color: var(--hos-gold);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .stats-bar .stat-divider {
+            color: var(--hos-gray-500);
+            user-select: none;
+        }
+
+        /* ── Filter Section ── */
+        .filter-section {
+            background: var(--hos-black-card);
+            padding: 1.2rem 2rem;
+            border-bottom: 1px solid var(--hos-black-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: center;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .filter-row + .filter-row {
+            margin-top: 0.75rem;
+        }
+        .filter-section input[type="text"],
+        .filter-section input[type="number"],
+        .filter-section select {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: var(--hos-black-primary);
+            color: var(--hos-text-primary);
+            border: 1px solid var(--hos-gold);
+            padding: 0.55rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 2px;
+            min-width: 150px;
+            appearance: auto;
+        }
+        .filter-section input[type="text"] {
+            min-width: 200px;
+        }
+        .filter-section input[type="number"] {
+            min-width: 110px;
+        }
+        .filter-section input:focus,
+        .filter-section select:focus {
+            outline: 2px solid var(--hos-gold);
+            outline-offset: 1px;
+        }
+        .filter-section input::placeholder {
+            color: var(--hos-gray-700);
+        }
+        .filter-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .filter-reset-btn {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: transparent;
+            color: var(--hos-gold);
+            border: 1px solid var(--hos-gold);
+            padding: 0.55rem 1.5rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+        .filter-reset-btn:hover {
+            background: var(--hos-gold-10);
+        }
+        .filter-count-badge {
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .filter-count-badge.visible {
+            display: flex;
+        }
+
+        /* ── Cars Grid ── */
+        .cars-section {
+            background: var(--hos-black-primary);
+            padding: 3rem 2rem 4rem;
+        }
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ── Car Card ── */
+        .car-card {
+            background: var(--hos-black-surface);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .car-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+        }
+        .car-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        }
+        .car-card-image {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 */
+            overflow: hidden;
+        }
+        .car-card-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .car-card:hover .car-card-image img {
+            transform: scale(1.05);
+        }
+        .brand-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(201, 160, 91, 0.92);
+            color: var(--hos-text-on-gold);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            border-radius: 2px;
+            text-transform: uppercase;
+            z-index: 1;
+        }
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border-radius: 2px;
+            text-transform: uppercase;
+            z-index: 1;
+        }
+        .status-badge.available { background: var(--hos-status-green); color: var(--hos-text-primary); }
+        .status-badge.sold { background: var(--hos-status-red); color: var(--hos-text-primary); }
+        .status-badge.reserved { background: rgba(201, 160, 91, 0.9); color: var(--hos-text-on-gold); }
+
+        /* Ribbons & badges */
+        .card-ribbon {
+            position: absolute;
+            top: 16px;
+            left: -30px;
+            width: 120px;
+            text-align: center;
+            padding: 0.25rem 0;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transform: rotate(-45deg);
+            z-index: 2;
+        }
+        .card-ribbon.featured {
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+        }
+        .card-badge-new,
+        .card-badge-reduced {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 2px;
+            z-index: 1;
+        }
+        .card-badge-new {
+            background: var(--hos-status-green-dark);
+            color: var(--hos-text-primary);
+        }
+        .card-badge-reduced {
+            background: var(--hos-status-red-dark);
+            color: var(--hos-text-primary);
+            left: auto;
+            right: 12px;
+        }
+
+        .car-card-body {
+            padding: 1.2rem 1.4rem 1.4rem;
+        }
+        .car-card-title {
+            font-size: 1.1rem;
+            color: var(--hos-gold);
+            margin: 0 0 0.5rem;
+            letter-spacing: 0.05em;
+        }
+        .car-card-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .car-card-title a:hover {
+            text-decoration: underline;
+        }
+        .car-card-specs {
+            color: var(--hos-gray-a00);
+            font-size: 0.8rem;
+            margin: 0 0 0.25rem;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
+        }
+        .car-card-price {
+            font-size: 1.35rem;
+            color: var(--hos-gold);
+            font-weight: 700;
+            margin: 0.6rem 0 0.2rem;
+        }
+        .car-card-vat {
+            font-size: 0.72rem;
+            color: var(--hos-text-hint);
+            margin: 0 0 1rem;
+            letter-spacing: 0.03em;
+        }
+        .car-card-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .car-card-btn {
+            display: inline-block;
+            background: transparent;
+            color: var(--hos-gold);
+            border: 1px solid var(--hos-gold);
+            padding: 0.5rem 1.2rem;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: 2px;
+            text-align: center;
+        }
+        .car-card-btn:hover {
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+        }
+        .car-card-btn.primary {
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+        }
+        .car-card-btn.primary:hover {
+            background: var(--hos-gold-dark);
+        }
+
+        /* ── Empty / Loading ── */
+        .cars-empty {
+            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .cars-empty-icon {
+            font-size: 3rem;
+            color: var(--hos-black-muted);
+            margin-bottom: 1rem;
+        }
+        .cars-empty h2 {
+            color: var(--hos-gold);
+            font-size: 1.5rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+        .cars-empty p {
+            color: var(--hos-text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .cars-empty a { color: var(--hos-gold); text-decoration: underline; }
+
+        .cars-loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--hos-text-muted);
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+        .cars-loading .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--hos-black-border);
+            border-top-color: var(--hos-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Modal ── */
+        .car-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        .car-modal-overlay.open {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .car-modal {
+            background: var(--hos-black-surface);
+            max-width: 1000px;
+            width: 100%;
+            border-radius: 4px;
+            position: relative;
+            margin: 1rem auto;
+            overflow: hidden;
+        }
+        .car-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: var(--hos-text-primary);
+            font-size: 1.6rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .car-modal-close:hover {
+            background: rgba(201, 160, 91, 0.85);
+            color: var(--hos-text-on-gold);
+        }
+
+        /* Gallery */
+        .modal-gallery {
+            position: relative;
+            width: 100%;
+            background: var(--hos-black-primary);
+        }
+        .modal-gallery .modal-main-img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+        .modal-gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: var(--hos-text-primary);
+            font-size: 1.8rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            z-index: 3;
+        }
+        .modal-gallery-nav:hover { background: rgba(201, 160, 91, 0.8); color: var(--hos-text-on-gold); }
+        .modal-gallery-nav.prev { left: 1rem; }
+        .modal-gallery-nav.next { right: 1rem; }
+        .modal-thumbnails {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--hos-black-card);
+            overflow-x: auto;
+        }
+        .modal-thumbnails img {
+            width: 80px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 2px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            opacity: 0.5;
+            transition: opacity 0.3s, border-color 0.3s;
+            flex-shrink: 0;
+        }
+        .modal-thumbnails img:hover,
+        .modal-thumbnails img.active {
+            opacity: 1;
+            border-color: var(--hos-gold);
+        }
+
+        /* Modal Body */
+        .car-modal-body {
+            padding: 2rem;
+        }
+        .modal-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .car-modal-title {
+            font-size: 1.8rem;
+            color: var(--hos-gold);
+            margin: 0;
+            letter-spacing: 0.08em;
+        }
+        .car-modal-brand-badge {
+            display: inline-block;
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+            padding: 0.25rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 2px;
+            margin-top: 0.3rem;
+        }
+        .car-modal-price {
+            font-size: 1.6rem;
+            color: var(--hos-gold);
+            font-weight: 700;
+        }
+        .car-modal-vat {
+            font-size: 0.78rem;
+            color: var(--hos-text-muted);
+            margin-top: 0.2rem;
+        }
+
+        /* Finance Calculator */
+        .finance-section {
+            background: var(--hos-black-raised);
+            border: 1px solid var(--hos-black-border);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .finance-section h3 {
+            color: var(--hos-gold);
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            margin: 0 0 1rem;
+            text-transform: uppercase;
+        }
+        .finance-inputs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .finance-inputs label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            font-size: 0.78rem;
+            color: var(--hos-gray-a00);
+            flex: 1;
+            min-width: 120px;
+        }
+        .finance-inputs input {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: var(--hos-black-primary);
+            color: var(--hos-text-primary);
+            border: 1px solid var(--hos-black-muted);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            border-radius: 2px;
+        }
+        .finance-inputs input:focus {
+            outline: 2px solid var(--hos-gold);
+            outline-offset: 1px;
+        }
+        .finance-result {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding-top: 1rem;
+            border-top: 1px solid var(--hos-black-border);
+        }
+        .finance-result-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .finance-result-label {
+            font-size: 0.72rem;
+            color: var(--hos-text-hint);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .finance-result-value {
+            font-size: 1.2rem;
+            color: var(--hos-gold);
+            font-weight: 700;
+        }
+
+        /* Specs Table */
+        .modal-specs-section {
+            margin-bottom: 2rem;
+        }
+        .modal-section-title {
+            font-size: 1rem;
+            color: var(--hos-gold);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin: 0 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--hos-black-divider);
+        }
+        .car-modal-specs {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .car-modal-specs.two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .car-modal-specs tr {
+            border-bottom: 1px solid var(--hos-black-border);
+        }
+        .car-modal-specs td {
+            padding: 0.6rem 1rem;
+            font-size: 0.88rem;
+        }
+        .car-modal-specs td:first-child {
+            color: var(--hos-text-muted);
+            width: 45%;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+        }
+        .car-modal-specs td:last-child {
+            color: var(--hos-gray-e00);
+        }
+
+        /* Provenance */
+        .provenance-section {
+            margin-bottom: 2rem;
+        }
+        .provenance-badges {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .provenance-badge {
+            background: rgba(201, 160, 91, 0.15);
+            border: 1px solid var(--hos-gold);
+            color: var(--hos-gold);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            border-radius: 2px;
+        }
+        .provenance-text {
+            color: var(--hos-text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .provenance-text p {
+            margin: 0 0 0.8rem;
+        }
+
+        /* Features */
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .feature-tag {
+            background: var(--hos-black-border);
+            color: var(--hos-gray-d00);
+            padding: 0.35rem 0.8rem;
+            font-size: 0.78rem;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .feature-tag::before {
+            content: '\2713';
+            color: var(--hos-gold);
+            font-weight: 700;
+        }
+
+        /* Description */
+        .car-modal-description {
+            color: var(--hos-text-secondary);
+            line-height: 1.75;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Documents */
+        .documents-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem;
+        }
+        .documents-list li {
+            margin-bottom: 0.5rem;
+        }
+        .documents-list a {
+            color: var(--hos-gold);
+            text-decoration: none;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.3s;
+        }
+        .documents-list a:hover {
+            color: var(--hos-text-primary);
+        }
+        .documents-list a::before {
+            content: '\1F4C4';
+            font-size: 1rem;
+        }
+
+        /* Inquiry Form */
+        .inquiry-section {
+            background: var(--hos-black-raised);
+            border: 1px solid var(--hos-black-border);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .inquiry-section h3 {
+            color: var(--hos-gold);
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            margin: 0 0 1rem;
+            text-transform: uppercase;
+        }
+        .inquiry-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .inquiry-form-row {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .inquiry-form-row > * {
+            flex: 1;
+            min-width: 180px;
+        }
+        .inquiry-form label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.78rem;
+            color: var(--hos-gray-a00);
+        }
+        .inquiry-form input,
+        .inquiry-form select,
+        .inquiry-form textarea {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: var(--hos-black-primary);
+            color: var(--hos-text-primary);
+            border: 1px solid var(--hos-black-muted);
+            padding: 0.55rem 0.75rem;
+            font-size: 0.88rem;
+            border-radius: 2px;
+        }
+        .inquiry-form input:focus,
+        .inquiry-form select:focus,
+        .inquiry-form textarea:focus {
+            outline: 2px solid var(--hos-gold);
+            outline-offset: 1px;
+        }
+        .inquiry-form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .inquiry-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            color: var(--hos-gray-a00);
+        }
+        .inquiry-consent input[type="checkbox"] {
+            margin-top: 0.15rem;
+            accent-color: var(--hos-gold);
+        }
+        .inquiry-submit-btn {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.3s;
+            align-self: flex-start;
+        }
+        .inquiry-submit-btn:hover { background: var(--hos-gold-dark); }
+        .inquiry-submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .inquiry-success {
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid rgba(46, 160, 67, 0.4);
+            color: var(--hos-status-green-muted);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Similar Cars */
+        .similar-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--hos-black-divider);
+        }
+        .similar-section h3 {
+            color: var(--hos-gold);
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin: 0 0 1rem;
+        }
+        .similar-cars-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        .similar-car-card {
+            flex: 0 0 220px;
+            background: var(--hos-black-border);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .similar-car-card:hover { transform: translateY(-3px); }
+        .similar-car-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+        }
+        .similar-car-card-body {
+            padding: 0.6rem 0.8rem 0.8rem;
+        }
+        .similar-car-card-body h4 {
+            font-size: 0.82rem;
+            color: var(--hos-gold);
+            margin: 0 0 0.3rem;
+            letter-spacing: 0.04em;
+        }
+        .similar-car-card-body span {
+            font-size: 0.78rem;
+            color: var(--hos-text-secondary);
+        }
+
+        /* ── CTA Section ── */
+        .cta-section {
+            background: var(--hos-black-card);
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--hos-black-border);
+        }
+        .cta-section h2 {
+            color: var(--hos-gold);
+            font-size: 1.6rem;
+            letter-spacing: 0.12em;
+            margin: 0 0 1rem;
+        }
+        .cta-section p {
+            color: var(--hos-gray-a00);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: var(--hos-gold);
+            color: var(--hos-text-on-gold);
+            padding: 0.8rem 2.5rem;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+        .cta-btn:hover { background: var(--hos-gold-dark); }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .cars-grid { grid-template-columns: repeat(2, 1fr); }
+            .car-modal-specs.two-col { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+            .cars-hero h1 { font-size: 2rem; letter-spacing: 0.2em; }
+            .cars-hero p { font-size: 0.9rem; }
+            .cars-grid { grid-template-columns: 1fr; }
+            .filter-section { padding: 1rem; }
+            .filter-section input,
+            .filter-section select { min-width: 100%; }
+            .modal-gallery .modal-main-img { height: 260px; }
+            .car-modal-title { font-size: 1.3rem; }
+            .car-modal-body { padding: 1.2rem; }
+            .stats-bar { gap: 1rem; font-size: 0.82rem; }
+            .modal-header-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar" role="navigation">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+        <nav class="main-menu" role="navigation">
+            <a href="about.html" data-i18n="nav_about">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html" data-i18n="nav_storage">STORAGE</a>
+            <a href="cars.html" class="active" aria-current="page" data-i18n="nav_cars">CARS FOR SALE</a>
+            <a href="services.html" data-i18n="nav_events">MEETINGS & EVENTS</a>
+            <a href="partners.html" data-i18n="nav_partners">PARTNERS</a>
+            <a href="news.html" data-i18n="nav_news">NEWS</a>
+            <a href="shop.html" data-i18n="nav_shop">SHOP</a>
+            <a href="contact.html" data-i18n="nav_contact">CONTACT</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="cars-hero">
+            <h1>CARS FOR SALE</h1>
+            <p>Discover our curated collection of exceptional automobiles</p>
+        </section>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <span class="stat-value" id="statVehicles">--</span> Available Vehicles
+            </div>
+            <span class="stat-divider">|</span>
+            <div class="stat-item">
+                <span class="stat-value" id="statBrands">--</span> Brands
+            </div>
+            <span class="stat-divider">|</span>
+            <div class="stat-item">
+                Price from <span class="stat-value" id="statPriceFrom">--</span>
+            </div>
+        </div>
+
+        <!-- Advanced Filters -->
+        <div class="filter-section" id="filterSection">
+            <div class="filter-row">
+                <input type="text" id="filterSearch" placeholder="Search make, model, keyword..." aria-label="Search cars">
+                <select id="filterBrand" aria-label="Brand"><option value="">All Brands</option></select>
+                <select id="filterBodyType" aria-label="Body Type">
+                    <option value="">All Body Types</option>
+                    <option value="coupe">Coupe</option>
+                    <option value="sedan">Sedan</option>
+                    <option value="convertible">Convertible</option>
+                    <option value="suv">SUV</option>
+                    <option value="wagon">Wagon</option>
+                    <option value="hatchback">Hatchback</option>
+                    <option value="roadster">Roadster</option>
+                    <option value="targa">Targa</option>
+                    <option value="limousine">Limousine</option>
+                </select>
+            </div>
+            <div class="filter-row">
+                <select id="filterYearMin" aria-label="Year from"><option value="">Year From</option></select>
+                <select id="filterYearMax" aria-label="Year to"><option value="">Year To</option></select>
+                <input type="number" id="filterPriceMin" placeholder="Min Price (EUR)" aria-label="Minimum price" min="0" step="1000">
+                <input type="number" id="filterPriceMax" placeholder="Max Price (EUR)" aria-label="Maximum price" min="0" step="1000">
+                <select id="filterFuel" aria-label="Fuel Type">
+                    <option value="">All Fuel Types</option>
+                    <option value="petrol">Petrol</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="electric">Electric</option>
+                    <option value="hybrid">Hybrid</option>
+                    <option value="lpg">LPG</option>
+                </select>
+                <select id="filterTransmission" aria-label="Transmission">
+                    <option value="">All Transmissions</option>
+                    <option value="manual">Manual</option>
+                    <option value="automatic">Automatic</option>
+                    <option value="semi-automatic">Semi-Automatic</option>
+                </select>
+                <select id="filterDrivetrain" aria-label="Drivetrain">
+                    <option value="">All Drivetrains</option>
+                    <option value="rwd">RWD</option>
+                    <option value="fwd">FWD</option>
+                    <option value="awd">AWD</option>
+                    <option value="4wd">4WD</option>
+                </select>
+            </div>
+            <div class="filter-row">
+                <select id="filterSort" aria-label="Sort by">
+                    <option value="newest">Sort: Newest Listed</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="year-desc">Year: Newest First</option>
+                    <option value="year-asc">Year: Oldest First</option>
+                    <option value="mileage-asc">Mileage: Low to High</option>
+                </select>
+                <select id="filterStatus" aria-label="Status">
+                    <option value="available">Available Only</option>
+                    <option value="">Show All</option>
+                </select>
+                <div class="filter-actions">
+                    <button type="button" class="filter-reset-btn" id="filterReset">Reset Filters</button>
+                    <span class="filter-count-badge" id="filterCountBadge">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cars Grid -->
+        <section class="cars-section">
+            <div id="carsContainer">
+                <div class="cars-loading" id="carsLoading">
+                    <div class="spinner"></div>
+                    Loading vehicles...
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Can't Find What You're Looking For?</h2>
+            <p>Tell us what you're looking for and we'll find it for you. Our network spans the globe, and our specialists are ready to source your dream car.</p>
+            <a href="contact.html" class="cta-btn">Contact Us</a>
+        </section>
+    </main>
+
+    <!-- Car Detail Modal -->
+    <div class="car-modal-overlay" id="carModal">
+        <div class="car-modal" id="carModalContent">
+            <button class="car-modal-close" id="modalClose" aria-label="Close">&times;</button>
+
+            <!-- Gallery -->
+            <div class="modal-gallery" id="modalGallery">
+                <img class="modal-main-img" id="modalMainImg" src="" alt="">
+                <button class="modal-gallery-nav prev" id="galleryPrev" aria-label="Previous image">&#8249;</button>
+                <button class="modal-gallery-nav next" id="galleryNext" aria-label="Next image">&#8250;</button>
+            </div>
+            <div class="modal-thumbnails" id="modalThumbnails"></div>
+
+            <!-- Body -->
+            <div class="car-modal-body" id="modalBody">
+                <!-- Header -->
+                <div class="modal-header-row">
+                    <div>
+                        <h2 class="car-modal-title" id="modalTitle"></h2>
+                        <span class="car-modal-brand-badge" id="modalBrandBadge"></span>
+                    </div>
+                    <div style="text-align:right;">
+                        <div class="car-modal-price" id="modalPrice"></div>
+                        <div class="car-modal-vat" id="modalVat"></div>
+                    </div>
+                </div>
+
+                <!-- Finance Calculator -->
+                <div class="finance-section" id="financeSection">
+                    <h3>Finance Calculator</h3>
+                    <div class="finance-inputs">
+                        <label>
+                            Deposit (EUR)
+                            <input type="number" id="financeDeposit" value="0" min="0" step="1000">
+                        </label>
+                        <label>
+                            Term (months)
+                            <input type="number" id="financeTerm" value="48" min="6" max="120" step="6">
+                        </label>
+                        <label>
+                            Interest Rate (%)
+                            <input type="number" id="financeRate" value="4.9" min="0" max="30" step="0.1">
+                        </label>
+                    </div>
+                    <div class="finance-result" id="financeResult">
+                        <div class="finance-result-item">
+                            <span class="finance-result-label">Monthly Payment</span>
+                            <span class="finance-result-value" id="financeMonthly">--</span>
+                        </div>
+                        <div class="finance-result-item">
+                            <span class="finance-result-label">Total Cost</span>
+                            <span class="finance-result-value" id="financeTotal">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specs -->
+                <div class="modal-specs-section" id="modalSpecsSection">
+                    <h3 class="modal-section-title">Specifications</h3>
+                    <div class="car-modal-specs two-col" id="modalSpecsGrid"></div>
+                </div>
+
+                <!-- Provenance -->
+                <div class="provenance-section" id="provenanceSection" style="display:none;">
+                    <h3 class="modal-section-title">Provenance &amp; History</h3>
+                    <div class="provenance-badges" id="provenanceBadges"></div>
+                    <div class="provenance-text" id="provenanceText"></div>
+                </div>
+
+                <!-- Features -->
+                <div id="featuresSection" style="display:none;">
+                    <h3 class="modal-section-title">Features &amp; Equipment</h3>
+                    <div class="features-grid" id="featuresGrid"></div>
+                </div>
+
+                <!-- Description -->
+                <div id="descriptionSection" style="display:none;">
+                    <h3 class="modal-section-title">Description</h3>
+                    <div class="car-modal-description" id="modalDescription"></div>
+                </div>
+
+                <!-- Documents -->
+                <div id="documentsSection" style="display:none;">
+                    <h3 class="modal-section-title">Documents</h3>
+                    <ul class="documents-list" id="documentsList"></ul>
+                </div>
+
+                <!-- Inquiry Form -->
+                <div class="inquiry-section" id="inquirySection">
+                    <h3>Inquire About This Vehicle</h3>
+                    <div class="inquiry-success" id="inquirySuccess">Thank you for your inquiry. We will get back to you shortly.</div>
+                    <form class="inquiry-form" id="inquiryForm">
+                        <div class="inquiry-form-row">
+                            <label>
+                                First Name *
+                                <input type="text" id="inquiryFirstName" required>
+                            </label>
+                            <label>
+                                Last Name *
+                                <input type="text" id="inquiryLastName" required
+                            </label>
+                            <label>
+                                Email *
+                                <input type="email" id="inquiryEmail" required>
+                            </label>
+                            <label>
+                                Phone
+                                <input type="tel" id="inquiryPhone">
+                            </label>
+                        </div>
+                        <label>
+                            Inquiry Type
+                            <select id="inquiryType">
+                                <option value="general">General Inquiry</option>
+                                <option value="viewing">Request Viewing</option>
+                                <option value="test-drive">Test Drive</option>
+                                <option value="offer">Make an Offer</option>
+                                <option value="finance">Finance Inquiry</option>
+                                <option value="trade-in">Trade-In</option>
+                            </select>
+                        </label>
+                        <label>
+                            Message
+                            <textarea id="inquiryMessage" placeholder="Tell us how we can help..."></textarea>
+                        </label>
+                        <div class="inquiry-consent">
+                            <input type="checkbox" id="inquiryConsent" required>
+                            <span>I consent to House of Speed processing my personal data in accordance with the <a href="privacy.html" style="color:var(--hos-gold);">Privacy Policy</a>.</span>
+                        </div>
+                        <button type="submit" class="inquiry-submit-btn" id="inquirySubmitBtn">Send Inquiry</button>
+                    </form>
+                </div>
+
+                <!-- Similar Cars -->
+                <div class="similar-section" id="similarSection" style="display:none;">
+                    <h3>Similar Vehicles</h3>
+                    <div class="similar-cars-scroll" id="similarCars"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer">
+            </div>
+            <div class="footer-info">
+                <p data-i18n="footer_copyright">&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+                <p>Markerkant 10-12, 1316 AA Almere, The Netherlands | KVK 73625184</p>
+                <nav class="footer-links" aria-label="Footer navigation">
+                    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a>
+                    <a href="shop.html" data-i18n="footer_shop">Shop</a>
+                    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        'use strict';
+
+        var API_BASE = '/api';
+
+        // ── DOM refs ──
+        var container = document.getElementById('carsContainer');
+        var loadingEl = document.getElementById('carsLoading');
+
+        // Filter elements
+        var searchInput    = document.getElementById('filterSearch');
+        var brandSelect    = document.getElementById('filterBrand');
+        var bodyTypeSelect = document.getElementById('filterBodyType');
+        var yearMinSelect  = document.getElementById('filterYearMin');
+        var yearMaxSelect  = document.getElementById('filterYearMax');
+        var priceMinInput  = document.getElementById('filterPriceMin');
+        var priceMaxInput  = document.getElementById('filterPriceMax');
+        var fuelSelect     = document.getElementById('filterFuel');
+        var transSelect    = document.getElementById('filterTransmission');
+        var driveSelect    = document.getElementById('filterDrivetrain');
+        var sortSelect     = document.getElementById('filterSort');
+        var statusSelect   = document.getElementById('filterStatus');
+        var resetBtn       = document.getElementById('filterReset');
+        var filterBadge    = document.getElementById('filterCountBadge');
+
+        // Stats
+        var statVehicles = document.getElementById('statVehicles');
+        var statBrands   = document.getElementById('statBrands');
+        var statPriceFrom= document.getElementById('statPriceFrom');
+
+        // Modal elements
+        var modalOverlay    = document.getElementById('carModal');
+        var modalContent    = document.getElementById('carModalContent');
+        var modalCloseBtn   = document.getElementById('modalClose');
+        var modalMainImg    = document.getElementById('modalMainImg');
+        var modalThumbnails = document.getElementById('modalThumbnails');
+        var galleryPrev     = document.getElementById('galleryPrev');
+        var galleryNext     = document.getElementById('galleryNext');
+        var modalTitle      = document.getElementById('modalTitle');
+        var modalBrandBadge = document.getElementById('modalBrandBadge');
+        var modalPrice      = document.getElementById('modalPrice');
+        var modalVat        = document.getElementById('modalVat');
+        var modalSpecsGrid  = document.getElementById('modalSpecsGrid');
+        var provenanceSection = document.getElementById('provenanceSection');
+        var provenanceBadges  = document.getElementById('provenanceBadges');
+        var provenanceText    = document.getElementById('provenanceText');
+        var featuresSection   = document.getElementById('featuresSection');
+        var featuresGrid      = document.getElementById('featuresGrid');
+        var descriptionSection= document.getElementById('descriptionSection');
+        var modalDescription  = document.getElementById('modalDescription');
+        var documentsSection  = document.getElementById('documentsSection');
+        var documentsList     = document.getElementById('documentsList');
+        var similarSection    = document.getElementById('similarSection');
+        var similarCars       = document.getElementById('similarCars');
+        var inquiryForm       = document.getElementById('inquiryForm');
+        var inquirySuccess    = document.getElementById('inquirySuccess');
+        var inquirySubmitBtn  = document.getElementById('inquirySubmitBtn');
+
+        // Finance
+        var financeDeposit = document.getElementById('financeDeposit');
+        var financeTerm    = document.getElementById('financeTerm');
+        var financeRate    = document.getElementById('financeRate');
+        var financeMonthly = document.getElementById('financeMonthly');
+        var financeTotal   = document.getElementById('financeTotal');
+
+        var allCars = [];
+        var currentGalleryImages = [];
+        var currentGalleryIndex = 0;
+        var currentCarId = null;
+        var financeDebounceTimer = null;
+
+        // ── Format Helpers ──
+        function formatPrice(price, currency) {
+            if (!price && price !== 0) return 'Price on Application';
+            var cur = currency || 'EUR';
+            return new Intl.NumberFormat('de-DE', {
+                style: 'currency',
+                currency: cur,
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(price);
+        }
+
+        function formatMileage(mileage, unit) {
+            if (!mileage && mileage !== 0) return '--';
+            var u = unit || 'km';
+            return Number(mileage).toLocaleString('de-DE') + ' ' + u;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            var d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function statusClass(status) {
+            if (!status) return 'available';
+            var s = status.toLowerCase();
+            if (s === 'sold') return 'sold';
+            if (s === 'reserved') return 'reserved';
+            return 'available';
+        }
+
+        function vatLabel(vat) {
+            if (!vat) return '';
+            var v = String(vat).toLowerCase();
+            if (v === 'incl' || v === 'included' || v === 'incl. vat' || v === 'incl_vat') return 'incl. VAT';
+            if (v === 'excl' || v === 'excluded' || v === 'ex. vat' || v === 'ex_vat') return 'ex. VAT';
+            if (v === 'margin' || v === 'margin scheme' || v === 'margin_scheme') return 'Margin scheme';
+            return vat;
+        }
+
+        // ── Stats ──
+        function fetchStats() {
+            fetch(API_BASE + '/cars/stats')
+                .then(function (res) { return res.ok ? res.json() : null; })
+                .then(function (data) {
+                    if (!data) return;
+                    if (data.availableCount !== undefined) statVehicles.textContent = data.availableCount;
+                    if (data.brandCount !== undefined) statBrands.textContent = data.brandCount;
+                    if (data.minPrice !== undefined) statPriceFrom.textContent = formatPrice(data.minPrice);
+                })
+                .catch(function () {
+                    // Stats will be computed from car data as fallback
+                });
+        }
+
+        function computeStatsFromCars(cars) {
+            var available = cars.filter(function (c) { return !c.status || c.status.toLowerCase() === 'available'; });
+            var brands = new Set();
+            var minPrice = Infinity;
+            available.forEach(function (c) {
+                if (c.brand) brands.add(c.brand);
+                if (c.price && c.price < minPrice) minPrice = c.price;
+            });
+            statVehicles.textContent = available.length;
+            statBrands.textContent = brands.size;
+            statPriceFrom.textContent = minPrice < Infinity ? formatPrice(minPrice) : '--';
+        }
+
+        // ── Brands ──
+        function fetchBrands() {
+            fetch(API_BASE + '/cars/brands')
+                .then(function (res) { return res.ok ? res.json() : null; })
+                .then(function (data) {
+                    if (!data) return;
+                    var brands = Array.isArray(data) ? data : (data.brands || []);
+                    populateBrandDropdown(brands);
+                })
+                .catch(function () { /* brands from car data */ });
+        }
+
+        function populateBrandDropdown(brands) {
+            var current = brandSelect.value;
+            brandSelect.innerHTML = '<option value="">All Brands</option>';
+            brands.sort().forEach(function (b) {
+                var name = typeof b === 'string' ? b : b.name || b.brand;
+                if (!name) return;
+                var opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                brandSelect.appendChild(opt);
+            });
+            if (current) brandSelect.value = current;
+        }
+
+        function populateFiltersFromCars(cars) {
+            var brands = [];
+            var brandSet = new Set();
+            var years = new Set();
+            cars.forEach(function (c) {
+                if (c.brand && !brandSet.has(c.brand)) { brandSet.add(c.brand); brands.push(c.brand); }
+                if (c.year) years.add(c.year);
+            });
+            populateBrandDropdown(brands);
+
+            var sortedYears = Array.from(years).sort(function (a, b) { return b - a; });
+            var currentMin = yearMinSelect.value;
+            var currentMax = yearMaxSelect.value;
+            yearMinSelect.innerHTML = '<option value="">Year From</option>';
+            yearMaxSelect.innerHTML = '<option value="">Year To</option>';
+            sortedYears.forEach(function (y) {
+                yearMinSelect.innerHTML += '<option value="' + y + '">' + y + '</option>';
+                yearMaxSelect.innerHTML += '<option value="' + y + '">' + y + '</option>';
+            });
+            if (currentMin) yearMinSelect.value = currentMin;
+            if (currentMax) yearMaxSelect.value = currentMax;
+        }
+
+        // ── Query / URL sync ──
+        function buildQuery() {
+            var params = new URLSearchParams();
+            if (statusSelect.value) params.set('status', statusSelect.value);
+            if (searchInput.value.trim()) params.set('search', searchInput.value.trim());
+            if (brandSelect.value) params.set('brand', brandSelect.value);
+            if (bodyTypeSelect.value) params.set('bodyType', bodyTypeSelect.value);
+            if (yearMinSelect.value) params.set('yearMin', yearMinSelect.value);
+            if (yearMaxSelect.value) params.set('yearMax', yearMaxSelect.value);
+            if (priceMinInput.value) params.set('minPrice', priceMinInput.value);
+            if (priceMaxInput.value) params.set('maxPrice', priceMaxInput.value);
+            if (fuelSelect.value) params.set('fuel', fuelSelect.value);
+            if (transSelect.value) params.set('transmission', transSelect.value);
+            if (driveSelect.value) params.set('drivetrain', driveSelect.value);
+            if (sortSelect.value && sortSelect.value !== 'newest') params.set('sort', sortSelect.value);
+            return params;
+        }
+
+        function syncUrlParams() {
+            var params = buildQuery();
+            var newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+            window.history.replaceState(null, '', newUrl);
+        }
+
+        function loadFiltersFromUrl() {
+            var params = new URLSearchParams(window.location.search);
+            if (params.get('search')) searchInput.value = params.get('search');
+            if (params.get('brand')) brandSelect.value = params.get('brand');
+            if (params.get('bodyType')) bodyTypeSelect.value = params.get('bodyType');
+            if (params.get('yearMin')) yearMinSelect.value = params.get('yearMin');
+            if (params.get('yearMax')) yearMaxSelect.value = params.get('yearMax');
+            if (params.get('minPrice')) priceMinInput.value = params.get('minPrice');
+            if (params.get('maxPrice')) priceMaxInput.value = params.get('maxPrice');
+            if (params.get('fuel')) fuelSelect.value = params.get('fuel');
+            if (params.get('transmission')) transSelect.value = params.get('transmission');
+            if (params.get('drivetrain')) driveSelect.value = params.get('drivetrain');
+            if (params.get('sort')) sortSelect.value = params.get('sort');
+            if (params.has('status')) statusSelect.value = params.get('status');
+        }
+
+        function updateFilterBadge() {
+            var count = 0;
+            if (searchInput.value.trim()) count++;
+            if (brandSelect.value) count++;
+            if (bodyTypeSelect.value) count++;
+            if (yearMinSelect.value) count++;
+            if (yearMaxSelect.value) count++;
+            if (priceMinInput.value) count++;
+            if (priceMaxInput.value) count++;
+            if (fuelSelect.value) count++;
+            if (transSelect.value) count++;
+            if (driveSelect.value) count++;
+            filterBadge.textContent = count;
+            filterBadge.classList.toggle('visible', count > 0);
+        }
+
+        // ── Build card ──
+        function buildCard(car) {
+            var image = (car.images && car.images.length > 0) ? car.images[0] : 'assets/images/ferari3.jpg';
+            var title = car.title || [car.brand, car.model, car.variant, car.year].filter(Boolean).join(' ');
+            var specs1 = [
+                car.year,
+                car.mileage !== undefined && car.mileage !== null ? formatMileage(car.mileage, car.mileage_unit) : null,
+                car.fuel || car.fuelType,
+                car.transmission
+            ].filter(Boolean).join(' &nbsp;|&nbsp; ');
+            var specs2 = [
+                car.engine,
+                car.horsepower || car.hp ? (car.horsepower || car.hp) + ' HP' : null,
+                car.drivetrain
+            ].filter(Boolean).join(' &nbsp;|&nbsp; ');
+            var status = car.status || 'available';
+            var id = car._id || car.id || '';
+
+            var priceHtml;
+            if (car.price_qualifier === 'poa' || (!car.price && car.price !== 0)) {
+                priceHtml = 'Price on Application';
+            } else {
+                priceHtml = formatPrice(car.price, car.currency);
+            }
+            var vatText = vatLabel(car.vat_status);
+
+            var ribbonHtml = '';
+            if (car.featured) ribbonHtml = '<div class="card-ribbon featured">Featured</div>';
+
+            var badgeNewHtml = '';
+            if (car.just_arrived) badgeNewHtml = '<span class="card-badge-new">New</span>';
+
+            var badgeReducedHtml = '';
+            if (car.price_reduced) badgeReducedHtml = '<span class="card-badge-reduced">Reduced</span>';
+
+            return '<article class="car-card" data-car-id="' + id + '">' +
+                '<div class="car-card-image">' +
+                    ribbonHtml +
+                    '<img data-src="' + image + '" alt="' + title + '" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'225\'%3E%3Crect fill=\'%23222\'/%3E%3C/svg%3E">' +
+                    (car.brand ? '<span class="brand-badge">' + car.brand + '</span>' : '') +
+                    '<span class="status-badge ' + statusClass(status) + '">' + status + '</span>' +
+                    badgeNewHtml +
+                    badgeReducedHtml +
+                '</div>' +
+                '<div class="car-card-body">' +
+                    '<h3 class="car-card-title"><a href="#" onclick="return false;">' + title + '</a></h3>' +
+                    (specs1 ? '<p class="car-card-specs">' + specs1 + '</p>' : '') +
+                    (specs2 ? '<p class="car-card-specs">' + specs2 + '</p>' : '') +
+                    '<p class="car-card-price">' + priceHtml + '</p>' +
+                    (vatText ? '<p class="car-card-vat">' + vatText + '</p>' : '') +
+                    '<div class="car-card-buttons">' +
+                        '<button class="car-card-btn primary" type="button">View Details</button>' +
+                        '<a href="contact.html?car=' + encodeURIComponent(title) + '" class="car-card-btn">Inquire</a>' +
+                    '</div>' +
+                '</div>' +
+            '</article>';
+        }
+
+        // ── Render ──
+        function renderCars(cars) {
+            if (!cars || cars.length === 0) {
+                container.innerHTML =
+                    '<div class="cars-empty">' +
+                        '<div class="cars-empty-icon">&#128663;</div>' +
+                        '<h2>No Vehicles Currently Available</h2>' +
+                        '<p>Our inventory is updated regularly. Please check back soon or <a href="contact.html">contact us</a> to discuss your requirements.</p>' +
+                    '</div>';
+                return;
+            }
+            container.innerHTML = '<div class="cars-grid">' + cars.map(buildCard).join('') + '</div>';
+            initLazyImages();
+            initCardAnimations();
+            attachCardListeners();
+        }
+
+        function attachCardListeners() {
+            container.querySelectorAll('.car-card').forEach(function (card) {
+                card.addEventListener('click', function (e) {
+                    if (e.target.closest('.car-card-btn:not(.primary)')) return;
+                    var id = card.getAttribute('data-car-id');
+                    if (id) {
+                        openModal(id);
+                    } else {
+                        var idx = Array.from(container.querySelectorAll('.car-card')).indexOf(card);
+                        if (allCars[idx]) openModalWithData(allCars[idx]);
+                    }
+                });
+            });
+        }
+
+        // ── Lazy Loading ──
+        function initLazyImages() {
+            if (!('IntersectionObserver' in window)) {
+                document.querySelectorAll('.car-card-image img[data-src]').forEach(function (img) {
+                    img.src = img.getAttribute('data-src');
+                });
+                return;
+            }
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var img = entry.target;
+                        img.src = img.getAttribute('data-src');
+                        img.removeAttribute('data-src');
+                        observer.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '200px' });
+            document.querySelectorAll('.car-card-image img[data-src]').forEach(function (img) {
+                observer.observe(img);
+            });
+        }
+
+        // ── Scroll Animations ──
+        function initCardAnimations() {
+            if (!('IntersectionObserver' in window)) {
+                document.querySelectorAll('.car-card').forEach(function (c) { c.classList.add('visible'); });
+                return;
+            }
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.car-card').forEach(function (c) { observer.observe(c); });
+        }
+
+        // ── Fetch Cars ──
+        function fetchCars(updateFilters) {
+            loadingEl.style.display = '';
+            container.innerHTML = '';
+            container.appendChild(loadingEl);
+
+            var params = buildQuery();
+            syncUrlParams();
+            updateFilterBadge();
+
+            var url = API_BASE + '/cars' + (params.toString() ? '?' + params.toString() : '');
+
+            fetch(url)
+                .then(function (res) {
+                    if (!res.ok) throw new Error('Failed to load vehicles');
+                    return res.json();
+                })
+                .then(function (data) {
+                    var cars = Array.isArray(data) ? data : (data.cars || data.data || []);
+                    allCars = cars;
+                    if (updateFilters) populateFiltersFromCars(cars);
+                    computeStatsFromCars(cars);
+                    renderCars(cars);
+                })
+                .catch(function (err) {
+                    console.error('Error loading cars:', err);
+                    container.innerHTML =
+                        '<div class="cars-empty">' +
+                            '<div class="cars-empty-icon">&#128663;</div>' +
+                            '<h2>No Vehicles Currently Available</h2>' +
+                            '<p>Our inventory is being updated. Please check back soon or <a href="contact.html">contact us</a> to discuss your requirements.</p>' +
+                        '</div>';
+                });
+        }
+
+        // ── Modal: Open ──
+        function openModal(carId) {
+            currentCarId = carId;
+
+            // Increment view count
+            fetch(API_BASE + '/cars/' + carId, { method: 'GET' }).catch(function () {});
+
+            fetch(API_BASE + '/cars/' + carId)
+                .then(function (res) {
+                    if (!res.ok) throw new Error('Car not found');
+                    return res.json();
+                })
+                .then(function (car) {
+                    if (car.car) car = car.car;
+                    openModalWithData(car);
+                })
+                .catch(function () {
+                    var car = allCars.find(function (c) { return (c._id || c.id) === carId; });
+                    if (car) openModalWithData(car);
+                });
+        }
+
+        function openModalWithData(car) {
+            var images = car.images && car.images.length > 0 ? car.images : ['assets/images/ferari3.jpg'];
+            var title = car.title || [car.brand, car.model, car.variant, car.year].filter(Boolean).join(' ');
+            currentCarId = car._id || car.id || null;
+            currentGalleryImages = images;
+            currentGalleryIndex = 0;
+
+            // Gallery
+            modalMainImg.src = images[0];
+            modalMainImg.alt = title;
+            galleryPrev.style.display = images.length > 1 ? '' : 'none';
+            galleryNext.style.display = images.length > 1 ? '' : 'none';
+
+            modalThumbnails.innerHTML = '';
+            if (images.length > 1) {
+                images.forEach(function (img, i) {
+                    var thumb = document.createElement('img');
+                    thumb.src = img;
+                    thumb.alt = title + ' - image ' + (i + 1);
+                    if (i === 0) thumb.classList.add('active');
+                    thumb.addEventListener('click', function () { setGalleryIndex(i); });
+                    modalThumbnails.appendChild(thumb);
+                });
+            }
+
+            // Title / brand / price
+            modalTitle.textContent = title;
+            modalBrandBadge.textContent = car.brand || '';
+            modalBrandBadge.style.display = car.brand ? '' : 'none';
+
+            if (car.price_qualifier === 'poa' || (!car.price && car.price !== 0)) {
+                modalPrice.textContent = 'Price on Application';
+            } else {
+                modalPrice.textContent = formatPrice(car.price, car.currency);
+            }
+            modalVat.textContent = vatLabel(car.vat_status);
+
+            // Finance
+            if (car.price && car.price > 0) {
+                document.getElementById('financeSection').style.display = '';
+                financeDeposit.value = 0;
+                financeTerm.value = 48;
+                financeRate.value = 4.9;
+                calculateFinance(car.price);
+            } else {
+                document.getElementById('financeSection').style.display = 'none';
+            }
+
+            // Specs
+            var specs = [
+                ['Brand', car.brand],
+                ['Model', car.model],
+                ['Variant', car.variant],
+                ['Year', car.year],
+                ['Body Type', car.body_type || car.bodyType],
+                ['Engine', car.engine],
+                ['Power', (car.horsepower || car.hp) ? (car.horsepower || car.hp) + ' HP' : null],
+                ['Torque', car.torque],
+                ['0-100 km/h', car.acceleration ? car.acceleration + 's' : null],
+                ['Top Speed', car.top_speed ? car.top_speed + ' km/h' : null],
+                ['Transmission', car.transmission],
+                ['Drivetrain', car.drivetrain],
+                ['Fuel Type', car.fuel || car.fuelType],
+                ['Mileage', car.mileage !== undefined && car.mileage !== null ? formatMileage(car.mileage, car.mileage_unit) : null],
+                ['Condition', car.condition],
+                ['Owners', car.owners],
+                ['VIN', car.vin],
+                ['Exterior Color', car.exteriorColor || car.exterior_color || car.color],
+                ['Interior Color', car.interiorColor || car.interior_color],
+                ['Interior Material', car.interior_material || car.interiorMaterial],
+                ['Doors', car.doors],
+                ['Seats', car.seats]
+            ];
+
+            modalSpecsGrid.innerHTML = '';
+            specs.forEach(function (row) {
+                if (row[1] !== null && row[1] !== undefined && row[1] !== '') {
+                    var table = document.createElement('table');
+                    table.innerHTML = '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td></tr>';
+                    table.className = 'car-modal-specs';
+                    modalSpecsGrid.appendChild(table);
+                }
+            });
+
+            // Provenance
+            var hasProv = car.matching_numbers || car.production_number || car.provenance || car.restoration_history || car.concours_history || car.racing_history;
+            provenanceSection.style.display = hasProv ? '' : 'none';
+            if (hasProv) {
+                provenanceBadges.innerHTML = '';
+                if (car.matching_numbers) provenanceBadges.innerHTML += '<span class="provenance-badge">Matching Numbers</span>';
+                if (car.production_number) provenanceBadges.innerHTML += '<span class="provenance-badge">Production #' + car.production_number + '</span>';
+
+                var provHtml = '';
+                if (car.provenance) provHtml += '<p><strong>Provenance:</strong> ' + car.provenance + '</p>';
+                if (car.restoration_history) provHtml += '<p><strong>Restoration:</strong> ' + car.restoration_history + '</p>';
+                if (car.concours_history) provHtml += '<p><strong>Concours:</strong> ' + car.concours_history + '</p>';
+                if (car.racing_history) provHtml += '<p><strong>Racing:</strong> ' + car.racing_history + '</p>';
+                provenanceText.innerHTML = provHtml;
+            }
+
+            // Features
+            var features = car.features || car.equipment || [];
+            featuresSection.style.display = features.length > 0 ? '' : 'none';
+            featuresGrid.innerHTML = '';
+            features.forEach(function (f) {
+                featuresGrid.innerHTML += '<span class="feature-tag">' + f + '</span>';
+            });
+
+            // Description
+            descriptionSection.style.display = car.description ? '' : 'none';
+            modalDescription.innerHTML = car.description || '';
+
+            // Documents
+            var docs = car.documents || [];
+            documentsSection.style.display = docs.length > 0 ? '' : 'none';
+            documentsList.innerHTML = '';
+            docs.forEach(function (d) {
+                var name = d.name || d.title || 'Document';
+                var url = d.url || d.file || '#';
+                documentsList.innerHTML += '<li><a href="' + url + '" target="_blank" rel="noopener">' + name + '</a></li>';
+            });
+
+            // Inquiry form reset
+            inquiryForm.reset();
+            inquirySuccess.style.display = 'none';
+            inquiryForm.style.display = '';
+            inquirySubmitBtn.disabled = false;
+
+            // Similar cars
+            loadSimilarCars(currentCarId);
+
+            // Show modal
+            modalOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ── Gallery Navigation ──
+        function setGalleryIndex(idx) {
+            if (idx < 0) idx = currentGalleryImages.length - 1;
+            if (idx >= currentGalleryImages.length) idx = 0;
+            currentGalleryIndex = idx;
+            modalMainImg.src = currentGalleryImages[idx];
+            var thumbs = modalThumbnails.querySelectorAll('img');
+            thumbs.forEach(function (t, i) {
+                t.classList.toggle('active', i === idx);
+            });
+        }
+
+        galleryPrev.addEventListener('click', function (e) { e.stopPropagation(); setGalleryIndex(currentGalleryIndex - 1); });
+        galleryNext.addEventListener('click', function (e) { e.stopPropagation(); setGalleryIndex(currentGalleryIndex + 1); });
+
+        // ── Finance Calculator ──
+        function calculateFinance(carPrice) {
+            var deposit = parseFloat(financeDeposit.value) || 0;
+            var term = parseInt(financeTerm.value) || 48;
+            var rate = parseFloat(financeRate.value) || 0;
+            var principal = carPrice - deposit;
+            if (principal <= 0) {
+                financeMonthly.textContent = formatPrice(0);
+                financeTotal.textContent = formatPrice(deposit);
+                return;
+            }
+
+            // Try API first, fallback to local calculation
+            clearTimeout(financeDebounceTimer);
+            financeDebounceTimer = setTimeout(function () {
+                fetch(API_BASE + '/finance/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ price: carPrice, deposit: deposit, term: term, rate: rate })
+                })
+                .then(function (res) { return res.ok ? res.json() : null; })
+                .then(function (data) {
+                    if (data && data.monthlyPayment !== undefined) {
+                        financeMonthly.textContent = formatPrice(data.monthlyPayment);
+                        financeTotal.textContent = formatPrice(data.totalCost || (data.monthlyPayment * term + deposit));
+                    } else {
+                        throw new Error('fallback');
+                    }
+                })
+                .catch(function () {
+                    // Local calculation
+                    var monthlyRate = rate / 100 / 12;
+                    var monthly;
+                    if (monthlyRate === 0) {
+                        monthly = principal / term;
+                    } else {
+                        monthly = principal * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+                    }
+                    financeMonthly.textContent = formatPrice(Math.round(monthly));
+                    financeTotal.textContent = formatPrice(Math.round(monthly * term + deposit));
+                });
+            }, 400);
+        }
+
+        var currentCarPrice = 0;
+        var origOpenModal = openModalWithData;
+
+        // Finance input listeners
+        [financeDeposit, financeTerm, financeRate].forEach(function (el) {
+            el.addEventListener('input', function () {
+                var priceText = modalPrice.textContent.replace(/[^0-9]/g, '');
+                var price = parseInt(priceText) || 0;
+                if (price > 0) calculateFinance(price);
+            });
+        });
+
+        // ── Similar Cars ──
+        function loadSimilarCars(carId) {
+            similarSection.style.display = 'none';
+            if (!carId) return;
+            fetch(API_BASE + '/cars/' + carId + '/similar')
+                .then(function (res) { return res.ok ? res.json() : null; })
+                .then(function (data) {
+                    if (!data) return;
+                    var cars = Array.isArray(data) ? data : (data.cars || data.data || []);
+                    if (cars.length === 0) return;
+                    similarSection.style.display = '';
+                    similarCars.innerHTML = '';
+                    cars.slice(0, 4).forEach(function (c) {
+                        var img = c.images && c.images.length > 0 ? c.images[0] : 'assets/images/ferari3.jpg';
+                        var t = c.title || [c.brand, c.model, c.year].filter(Boolean).join(' ');
+                        var p = c.price ? formatPrice(c.price, c.currency) : 'POA';
+                        var card = document.createElement('div');
+                        card.className = 'similar-car-card';
+                        card.setAttribute('data-car-id', c._id || c.id || '');
+                        card.innerHTML = '<img src="' + img + '" alt="' + t + '">' +
+                            '<div class="similar-car-card-body"><h4>' + t + '</h4><span>' + p + '</span></div>';
+                        card.addEventListener('click', function () {
+                            var sid = c._id || c.id;
+                            if (sid) openModal(sid); else openModalWithData(c);
+                        });
+                        similarCars.appendChild(card);
+                    });
+                })
+                .catch(function () {});
+        }
+
+        // ── Inquiry Form ──
+        inquiryForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!currentCarId) return;
+            inquirySubmitBtn.disabled = true;
+            inquirySubmitBtn.textContent = 'Sending...';
+
+            var payload = {
+                first_name: document.getElementById('inquiryFirstName').value,
+                last_name: document.getElementById('inquiryLastName').value,
+                email: document.getElementById('inquiryEmail').value,
+                phone: document.getElementById('inquiryPhone').value,
+                inquiry_type: document.getElementById('inquiryType').value,
+                message: document.getElementById('inquiryMessage').value,
+                gdpr_consent: document.getElementById('inquiryConsent').checked
+            };
+
+            fetch(API_BASE + '/cars/' + currentCarId + '/inquire', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(function (res) {
+                if (!res.ok) throw new Error('Submission failed');
+                return res.json();
+            })
+            .then(function () {
+                inquiryForm.style.display = 'none';
+                inquirySuccess.style.display = 'block';
+            })
+            .catch(function () {
+                inquirySubmitBtn.disabled = false;
+                inquirySubmitBtn.textContent = 'Send Inquiry';
+                alert('There was an error submitting your inquiry. Please try again or contact us directly.');
+            });
+        });
+
+        // ── Close Modal ──
+        function closeModal() {
+            modalOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+            currentCarId = null;
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === modalOverlay) closeModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeModal();
+            if (modalOverlay.classList.contains('open')) {
+                if (e.key === 'ArrowLeft') setGalleryIndex(currentGalleryIndex - 1);
+                if (e.key === 'ArrowRight') setGalleryIndex(currentGalleryIndex + 1);
+            }
+        });
+
+        // ── Filter Events ──
+        var filterEls = [brandSelect, bodyTypeSelect, yearMinSelect, yearMaxSelect, fuelSelect, transSelect, driveSelect, sortSelect, statusSelect];
+        filterEls.forEach(function (el) {
+            el.addEventListener('change', function () { fetchCars(false); });
+        });
+
+        var searchDebounce = null;
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchDebounce);
+            searchDebounce = setTimeout(function () { fetchCars(false); }, 350);
+        });
+
+        [priceMinInput, priceMaxInput].forEach(function (el) {
+            el.addEventListener('change', function () { fetchCars(false); });
+        });
+
+        resetBtn.addEventListener('click', function () {
+            searchInput.value = '';
+            brandSelect.value = '';
+            bodyTypeSelect.value = '';
+            yearMinSelect.value = '';
+            yearMaxSelect.value = '';
+            priceMinInput.value = '';
+            priceMaxInput.value = '';
+            fuelSelect.value = '';
+            transSelect.value = '';
+            driveSelect.value = '';
+            sortSelect.value = 'newest';
+            statusSelect.value = 'available';
+            fetchCars(true);
+        });
+
+        // ── Init ──
+        loadFiltersFromUrl();
+        fetchStats();
+        fetchBrands();
+        fetchCars(true);
+
+    })();
+    </script>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

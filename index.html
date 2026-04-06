@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="House Of Speed - A sanctuary for motor connoisseurs in Almere, The Netherlands. Premium storage, luxury car sales, expert service, and exclusive events.">
+    <meta name="keywords" content="House Of Speed, luxury cars, classic cars, Rolls-Royce, Almere Netherlands, car storage">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="House Of Speed - A Sanctuary for Motor Connoisseurs">
+    <meta property="og:description" content="Premium storage, luxury car sales, and expert service for classic and luxury vehicles in Almere, The Netherlands.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://houseofspeed.dk/">
+    <meta property="og:image" content="https://houseofspeed.dk/assets/images/og-image.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="House Of Speed - A Sanctuary for Motor Connoisseurs">
+    <meta name="twitter:description" content="Premium storage, luxury car sales, and expert service in Almere, The Netherlands.">
+    <meta name="twitter:image" content="https://houseofspeed.dk/assets/images/og-image.jpg">
+
+    <title>House Of Speed - A Sanctuary for Motor Connoisseurs | Almere, The Netherlands</title>
+    <link rel="canonical" href="https://houseofspeed.dk/">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Critical CSS inlined for above-the-fold content -->
+    <style>
+        /* Critical CSS - HOS Theme */
+        :root{--hos-black:#111111;--hos-black-primary:#1a1a1a;--hos-black-raised:#1f1f1f;--hos-black-elevated:#1e1e1e;--hos-black-card:#222222;--hos-black-surface:#2a2a2a;--hos-black-border:#333333;--hos-black-divider:#3a3a3a;--hos-black-muted:#444444;--hos-gold:#c9a05b;--hos-gold-light:#d4b06a;--hos-gold-dark:#b08a45;--hos-gold-bright:#e8c874;--hos-gold-10:rgba(201,160,91,0.1);--hos-gold-30:rgba(201,160,91,0.3);--hos-gold-90:rgba(201,160,91,0.9);--hos-text-primary:#ffffff;--hos-text-secondary:#cccccc;--hos-text-muted:#999999;--hos-text-hint:#888888;--hos-text-disabled:#666666;--hos-text-on-gold:#1a1a1a;--hos-gray-500:#555555;--hos-gray-600:#666666;--hos-gray-700:#777777;--hos-gray-800:#888888;--hos-gray-900:#999999;--hos-gray-a00:#aaaaaa;--hos-gray-c00:#cccccc;--hos-gray-d00:#dddddd;--hos-gray-e00:#eeeeee;--hos-status-green:#22c55e;--hos-status-red:#ef4444;--hos-status-yellow:#eab308;--hos-status-blue:#3b82f6;--hos-status-orange:#f97316;--hos-status-purple:#a855f7;--hos-status-gray:#6b7280;--hos-nav-bg:rgba(20,20,20,.95);--hos-nav-bg-solid:rgba(20,20,20,.98);--hos-overlay:rgba(0,0,0,0.7);--color-navy:var(--hos-black-primary);--color-bronze:var(--hos-gold);--color-cream:var(--hos-black-primary);--color-slate:var(--hos-text-secondary);--color-dark-navy:var(--hos-black);--spacing-xs:0.5rem;--spacing-sm:1rem;--spacing-md:2rem;--spacing-lg:4rem;--font-primary:'Gill Sans','Gill Sans MT',Calibri,'Trebuchet MS',sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-primary);color:var(--hos-text-primary);background:var(--hos-black-primary);line-height:1.7;overflow-x:hidden}.navbar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:20px 50px;background:var(--hos-nav-bg);backdrop-filter:blur(10px);z-index:1000;color:var(--hos-text-primary);transition:background 0.3s ease}.hero{position:relative;height:100vh;background:linear-gradient(rgba(20,20,20,.3),rgba(0,0,0,.2)),var(--hos-black);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;overflow:hidden}.hero-title{position:relative;z-index:1;color:var(--hos-text-primary);font-size:72px;font-weight:200;letter-spacing:18px;text-align:center;text-shadow:none;text-transform:uppercase}    </style>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+
+        <!-- Main Menu -->
+        <nav class="main-menu">
+            <a href="about.html" data-i18n="nav_about">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html" data-i18n="nav_storage">STORAGE</a>
+            <a href="cars.html" data-i18n="nav_cars">CARS FOR SALE</a>
+            <a href="services.html" data-i18n="nav_events">MEETINGS & EVENTS</a>
+            <a href="partners.html" data-i18n="nav_partners">PARTNERS</a>
+            <a href="news.html" data-i18n="nav_news">NEWS</a>
+            <a href="shop.html" data-i18n="nav_shop">SHOP</a>
+            <a href="contact.html" data-i18n="nav_contact">CONTACT</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline poster="assets/images/rolce.jpg">
+            <source src="assets/videos/hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <h1 class="hero-title" data-text-reveal data-i18n="hero_title">WELCOME TO HOUSE OF SPEED</h1>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2 class="section-title" data-animate-title data-i18n="about_title">A SANCTUARY FOR MOTOR CONNOISSEURS</h2>
+
+            <p class="intro-text" data-i18n="about_intro1">
+                At HOUSE OF SPEED, we treasure international clients and partnerships. Therefore, we encourage you to reach out to us by using our contact form, sending us an e-mail, or giving us a call.
+            </p>
+            <p class="intro-text" data-i18n="about_intro2">
+                In the meantime, you can read more about HOUSE OF SPEED right here.
+            </p>
+
+            <blockquote class="founder-quote" data-i18n="about_quote">
+                "Since I was a child, cars have been a significant part of my life. I treasure the mechanic, the exclusivity, the design, and the overwhelming power of the engine. At my estate, Rohden Gods, we have had our family garage for many years and held many events for other enthusiasts. It was here the idea of HOUSE OF SPEED arose."
+            </blockquote>
+            <div class="signature">Anders</div>
+
+            <p class="mission-text" data-i18n="about_mission1">
+                A garage is more than just a place to store your car. It is a place to share your passion. And that is why HOUSE OF SPEED was created to behold all elements that an assembly point for motor connoisseurs must hold.
+            </p>
+
+            <p class="mission-text" data-i18n="about_mission2">
+                We have endeavored to develop supreme frames for ideal storage, modern workshops, social gatherings, and a space for inspiration and room to focus on the vehicle as a passion. HOUSE OF SPEED is an exclusive network with space to immerse in those elements which make each car unique. Furthermore, we provide easy access to world-class professionals who help solve all your wishes and ambitions for your vehicle.
+            </p>
+
+            <p class="focus-text" data-i18n="about_focus">
+                Our activities focus on four main areas: Sales, Service, Storage, and Social.
+            </p>
+        </div>
+    </section>
+
+    <!-- Sales Section -->
+    <section class="sales-section" id="cars">
+        <div class="container-split">
+            <div class="image-container" data-image-reveal>
+                <div class="car-image sales-image" data-parallax="0.15"></div>
+            </div>
+            <div class="content-container">
+                <h2 class="section-title-dark" data-animate-title data-i18n="sales_title">SALES</h2>
+                <p data-i18n="sales_text">
+                    At HOUSE OF SPEED, we collaborate with a range of carefully selected business partners who offers sales and leasing of classic- and luxury vehicles. Besides our external partners, we furthermore operate our own sales department, SALES GARAGE, as well as an official dealership of brands such as Rolls-Royce, Lotus, KALMAR Automotive, Dallara Stradale, and Morgan.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section class="service-section">
+        <div class="container-split reverse">
+            <div class="content-container">
+                <h2 class="section-title-dark" data-animate-title data-i18n="service_title">SERVICE</h2>
+                <p data-i18n="service_text">
+                    Our world-class workshop facilities provide comprehensive service for classic and luxury vehicles. From routine maintenance to complete restorations, our expert technicians deliver exceptional craftsmanship and attention to detail.
+                </p>
+            </div>
+            <div class="image-container" data-image-reveal="right">
+                <div class="car-image service-image" data-parallax="0.15"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Storage Section -->
+    <section class="sales-section" id="storage">
+        <div class="container-split">
+            <div class="image-container" data-image-reveal>
+                <div class="car-image storage-image" data-parallax="0.15"></div>
+            </div>
+            <div class="content-container">
+                <h2 class="section-title-dark" data-animate-title data-i18n="storage_title">STORAGE</h2>
+                <p data-i18n="storage_text">
+                    Our exclusive storage facility offers the perfect environment for your prized vehicles. Climate-controlled spaces, 24/7 security monitoring, and discrete access ensure your collection is preserved in optimal conditions. Each space is designed to accommodate the unique needs of classic and luxury automobile enthusiasts.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Section -->
+    <section class="service-section" id="social">
+        <div class="container-split reverse">
+            <div class="content-container">
+                <h2 class="section-title-dark" data-animate-title data-i18n="social_title">SOCIAL</h2>
+                <p data-i18n="social_text">
+                    HOUSE OF SPEED is more than a garage -- it's a community. Join fellow enthusiasts for exclusive events, car meets, and social gatherings. From intimate dinner parties surrounded by automotive excellence to larger networking events, we create moments that celebrate the passion we all share for exceptional automobiles.
+                </p>
+            </div>
+            <div class="image-container" data-image-reveal="right">
+                <div class="car-image social-image" data-parallax="0.15"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title-gold" data-animate-title data-i18n="contact_title">CONTACT US</h2>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3 class="company-name">HOUSE OF SPEED B.V.</h3>
+
+                    <div class="info-item">
+                        <svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span>Markerkant 10-12, 1316 AA Almere</span>
+                    </div>
+
+                    <div class="info-item">
+                        <svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <a href="tel:+31365391911">+31 36 539 1911</a>
+                    </div>
+
+                    <div class="info-item">
+                        <svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <a href="mailto:info@houseofspeed.dk">info@houseofspeed.dk</a>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="cvr-label">KVK</span>
+                        <span>KVK 73625184</span>
+                    </div>
+
+                    <div class="info-item">
+                        <svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <a href="https://maps.google.com/?q=Markerkant+10-12,+1316+AA+Almere,+The+Netherlands" target="_blank" rel="noopener noreferrer" class="directions-link" data-i18n="contact_directions">Get directions</a>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form id="contactForm" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name" data-i18n="form_name">NAME <span class="required">*</span></label>
+                                <input type="text" id="name" name="name" required aria-describedby="nameError">
+                                <span class="error-message" id="nameError" aria-live="polite"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" data-i18n="form_email">EMAIL <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" required aria-describedby="emailError">
+                                <span class="error-message" id="emailError" aria-live="polite"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" data-i18n="form_message">MESSAGE <span class="required">*</span></label>
+                            <textarea id="message" name="message" rows="5" required aria-describedby="messageError"></textarea>
+                            <span class="error-message" id="messageError" aria-live="polite"></span>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="consent" name="consent" required aria-describedby="consentError">
+                            <label for="consent" data-i18n="form_consent">Yes, please contact me <a href="privacy.html">Read declaration of consent</a></label>
+                        </div>
+                        <span class="error-message" id="consentError" aria-live="polite"></span>
+
+                        <button type="submit" class="submit-btn magnetic-btn" data-i18n="form_submit">SEND MESSAGE</button>
+                        <div class="form-status" id="formStatus" role="alert"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Teaser Section -->
+    <section class="shop-teaser-section" id="shop">
+        <div class="container shop-teaser-container">
+            <h2 class="section-title-dark shop-teaser-title" data-i18n="shop_title">THE HOUSE OF SPEED STORE</h2>
+            <p class="intro-text shop-teaser-subtitle" data-i18n="shop_subtitle">
+                Exclusive merchandise, premium car care products, and curated accessories for the discerning motorist.
+            </p>
+            <div class="shop-teaser-grid">
+                <!-- Merchandise -->
+                <article class="shop-teaser-card">
+                    <div class="shop-teaser-card-image" style="background-image:url('assets/images/ferrari2.jpg')">
+                        <span class="shop-teaser-badge" data-i18n="shop_badge_merch">Merchandise</span>
+                    </div>
+                    <div class="shop-teaser-card-body">
+                        <h3 class="shop-teaser-card-title" data-i18n="shop_merch_title">HOS COLLECTION</h3>
+                        <p class="shop-teaser-card-text" data-i18n="shop_merch_text">Caps, jackets, gloves, polo shirts and more -- carry the spirit of House Of Speed.</p>
+                        <a href="shop.html?category=merchandise" class="shop-teaser-card-link" data-i18n="shop_merch_link">Shop Collection</a>
+                    </div>
+                </article>
+                <!-- Car Care -->
+                <article class="shop-teaser-card">
+                    <div class="shop-teaser-card-image" style="background-image:url('assets/images/rolce.jpg')">
+                        <span class="shop-teaser-badge" data-i18n="shop_badge_care">Car Care</span>
+                    </div>
+                    <div class="shop-teaser-card-body">
+                        <h3 class="shop-teaser-card-title" data-i18n="shop_care_title">PREMIUM DETAILING</h3>
+                        <p class="shop-teaser-card-text" data-i18n="shop_care_text">Professional-grade car care products curated by our expert technicians for your prized vehicles.</p>
+                        <a href="shop.html?category=car-care" class="shop-teaser-card-link" data-i18n="shop_care_link">Shop Car Care</a>
+                    </div>
+                </article>
+                <!-- Accessories -->
+                <article class="shop-teaser-card">
+                    <div class="shop-teaser-card-image" style="background-image:url('assets/images/ferari3.jpg')">
+                        <span class="shop-teaser-badge" data-i18n="shop_badge_acc">Accessories</span>
+                    </div>
+                    <div class="shop-teaser-card-body">
+                        <h3 class="shop-teaser-card-title" data-i18n="shop_acc_title">CURATED GIFTS</h3>
+                        <p class="shop-teaser-card-text" data-i18n="shop_acc_text">Keyrings, mugs, tote bags and laptop sleeves -- refined gifts for the motor enthusiast in your life.</p>
+                        <a href="shop.html?category=accessories" class="shop-teaser-card-link" data-i18n="shop_acc_link">Shop Accessories</a>
+                    </div>
+                </article>
+            </div>
+            <div class="shop-teaser-cta">
+                <a href="shop.html" class="cta-button magnetic-btn" data-i18n="shop_cta">VISIT THE STORE</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h3 class="newsletter-title" data-i18n="newsletter_title">STAY INFORMED</h3>
+                    <p data-i18n="newsletter_text">Subscribe to our newsletter for exclusive updates on events, new arrivals, and automotive insights.</p>
+                </div>
+                <form id="newsletterForm" class="newsletter-form" novalidate>
+                    <div class="newsletter-input-group">
+                        <input type="email" id="newsletterEmail" name="newsletterEmail" data-i18n-placeholder="newsletter_placeholder" placeholder="Enter your email address" required aria-describedby="newsletterError">
+                        <button type="submit" class="newsletter-btn" data-i18n="newsletter_btn">SUBSCRIBE</button>
+                    </div>
+                    <span class="error-message" id="newsletterError" aria-live="polite"></span>
+                    <div class="newsletter-status" id="newsletterStatus" role="alert"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <!-- Logo and tagline -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer">
+                    </div>
+                    <p class="footer-tagline" data-i18n="footer_tagline">A sanctuary for motor connoisseurs since 2016</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-nav">
+                    <h4 class="footer-heading" data-i18n="footer_quick_links">QUICK LINKS</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="about.html" data-i18n="footer_about">About Us</a></li>
+                        <li><a href="storage.html" data-i18n="footer_storage">Storage</a></li>
+                        <li><a href="cars.html" data-i18n="footer_cars">Cars for Sale</a></li>
+                        <li><a href="services.html" data-i18n="footer_events">Meetings & Events</a></li>
+                        <li><a href="partners.html" data-i18n="footer_partners">Partners</a></li>
+                        <li><a href="shop.html" data-i18n="footer_shop">Shop</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Business Hours -->
+                <div class="footer-hours">
+                    <h4 class="footer-heading" data-i18n="footer_hours_title">BUSINESS HOURS</h4>
+                    <ul class="hours-list">
+                        <li><span data-i18n="footer_mon_fri">Monday - Friday</span><span>09:00 - 17:00</span></li>
+                        <li><span data-i18n="footer_sat">Saturday</span><span>10:00 - 14:00</span></li>
+                        <li><span data-i18n="footer_sun">Sunday</span><span data-i18n="footer_closed">Closed</span></li>
+                    </ul>
+                    <p class="hours-note" data-i18n="footer_hours_note">Visits by appointment preferred</p>
+                </div>
+
+                <!-- Social Links -->
+                <div class="footer-social">
+                    <h4 class="footer-heading" data-i18n="footer_follow">FOLLOW US</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/houseofspeed.dk/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/houseofspeed.dk/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/houseofspeed/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on LinkedIn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect x="2" y="9" width="4" height="12"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a>
+                    <span class="footer-divider">|</span>
+                    <a href="terms.html" data-i18n="footer_terms">Terms & Conditions</a>
+                </div>
+                <p class="copyright" data-i18n="footer_copyright">&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Form Validation Script -->
+    <script>
+        (function() {
+            // Contact Form Validation
+            const contactForm = document.getElementById('contactForm');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            const consentInput = document.getElementById('consent');
+            const formStatus = document.getElementById('formStatus');
+
+            // Newsletter Form
+            const newsletterForm = document.getElementById('newsletterForm');
+            const newsletterEmail = document.getElementById('newsletterEmail');
+            const newsletterStatus = document.getElementById('newsletterStatus');
+
+            // Validation functions
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function showError(input, errorElement, message) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                errorElement.textContent = message;
+            }
+
+            function showSuccess(input, errorElement) {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                errorElement.textContent = '';
+            }
+
+            function validateField(input, errorElement, validationType) {
+                const value = input.value.trim();
+
+                if (validationType === 'required' && !value) {
+                    showError(input, errorElement, 'This field is required');
+                    return false;
+                }
+
+                if (validationType === 'email') {
+                    if (!value) {
+                        showError(input, errorElement, 'Email is required');
+                        return false;
+                    }
+                    if (!validateEmail(value)) {
+                        showError(input, errorElement, 'Please enter a valid email address');
+                        return false;
+                    }
+                }
+
+                showSuccess(input, errorElement);
+                return true;
+            }
+
+            // Real-time validation for contact form
+            nameInput.addEventListener('blur', function() {
+                validateField(this, document.getElementById('nameError'), 'required');
+            });
+
+            emailInput.addEventListener('blur', function() {
+                validateField(this, document.getElementById('emailError'), 'email');
+            });
+
+            messageInput.addEventListener('blur', function() {
+                validateField(this, document.getElementById('messageError'), 'required');
+            });
+
+            // Contact form submission
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                let isValid = true;
+
+                if (!validateField(nameInput, document.getElementById('nameError'), 'required')) {
+                    isValid = false;
+                }
+                if (!validateField(emailInput, document.getElementById('emailError'), 'email')) {
+                    isValid = false;
+                }
+                if (!validateField(messageInput, document.getElementById('messageError'), 'required')) {
+                    isValid = false;
+                }
+                if (!consentInput.checked) {
+                    document.getElementById('consentError').textContent = 'You must agree to be contacted';
+                    isValid = false;
+                } else {
+                    document.getElementById('consentError').textContent = '';
+                }
+
+                if (isValid) {
+                    // Simulate form submission
+                    formStatus.className = 'form-status success';
+                    formStatus.textContent = 'Thank you! Your message has been sent successfully.';
+                    contactForm.reset();
+                    // Remove valid classes after reset
+                    [nameInput, emailInput, messageInput].forEach(input => {
+                        input.classList.remove('valid');
+                    });
+                }
+            });
+
+            // Newsletter form validation
+            newsletterEmail.addEventListener('blur', function() {
+                validateField(this, document.getElementById('newsletterError'), 'email');
+            });
+
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (validateField(newsletterEmail, document.getElementById('newsletterError'), 'email')) {
+                    newsletterStatus.className = 'newsletter-status success';
+                    newsletterStatus.textContent = 'Thank you for subscribing!';
+                    newsletterForm.reset();
+                    newsletterEmail.classList.remove('valid');
+                }
+            });
+        })();
+    </script>
+    <script src="scripts.js" defer></script>
+    <script src="shop.js" defer></script>
+</body>
+</html>

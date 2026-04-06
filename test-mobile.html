@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Menu Test - House Of Speed</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(180, 145, 111, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <span class="language">ENGLISH</span>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+
+        <nav class="main-menu">
+            <a href="about.html">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html">STORAGE</a>
+            <a href="services.html">CARS FOR SALE</a>
+            <a href="services.html">MEETINGS & EVENTS</a>
+            <a href="partners.html">PARTNERS</a>
+            <a href="news.html">NEWS</a>
+            <a href="contact.html">CONTACT</a>
+        </nav>
+    </header>
+
+    <main style="padding-top: 150px; text-align: center;">
+        <h1 style="color: var(--hos-gold);">Mobile Menu Test</h1>
+        <p>Resize your browser to test responsive breakpoints.</p>
+        <p>Click the hamburger menu (☰) on mobile.</p>
+    </main>
+
+    <div class="test-info">
+        <strong>Test Checklist:</strong><br>
+        ✓ Hamburger appears < 1024px<br>
+        ✓ Menu slides in smoothly<br>
+        ✓ Logo scales down on mobile<br>
+        ✓ Phone link readable<br>
+        ✓ Menu items accessible
+    </div>
+</body>
+</html>

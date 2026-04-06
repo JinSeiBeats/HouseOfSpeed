@@ -1,0 +1,10 @@
+# House Of Speed - robots.txt
+User-agent: *
+Allow: /
+
+# Disallow admin/private pages if any
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://houseofspeed.dk/sitemap.xml

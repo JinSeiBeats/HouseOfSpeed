@@ -1,0 +1,176 @@
+/**
+ * PRINT STYLESHEET
+ * Optimized for printing contact information and content pages
+ */
+
+@media print {
+    /* Reset margins for better print layout */
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    @page {
+        margin: 2cm;
+    }
+
+    body {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+
+    /* Hide non-essential elements */
+    .navbar,
+    .main-menu,
+    .hamburger,
+    .search-btn,
+    .footer,
+    .hero,
+    button,
+    .cta-button,
+    .cta-button-large,
+    .submit-btn,
+    input[type="submit"],
+    .form-group input,
+    .form-group textarea,
+    .checkbox-group,
+    .gallery-overlay,
+    nav,
+    .menu-toggle {
+        display: none !important;
+    }
+
+    /* Show only essential content */
+    .contact-section {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+    }
+
+    .contact-content {
+        display: block !important;
+    }
+
+    .contact-info {
+        margin-bottom: 2cm;
+    }
+
+    .company-name {
+        font-size: 18pt;
+        font-weight: bold;
+        margin-bottom: 1cm;
+        color: #000 !important;
+    }
+
+    .info-item {
+        margin-bottom: 0.5cm;
+        page-break-inside: avoid;
+    }
+
+    .info-item a {
+        color: #000 !important;
+        text-decoration: none;
+    }
+
+    /* Display URLs after links */
+    .info-item a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 10pt;
+        color: #666;
+    }
+
+    .info-item a[href^="tel"]::after,
+    .info-item a[href^="mailto"]::after {
+        content: "";
+    }
+
+    /* Page breaks */
+    h1, h2, h3 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    p, li {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Print-specific typography */
+    h1 {
+        font-size: 24pt;
+        margin-bottom: 1cm;
+    }
+
+    h2 {
+        font-size: 18pt;
+        margin-bottom: 0.5cm;
+        margin-top: 1cm;
+    }
+
+    h3 {
+        font-size: 14pt;
+        margin-bottom: 0.3cm;
+    }
+
+    /* Images */
+    img {
+        max-width: 100%;
+        page-break-inside: avoid;
+    }
+
+    /* Tables (if any) */
+    table {
+        border-collapse: collapse;
+        page-break-inside: avoid;
+    }
+
+    th, td {
+        border: 1px solid #000;
+        padding: 0.3cm;
+    }
+
+    /* Privacy policy specific */
+    .privacy-content {
+        max-width: 100%;
+    }
+
+    .privacy-content h2 {
+        border-bottom: 2px solid #000;
+        padding-bottom: 0.2cm;
+    }
+
+    .privacy-content ul {
+        margin-left: 1cm;
+    }
+
+    /* Add page header/footer */
+    @page {
+        @top-right {
+            content: "House Of Speed | Page " counter(page);
+        }
+        @bottom-center {
+            content: "Markerkant 10-12, 1316 AA Almere | +31 36 539 1911 | info@houseofspeed.dk";
+            font-size: 9pt;
+            color: #666;
+        }
+    }
+
+    /* Force page break before sections */
+    .about-section,
+    .sales-section,
+    .service-section {
+        page-break-before: always;
+    }
+
+    /* Print button helper (if you add one) */
+    .print-only {
+        display: block !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}

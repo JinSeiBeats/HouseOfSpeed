@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, follow">
+    <title>Page Not Found - House Of Speed</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar" role="navigation">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+
+        <!-- Main Menu -->
+        <nav class="main-menu" role="navigation">
+            <a href="about.html" data-i18n="nav_about">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html" data-i18n="nav_storage">STORAGE</a>
+            <a href="cars.html" data-i18n="nav_cars">CARS FOR SALE</a>
+            <a href="services.html" data-i18n="nav_events">MEETINGS & EVENTS</a>
+            <a href="partners.html" data-i18n="nav_partners">PARTNERS</a>
+            <a href="news.html" data-i18n="nav_news">NEWS</a>
+            <a href="contact.html" data-i18n="nav_contact">CONTACT</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="error-section">
+            <div class="container">
+                <h1 class="error-title">404</h1>
+                <h2 class="section-title" data-i18n="error_title">PAGE NOT FOUND</h2>
+                <p class="intro-text" data-i18n="error_text">The page you're looking for doesn't exist or has been moved.</p>
+
+                <nav class="error-nav">
+                    <a href="index.html" class="cta-button-large" data-i18n="error_return_home">Return Home</a>
+                    <p class="error-links">
+                        <span data-i18n="error_or_visit">Or visit:</span>
+                        <a href="about.html" data-i18n="error_link_about">About</a> |
+                        <a href="services.html" data-i18n="error_link_services">Services</a> |
+                        <a href="contact.html" data-i18n="error_link_contact">Contact</a>
+                    </p>
+                </nav>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo"><img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer"></div>
+            <div class="footer-info">
+                <p data-i18n="footer_copyright">&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+                <p>Markerkant 10-12, 1316 AA Almere, The Netherlands | KVK 73625184</p>
+                <nav class="footer-links"><a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a><a href="contact.html" data-i18n="footer_contact">Contact</a></nav>
+            </div>
+        </div>
+    </footer>
+    <script src="scripts.js" defer></script>
+</body>
+</html>

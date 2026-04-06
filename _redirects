@@ -1,0 +1,19 @@
+# Netlify Redirects Configuration
+# https://docs.netlify.com/routing/redirects/
+
+# Redirect www to non-www (301 permanent redirect)
+https://www.houseofspeed.dk/* https://houseofspeed.dk/:splat 301!
+
+# Redirect old URLs (if migrating from old site)
+# /old-page.html /new-page.html 301
+# /services/sales /services.html#sales 301
+
+# Custom 404 page
+/* /404.html 404
+
+# Example: Redirect temporary maintenance page
+# /* /maintenance.html 302
+
+# Example: Redirect specific pages during migration
+# /contact-us /contact.html 301
+# /about-us /about.html 301

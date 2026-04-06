@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore our services: luxury car sales, expert maintenance, and exclusive events for motor connoisseurs at House Of Speed.">
+    <meta name="keywords" content="luxury car sales, classic cars, Rolls-Royce dealer, car service, motor events">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Services - House Of Speed">
+    <meta property="og:description" content="Sales, service, and events for classic and luxury vehicles.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://houseofspeed.dk/services.html">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Services - House Of Speed">
+    <meta name="twitter:description" content="Sales, service, and events for classic and luxury vehicles.">
+
+    <title>Services - Sales, Service & Events | House Of Speed</title>
+    <link rel="canonical" href="https://houseofspeed.dk/services.html">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar" role="navigation">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+
+        <!-- Main Menu -->
+        <nav class="main-menu" role="navigation">
+            <a href="about.html" data-i18n="nav_about">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html" data-i18n="nav_storage">STORAGE</a>
+            <a href="services.html" class="active" aria-current="page" data-i18n="nav_cars">CARS FOR SALE</a>
+            <a href="services.html" data-i18n="nav_events">MEETINGS & EVENTS</a>
+            <a href="partners.html" data-i18n="nav_partners">PARTNERS</a>
+            <a href="news.html" data-i18n="nav_news">NEWS</a>
+            <a href="shop.html" data-i18n="nav_shop">SHOP</a>
+            <a href="contact.html" data-i18n="nav_contact">CONTACT</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Sales Section -->
+        <section class="sales-section" id="sales">
+            <div class="container-split">
+                <div class="image-container">
+                    <img src="assets/images/ferari3.jpg"
+                         alt="Luxury Ferrari vehicle at House Of Speed showroom"
+                         loading="eager"
+                         decoding="async"
+                         class="car-image">
+                </div>
+                <div class="content-container">
+                    <h2 class="section-title-dark" data-i18n="services_sales_title">SALES</h2>
+                    <p data-i18n="services_sales_text">
+                        At HOUSE OF SPEED, we collaborate with a range of carefully selected business partners who offers sales and leasing of classic- and luxury vehicles. Besides our external partners, we furthermore operate our own sales department, SALES GARAGE, as well as an official dealership of brands such as Rolls-Royce, Lotus, KALMAR Automotive, Dallara Stradale, and Morgan.
+                    </p>
+                    <a href="contact.html" class="cta-button" data-i18n="services_sales_cta">Inquire About Available Vehicles</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Section -->
+        <section class="service-section" id="service">
+            <div class="container-split reverse">
+                <div class="content-container">
+                    <h2 class="section-title-dark" data-i18n="services_service_title">SERVICE</h2>
+                    <p data-i18n="services_service_text">
+                        Our world-class workshop facilities provide comprehensive service for classic and luxury vehicles. From routine maintenance to complete restorations, our expert technicians deliver exceptional craftsmanship and attention to detail.
+                    </p>
+                    <ul class="service-list">
+                        <li data-i18n="services_service_item1">Regular maintenance and servicing</li>
+                        <li data-i18n="services_service_item2">Complete restoration projects</li>
+                        <li data-i18n="services_service_item3">Performance upgrades</li>
+                        <li data-i18n="services_service_item4">Paint and bodywork</li>
+                        <li data-i18n="services_service_item5">Interior refurbishment</li>
+                        <li data-i18n="services_service_item6">Pre-purchase inspections</li>
+                    </ul>
+                    <a href="contact.html" class="cta-button" data-i18n="services_service_cta">Schedule Service</a>
+                </div>
+                <div class="image-container">
+                    <img src="assets/images/ferrari4.jpg"
+                         alt="Professional technician servicing Ferrari at House Of Speed workshop"
+                         loading="lazy"
+                         decoding="async"
+                         class="car-image">
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section class="events-section" id="events" style="background: linear-gradient(rgba(26, 31, 46, 0.9), rgba(26, 31, 46, 0.9)), url('assets/images/rolce2.jpg'); background-size: cover; background-position: center;">
+            <div class="container">
+                <h2 class="section-title" style="color: var(--color-bronze);" data-i18n="services_events_title">MEETINGS & EVENTS</h2>
+                <p class="intro-text" data-i18n="services_events_text">
+                    House Of Speed hosts exclusive events for motor enthusiasts throughout the year. From intimate gatherings to large-scale exhibitions, our facilities provide the perfect backdrop for celebrating automotive excellence.
+                </p>
+
+                <div class="event-types">
+                    <article class="event-card">
+                        <h3 data-i18n="services_event_private">Private Viewings</h3>
+                        <p data-i18n="services_event_private_text">Exclusive access to our collection and available vehicles for serious collectors.</p>
+                    </article>
+                    <article class="event-card">
+                        <h3 data-i18n="services_event_meets">Car Meets</h3>
+                        <p data-i18n="services_event_meets_text">Monthly gatherings where enthusiasts share their passion and showcase their vehicles.</p>
+                    </article>
+                    <article class="event-card">
+                        <h3 data-i18n="services_event_workshop">Workshop Events</h3>
+                        <p data-i18n="services_event_workshop_text">Educational sessions with our expert technicians and industry professionals.</p>
+                    </article>
+                </div>
+
+                <div class="cta-section">
+                    <p data-i18n="services_events_cta_text">Interested in attending our next event?</p>
+                    <a href="contact.html" class="cta-button-large" data-i18n="services_events_cta_btn">Get in Touch</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer">
+            </div>
+            <div class="footer-info">
+                <p data-i18n="footer_copyright">&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+                <p>Markerkant 10-12, 1316 AA Almere, The Netherlands | KVK 73625184</p>
+                <nav class="footer-links" aria-label="Footer navigation">
+                    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a>
+                    <a href="shop.html" data-i18n="footer_shop">Shop</a>
+                    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts.js" defer></script>
+</body>
+</html>
