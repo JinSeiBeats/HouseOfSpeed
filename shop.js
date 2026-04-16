@@ -683,11 +683,11 @@ function initCartPage() {
                     <a href="shop.html" class="cta-button">Continue Shopping</a>
                 </div>
             `;
-            document.querySelector('.cart-summary')?.style.setProperty('display', 'none');
+            document.querySelector('.cart-summary')?.classList.add('hidden');
             return;
         }
 
-        document.querySelector('.cart-summary')?.style.removeProperty('display');
+        document.querySelector('.cart-summary')?.classList.remove('hidden');
 
         const subtotal = Cart.getTotal();
         const shipping = subtotal >= 500 ? 0 : 59;
@@ -830,6 +830,12 @@ function initCheckoutPage() {
 
         if (!valid) {
             document.getElementById('checkout-error').textContent = 'Please fill in all required fields correctly.';
+            // Scroll to first error field on mobile
+            var firstError = form.querySelector('.error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
             return;
         }
 

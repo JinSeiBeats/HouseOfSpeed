@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your House Of Speed account. Save your orders, wishlist, and addresses.">
+    <title>Create Account - House Of Speed</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar" role="navigation">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+        <nav class="main-menu" role="navigation">
+            <a href="about.html">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html">STORAGE</a>
+            <a href="cars.html">CARS FOR SALE</a>
+            <a href="services.html">MEETINGS & EVENTS</a>
+            <a href="partners.html">PARTNERS</a>
+            <a href="news.html">NEWS</a>
+            <a href="shop.html">SHOP</a>
+            <a href="contact.html">CONTACT</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="auth-section">
+            <div class="auth-container">
+                <h1 class="auth-title">CREATE ACCOUNT</h1>
+                <p class="auth-subtitle">Join the House of Speed community</p>
+
+                <div class="auth-error" id="authError" role="alert"></div>
+
+                <form id="signupForm" class="auth-form" novalidate>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label for="signup-first">FIRST NAME</label>
+                            <input type="text" id="signup-first" name="first_name" required autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-last">LAST NAME</label>
+                            <input type="text" id="signup-last" name="last_name" required autocomplete="family-name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">EMAIL</label>
+                        <input type="email" id="signup-email" name="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">PASSWORD</label>
+                        <input type="password" id="signup-password" name="password" required autocomplete="new-password" minlength="6">
+                        <span class="form-hint">Minimum 6 characters</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm">CONFIRM PASSWORD</label>
+                        <input type="password" id="signup-confirm" name="confirm_password" required autocomplete="new-password" minlength="6">
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="signup-consent" required>
+                        <label for="signup-consent">
+                            I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and
+                            <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-submit-btn" id="signupBtn">CREATE ACCOUNT</button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+                <p class="auth-switch">
+                    Already have an account? <a href="login.html" class="auth-link">Sign in</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer">
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+                <p>Markerkant 10-12, 1316 AA Almere, The Netherlands | KVK 73625184</p>
+                <nav class="footer-links" aria-label="Footer navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="shop.js" defer></script>
+    <script src="scripts.js" defer></script>
+    <script>
+    (function() {
+        'use strict';
+
+        if (HOS_AUTH.isLoggedIn()) {
+            window.location.href = 'account.html';
+            return;
+        }
+
+        var form = document.getElementById('signupForm');
+        var errorEl = document.getElementById('authError');
+
+        function showError(msg) {
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+        }
+
+        function clearError() {
+            errorEl.textContent = '';
+            errorEl.style.display = 'none';
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearError();
+
+            var firstName = document.getElementById('signup-first').value.trim();
+            var lastName = document.getElementById('signup-last').value.trim();
+            var email = document.getElementById('signup-email').value.trim();
+            var password = document.getElementById('signup-password').value;
+            var confirm = document.getElementById('signup-confirm').value;
+            var consent = document.getElementById('signup-consent').checked;
+
+            if (!firstName || !lastName) {
+                showError('Please enter your name');
+                return;
+            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('Please enter a valid email');
+                return;
+            }
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters');
+                return;
+            }
+            if (password !== confirm) {
+                showError('Passwords do not match');
+                return;
+            }
+            if (!consent) {
+                showError('Please accept the terms and privacy policy');
+                return;
+            }
+
+            var btn = document.getElementById('signupBtn');
+            btn.disabled = true;
+            btn.textContent = 'CREATING ACCOUNT...';
+
+            try {
+                await HOS_AUTH.signUp(email, password, firstName, lastName);
+                window.location.href = 'account.html';
+            } catch (err) {
+                showError(err.message || 'Failed to create account');
+                btn.disabled = false;
+                btn.textContent = 'CREATE ACCOUNT';
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

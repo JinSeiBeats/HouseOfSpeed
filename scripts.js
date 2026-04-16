@@ -197,9 +197,11 @@
     }
 
     // ================================================================
-    // 4. PARALLAX SCROLLING
+    // 4. PARALLAX SCROLLING (disabled on mobile for performance)
     // ================================================================
-    if (motionAllowed) {
+    var isMobileDevice = window.matchMedia('(max-width: 768px)').matches;
+
+    if (motionAllowed && !isMobileDevice) {
         var parallaxElements = document.querySelectorAll('[data-parallax]');
         var heroSection = document.querySelector('.hero');
         var ticking = false;
@@ -477,6 +479,14 @@
                 document.body.style.overflow = '';
             }
         });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (menuToggle.checked && !mainMenu.contains(e.target) && !e.target.closest('.hamburger')) {
+                menuToggle.checked = false;
+                menuToggle.dispatchEvent(new Event('change'));
+            }
+        });
     }
 
     // ================================================================
@@ -491,7 +501,8 @@
             var target = document.querySelector(href);
 
             if (target) {
-                var offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 130;
+                var navHeight = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 80;
+                var offsetTop = target.getBoundingClientRect().top + window.pageYOffset - (navHeight + 50);
 
                 window.scrollTo({
                     top: offsetTop,
@@ -604,6 +615,11 @@
 
         var lastScroll = 0;
         var navbarHeight = navbar.offsetHeight;
+
+        // Recalculate navbar height on resize/orientation change
+        window.addEventListener('resize', function() {
+            navbarHeight = navbar.offsetHeight;
+        }, { passive: true });
 
         window.addEventListener('scroll', function() {
             var currentScroll = window.pageYOffset;
@@ -1522,15 +1538,12 @@
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
-                var newCardsPerView = getCardsPerView();
-                if (newCardsPerView !== cardsPerView) {
-                    cardsPerView = newCardsPerView;
-                    if (currentIndex > getMaxIndex()) {
-                        currentIndex = getMaxIndex();
-                    }
+                cardsPerView = getCardsPerView();
+                if (currentIndex > getMaxIndex()) {
+                    currentIndex = getMaxIndex();
                 }
                 updateCarousel(false);
-            }, 100);
+            }, 150);
         });
 
         updateCarousel(false);

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in to your House Of Speed account. Access your orders, wishlist, and saved addresses.">
+    <title>Sign In - House Of Speed</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar" role="navigation">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+        <nav class="main-menu" role="navigation">
+            <a href="about.html">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html">STORAGE</a>
+            <a href="cars.html">CARS FOR SALE</a>
+            <a href="services.html">MEETINGS & EVENTS</a>
+            <a href="partners.html">PARTNERS</a>
+            <a href="news.html">NEWS</a>
+            <a href="shop.html">SHOP</a>
+            <a href="contact.html">CONTACT</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="auth-section">
+            <div class="auth-container">
+                <h1 class="auth-title">SIGN IN</h1>
+                <p class="auth-subtitle">Welcome back to House of Speed</p>
+
+                <div class="auth-error" id="authError" role="alert"></div>
+
+                <form id="loginForm" class="auth-form" novalidate>
+                    <div class="form-group">
+                        <label for="login-email">EMAIL</label>
+                        <input type="email" id="login-email" name="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">PASSWORD</label>
+                        <input type="password" id="login-password" name="password" required autocomplete="current-password" minlength="6">
+                    </div>
+                    <div class="auth-actions-row">
+                        <a href="#" id="forgotPasswordLink" class="auth-link">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="auth-submit-btn" id="loginBtn">SIGN IN</button>
+                </form>
+
+                <!-- Forgot password form (hidden by default) -->
+                <form id="resetForm" class="auth-form" style="display:none;" novalidate>
+                    <p class="auth-subtitle">Enter your email and we'll send you a reset link.</p>
+                    <div class="form-group">
+                        <label for="reset-email">EMAIL</label>
+                        <input type="email" id="reset-email" name="email" required autocomplete="email">
+                    </div>
+                    <button type="submit" class="auth-submit-btn">SEND RESET LINK</button>
+                    <button type="button" class="auth-link-btn" id="backToLogin">Back to sign in</button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+                <p class="auth-switch">
+                    Don't have an account? <a href="signup.html" class="auth-link">Create one</a>
+                </p>
+                <p class="auth-switch">
+                    <a href="shop.html" class="auth-link">Continue as guest</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer">
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+                <p>Markerkant 10-12, 1316 AA Almere, The Netherlands | KVK 73625184</p>
+                <nav class="footer-links" aria-label="Footer navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="shop.js" defer></script>
+    <script src="scripts.js" defer></script>
+    <script>
+    (function() {
+        'use strict';
+
+        // Redirect if already logged in
+        if (HOS_AUTH.isLoggedIn()) {
+            window.location.href = 'account.html';
+            return;
+        }
+
+        var loginForm = document.getElementById('loginForm');
+        var resetForm = document.getElementById('resetForm');
+        var errorEl = document.getElementById('authError');
+
+        function showError(msg) {
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+        }
+
+        function clearError() {
+            errorEl.textContent = '';
+            errorEl.style.display = 'none';
+        }
+
+        // Login
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearError();
+            var btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.textContent = 'SIGNING IN...';
+
+            try {
+                var email = document.getElementById('login-email').value.trim();
+                var password = document.getElementById('login-password').value;
+                await HOS_AUTH.signIn(email, password);
+                window.location.href = 'account.html';
+            } catch (err) {
+                showError(err.message || 'Invalid email or password');
+                btn.disabled = false;
+                btn.textContent = 'SIGN IN';
+            }
+        });
+
+        // Forgot password toggle
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            resetForm.style.display = 'block';
+            clearError();
+        });
+
+        document.getElementById('backToLogin').addEventListener('click', function() {
+            resetForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            clearError();
+        });
+
+        // Reset password
+        resetForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearError();
+            try {
+                var email = document.getElementById('reset-email').value.trim();
+                await HOS_AUTH.resetPassword(email);
+                showError(''); // Clear
+                errorEl.style.display = 'block';
+                errorEl.style.borderColor = 'var(--hos-gold)';
+                errorEl.style.color = 'var(--hos-gold)';
+                errorEl.textContent = 'If an account exists, a reset link has been sent.';
+            } catch (err) {
+                showError(err.message || 'Failed to send reset link');
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

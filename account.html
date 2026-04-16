@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your House Of Speed account. View orders, manage addresses, and update your profile.">
+    <title>My Account - House Of Speed</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+        <nav class="navbar" role="navigation">
+            <div class="nav-left">
+                <a href="tel:+31365391911" class="phone-link">+31 36 539 1911</a>
+                <span class="nav-divider">|</span>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" aria-label="Switch to English">EN</button>
+                    <span class="lang-divider">|</span>
+                    <button class="lang-btn" data-lang="nl" aria-label="Overschakelen naar Nederlands">NL</button>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img">
+                </a>
+            </div>
+            <div class="nav-right">
+                <label for="menu-toggle" class="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </nav>
+        <nav class="main-menu" role="navigation">
+            <a href="about.html">ABOUT HOUSE OF SPEED</a>
+            <a href="storage.html">STORAGE</a>
+            <a href="cars.html">CARS FOR SALE</a>
+            <a href="services.html">MEETINGS & EVENTS</a>
+            <a href="partners.html">PARTNERS</a>
+            <a href="news.html">NEWS</a>
+            <a href="shop.html">SHOP</a>
+            <a href="contact.html">CONTACT</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="account-section">
+            <div class="container">
+                <div class="account-header">
+                    <h1 class="account-title">MY ACCOUNT</h1>
+                    <p class="account-welcome" id="welcomeMsg"></p>
+                    <button class="auth-link-btn" id="signOutBtn">Sign Out</button>
+                </div>
+
+                <!-- Account Tabs -->
+                <div class="account-tabs">
+                    <button class="account-tab active" data-tab="orders">ORDERS</button>
+                    <button class="account-tab" data-tab="wishlist">WISHLIST</button>
+                    <button class="account-tab" data-tab="addresses">ADDRESSES</button>
+                    <button class="account-tab" data-tab="profile">PROFILE</button>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="account-panel active" id="panel-orders">
+                    <div class="panel-loading" id="orders-loading">Loading orders...</div>
+                    <div id="orders-content"></div>
+                </div>
+
+                <!-- Wishlist Tab -->
+                <div class="account-panel" id="panel-wishlist">
+                    <div class="panel-loading" id="wishlist-loading">Loading wishlist...</div>
+                    <div id="wishlist-content"></div>
+                </div>
+
+                <!-- Addresses Tab -->
+                <div class="account-panel" id="panel-addresses">
+                    <div class="panel-loading" id="addresses-loading">Loading addresses...</div>
+                    <div id="addresses-content"></div>
+                    <button class="cta-button" id="addAddressBtn" style="margin-top:1.5rem;">ADD NEW ADDRESS</button>
+
+                    <!-- Add/Edit Address Modal -->
+                    <div class="address-modal" id="addressModal" style="display:none;">
+                        <div class="address-modal-content">
+                            <h3 class="address-modal-title" id="addressModalTitle">ADD ADDRESS</h3>
+                            <form id="addressForm" novalidate>
+                                <input type="hidden" id="address-id">
+                                <div class="form-group">
+                                    <label for="addr-label">LABEL</label>
+                                    <input type="text" id="addr-label" placeholder="Home, Office, etc." value="Home">
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="addr-first">FIRST NAME</label>
+                                        <input type="text" id="addr-first" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addr-last">LAST NAME</label>
+                                        <input type="text" id="addr-last" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addr-line1">ADDRESS LINE 1</label>
+                                    <input type="text" id="addr-line1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addr-line2">ADDRESS LINE 2</label>
+                                    <input type="text" id="addr-line2">
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="addr-city">CITY</label>
+                                        <input type="text" id="addr-city" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addr-postal">POSTAL CODE</label>
+                                        <input type="text" id="addr-postal" required>
+                                    </div>
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="addr-country">COUNTRY</label>
+                                        <input type="text" id="addr-country" value="NL" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addr-phone">PHONE</label>
+                                        <input type="tel" id="addr-phone">
+                                    </div>
+                                </div>
+                                <div class="form-group checkbox-group">
+                                    <input type="checkbox" id="addr-default">
+                                    <label for="addr-default">Set as default address</label>
+                                </div>
+                                <div class="address-modal-actions">
+                                    <button type="submit" class="auth-submit-btn">SAVE ADDRESS</button>
+                                    <button type="button" class="auth-link-btn" id="cancelAddressBtn">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tab -->
+                <div class="account-panel" id="panel-profile">
+                    <form id="profileForm" class="auth-form" novalidate>
+                        <div class="auth-error" id="profileError" role="alert"></div>
+                        <div class="auth-success" id="profileSuccess" role="status"></div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="profile-first">FIRST NAME</label>
+                                <input type="text" id="profile-first" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-last">LAST NAME</label>
+                                <input type="text" id="profile-last" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">EMAIL</label>
+                            <input type="email" id="profile-email" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">PHONE</label>
+                            <input type="tel" id="profile-phone">
+                        </div>
+                        <button type="submit" class="auth-submit-btn">UPDATE PROFILE</button>
+                    </form>
+
+                    <div class="profile-password-section">
+                        <h3 class="account-section-title">CHANGE PASSWORD</h3>
+                        <form id="passwordForm" class="auth-form" novalidate>
+                            <div class="auth-error" id="passwordError" role="alert"></div>
+                            <div class="auth-success" id="passwordSuccess" role="status"></div>
+                            <div class="form-group">
+                                <label for="new-password">NEW PASSWORD</label>
+                                <input type="password" id="new-password" required minlength="6" autocomplete="new-password">
+                                <span class="form-hint">Minimum 6 characters</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-new-password">CONFIRM NEW PASSWORD</label>
+                                <input type="password" id="confirm-new-password" required minlength="6" autocomplete="new-password">
+                            </div>
+                            <button type="submit" class="auth-submit-btn">CHANGE PASSWORD</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/images/logo.jpg" alt="House of Speed Collections" class="logo-img-footer">
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2025 House Of Speed B.V. All rights reserved.</p>
+                <p>Markerkant 10-12, 1316 AA Almere, The Netherlands | KVK 73625184</p>
+                <nav class="footer-links" aria-label="Footer navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="shop.js" defer></script>
+    <script src="scripts.js" defer></script>
+    <script>
+    (function() {
+        'use strict';
+
+        // Redirect if not logged in
+        if (!HOS_AUTH.isLoggedIn()) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        var user = HOS_AUTH.getUser();
+        document.getElementById('welcomeMsg').textContent = 'Welcome, ' + (user.email || '');
+
+        // ============================================================
+        // TAB NAVIGATION
+        // ============================================================
+        var tabs = document.querySelectorAll('.account-tab');
+        var panels = document.querySelectorAll('.account-panel');
+
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var target = this.getAttribute('data-tab');
+                tabs.forEach(function(t) { t.classList.remove('active'); });
+                panels.forEach(function(p) { p.classList.remove('active'); });
+                this.classList.add('active');
+                document.getElementById('panel-' + target).classList.add('active');
+
+                // Load data for tab
+                if (target === 'orders') loadOrders();
+                if (target === 'wishlist') loadWishlist();
+                if (target === 'addresses') loadAddresses();
+                if (target === 'profile') loadProfile();
+            });
+        });
+
+        // ============================================================
+        // SIGN OUT
+        // ============================================================
+        document.getElementById('signOutBtn').addEventListener('click', async function() {
+            await HOS_AUTH.signOut();
+            window.location.href = 'index.html';
+        });
+
+        // ============================================================
+        // ORDERS
+        // ============================================================
+        async function loadOrders() {
+            var container = document.getElementById('orders-content');
+            var loading = document.getElementById('orders-loading');
+            loading.style.display = 'block';
+            try {
+                var orders = await HOS_AUTH.getOrders();
+                loading.style.display = 'none';
+                if (!orders || orders.length === 0) {
+                    container.innerHTML = '<div class="account-empty"><p>No orders yet.</p><a href="shop.html" class="cta-button">Start Shopping</a></div>';
+                    return;
+                }
+                container.innerHTML = orders.map(function(order) {
+                    var date = new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                    var statusClass = order.status === 'completed' ? 'status-green' : order.status === 'pending' ? 'status-yellow' : 'status-default';
+                    var items = order.order_items || [];
+                    return '<div class="order-card">' +
+                        '<div class="order-card-header">' +
+                            '<div><span class="order-number">' + order.order_number + '</span><span class="order-date">' + date + '</span></div>' +
+                            '<span class="order-status ' + statusClass + '">' + order.status.toUpperCase() + '</span>' +
+                        '</div>' +
+                        '<div class="order-items-list">' +
+                            items.map(function(item) {
+                                return '<div class="order-item-row">' +
+                                    '<span class="order-item-name">' + item.product_name + (item.size ? ' / ' + item.size : '') + (item.color ? ' / ' + item.color : '') + '</span>' +
+                                    '<span class="order-item-qty">x' + item.quantity + '</span>' +
+                                    '<span class="order-item-price">' + item.line_total.toLocaleString('nl-NL') + ' EUR</span>' +
+                                '</div>';
+                            }).join('') +
+                        '</div>' +
+                        '<div class="order-card-footer">' +
+                            '<span class="order-total">Total: ' + parseFloat(order.total).toLocaleString('nl-NL') + ' EUR</span>' +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+            } catch (err) {
+                loading.style.display = 'none';
+                container.innerHTML = '<p class="account-error">Failed to load orders.</p>';
+            }
+        }
+
+        // ============================================================
+        // WISHLIST
+        // ============================================================
+        async function loadWishlist() {
+            var container = document.getElementById('wishlist-content');
+            var loading = document.getElementById('wishlist-loading');
+            loading.style.display = 'block';
+            try {
+                var items = await HOS_AUTH.getWishlist();
+                loading.style.display = 'none';
+                if (!items || items.length === 0) {
+                    container.innerHTML = '<div class="account-empty"><p>Your wishlist is empty.</p><a href="shop.html" class="cta-button">Browse Shop</a></div>';
+                    return;
+                }
+                container.innerHTML = '<div class="wishlist-grid">' + items.map(function(item) {
+                    return '<div class="wishlist-card">' +
+                        (item.product_image ? '<div class="wishlist-card-image" style="background-image:url(' + item.product_image + ')"></div>' : '<div class="wishlist-card-image"></div>') +
+                        '<div class="wishlist-card-body">' +
+                            '<span class="wishlist-card-name">' + item.product_name + '</span>' +
+                            '<span class="wishlist-card-price">' + (item.product_price ? parseFloat(item.product_price).toLocaleString('nl-NL') + ' EUR' : '') + '</span>' +
+                            '<div class="wishlist-card-actions">' +
+                                '<a href="product.html?id=' + item.product_id + '" class="cta-button">View</a>' +
+                                '<button class="cart-remove-btn wishlist-remove" data-id="' + item.product_id + '" aria-label="Remove from wishlist">&times;</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                }).join('') + '</div>';
+
+                // Remove handlers
+                container.querySelectorAll('.wishlist-remove').forEach(function(btn) {
+                    btn.addEventListener('click', async function() {
+                        await HOS_AUTH.removeFromWishlist(this.getAttribute('data-id'));
+                        loadWishlist();
+                    });
+                });
+            } catch (err) {
+                loading.style.display = 'none';
+                container.innerHTML = '<p class="account-error">Failed to load wishlist.</p>';
+            }
+        }
+
+        // ============================================================
+        // ADDRESSES
+        // ============================================================
+        var addressModal = document.getElementById('addressModal');
+
+        async function loadAddresses() {
+            var container = document.getElementById('addresses-content');
+            var loading = document.getElementById('addresses-loading');
+            loading.style.display = 'block';
+            try {
+                var addresses = await HOS_AUTH.getAddresses();
+                loading.style.display = 'none';
+                if (!addresses || addresses.length === 0) {
+                    container.innerHTML = '<div class="account-empty"><p>No saved addresses.</p></div>';
+                    return;
+                }
+                container.innerHTML = addresses.map(function(addr) {
+                    return '<div class="address-card' + (addr.is_default ? ' default' : '') + '">' +
+                        '<div class="address-card-header">' +
+                            '<span class="address-label">' + (addr.label || 'Address') + '</span>' +
+                            (addr.is_default ? '<span class="address-default-badge">DEFAULT</span>' : '') +
+                        '</div>' +
+                        '<p>' + addr.first_name + ' ' + addr.last_name + '</p>' +
+                        '<p>' + addr.address_line1 + '</p>' +
+                        (addr.address_line2 ? '<p>' + addr.address_line2 + '</p>' : '') +
+                        '<p>' + addr.postal_code + ' ' + addr.city + ', ' + addr.country + '</p>' +
+                        (addr.phone ? '<p>' + addr.phone + '</p>' : '') +
+                        '<div class="address-card-actions">' +
+                            '<button class="auth-link-btn addr-edit" data-id="' + addr.id + '">Edit</button>' +
+                            '<button class="auth-link-btn addr-delete" data-id="' + addr.id + '">Delete</button>' +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+
+                // Edit/Delete handlers
+                container.querySelectorAll('.addr-edit').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var id = this.getAttribute('data-id');
+                        var addr = addresses.find(function(a) { return a.id === id; });
+                        if (addr) openAddressModal(addr);
+                    });
+                });
+                container.querySelectorAll('.addr-delete').forEach(function(btn) {
+                    btn.addEventListener('click', async function() {
+                        if (confirm('Delete this address?')) {
+                            await HOS_AUTH.deleteAddress(this.getAttribute('data-id'));
+                            loadAddresses();
+                        }
+                    });
+                });
+            } catch (err) {
+                loading.style.display = 'none';
+                container.innerHTML = '<p class="account-error">Failed to load addresses.</p>';
+            }
+        }
+
+        function openAddressModal(addr) {
+            var title = document.getElementById('addressModalTitle');
+            title.textContent = addr ? 'EDIT ADDRESS' : 'ADD ADDRESS';
+            document.getElementById('address-id').value = addr ? addr.id : '';
+            document.getElementById('addr-label').value = addr ? (addr.label || '') : 'Home';
+            document.getElementById('addr-first').value = addr ? addr.first_name : '';
+            document.getElementById('addr-last').value = addr ? addr.last_name : '';
+            document.getElementById('addr-line1').value = addr ? addr.address_line1 : '';
+            document.getElementById('addr-line2').value = addr ? (addr.address_line2 || '') : '';
+            document.getElementById('addr-city').value = addr ? addr.city : '';
+            document.getElementById('addr-postal').value = addr ? addr.postal_code : '';
+            document.getElementById('addr-country').value = addr ? addr.country : 'NL';
+            document.getElementById('addr-phone').value = addr ? (addr.phone || '') : '';
+            document.getElementById('addr-default').checked = addr ? addr.is_default : false;
+            addressModal.style.display = 'flex';
+        }
+
+        document.getElementById('addAddressBtn').addEventListener('click', function() {
+            openAddressModal(null);
+        });
+
+        document.getElementById('cancelAddressBtn').addEventListener('click', function() {
+            addressModal.style.display = 'none';
+        });
+
+        document.getElementById('addressForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var id = document.getElementById('address-id').value;
+            var data = {
+                label: document.getElementById('addr-label').value.trim(),
+                first_name: document.getElementById('addr-first').value.trim(),
+                last_name: document.getElementById('addr-last').value.trim(),
+                address_line1: document.getElementById('addr-line1').value.trim(),
+                address_line2: document.getElementById('addr-line2').value.trim() || null,
+                city: document.getElementById('addr-city').value.trim(),
+                postal_code: document.getElementById('addr-postal').value.trim(),
+                country: document.getElementById('addr-country').value.trim(),
+                phone: document.getElementById('addr-phone').value.trim() || null,
+                is_default: document.getElementById('addr-default').checked
+            };
+
+            try {
+                if (id) {
+                    await HOS_AUTH.updateAddress(id, data);
+                } else {
+                    await HOS_AUTH.addAddress(data);
+                }
+                addressModal.style.display = 'none';
+                loadAddresses();
+            } catch (err) {
+                alert(err.message || 'Failed to save address');
+            }
+        });
+
+        // ============================================================
+        // PROFILE
+        // ============================================================
+        async function loadProfile() {
+            try {
+                var profile = await HOS_AUTH.getProfile();
+                if (profile) {
+                    document.getElementById('profile-first').value = profile.first_name || '';
+                    document.getElementById('profile-last').value = profile.last_name || '';
+                    document.getElementById('profile-email').value = profile.email || '';
+                    document.getElementById('profile-phone').value = profile.phone || '';
+                    // Update welcome message
+                    if (profile.first_name) {
+                        document.getElementById('welcomeMsg').textContent = 'Welcome, ' + profile.first_name;
+                    }
+                }
+            } catch (err) {
+                // Fallback to user email
+                document.getElementById('profile-email').value = user.email || '';
+            }
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var errorEl = document.getElementById('profileError');
+            var successEl = document.getElementById('profileSuccess');
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            try {
+                await HOS_AUTH.updateProfile({
+                    first_name: document.getElementById('profile-first').value.trim(),
+                    last_name: document.getElementById('profile-last').value.trim(),
+                    phone: document.getElementById('profile-phone').value.trim() || null
+                });
+                successEl.textContent = 'Profile updated successfully';
+                successEl.style.display = 'block';
+                setTimeout(function() { successEl.style.display = 'none'; }, 3000);
+            } catch (err) {
+                errorEl.textContent = err.message || 'Failed to update profile';
+                errorEl.style.display = 'block';
+            }
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var errorEl = document.getElementById('passwordError');
+            var successEl = document.getElementById('passwordSuccess');
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            var newPass = document.getElementById('new-password').value;
+            var confirmPass = document.getElementById('confirm-new-password').value;
+
+            if (newPass.length < 6) {
+                errorEl.textContent = 'Password must be at least 6 characters';
+                errorEl.style.display = 'block';
+                return;
+            }
+            if (newPass !== confirmPass) {
+                errorEl.textContent = 'Passwords do not match';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                await HOS_AUTH.updatePassword(newPass);
+                successEl.textContent = 'Password changed successfully';
+                successEl.style.display = 'block';
+                document.getElementById('new-password').value = '';
+                document.getElementById('confirm-new-password').value = '';
+                setTimeout(function() { successEl.style.display = 'none'; }, 3000);
+            } catch (err) {
+                errorEl.textContent = err.message || 'Failed to change password';
+                errorEl.style.display = 'block';
+            }
+        });
+
+        // Load initial tab
+        loadOrders();
+        loadProfile();
+    })();
+    </script>
+</body>
+</html>
