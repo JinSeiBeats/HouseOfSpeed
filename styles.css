@@ -144,9 +144,9 @@
     --transition-slow: 0.5s ease;
 
     /* Shadows */
-    --shadow-sm: 2px 2px 10px rgba(0, 0, 0, 0.3);
-    --shadow-md: 2px 2px 20px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 2px 2px 20px rgba(0, 0, 0, 0.9);
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.7);
 
     /* Layout */
     --container-max-width: 1200px;
@@ -700,6 +700,13 @@ h1, h2, h3, h4, h5, h6 {
 /* ================================================================
    8. SERVICE/CONTENT SECTIONS
    ================================================================ */
+.events-section {
+    background: linear-gradient(rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.9)), url('assets/images/rolce2.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
 .about-section {
     background: var(--hos-black-primary);
     padding: var(--spacing-xl) var(--spacing-lg);
@@ -707,8 +714,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .sales-section,
 .service-section {
-    background: var(--hos-black-elevated);
+    background: var(--hos-black-card);
     padding: 0;
+    border-top: 1px solid var(--hos-black-border);
 }
 
 .intro-text {
@@ -1047,7 +1055,7 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
     border: 2px solid var(--color-bronze);
     color: var(--color-bronze);
-    padding: 0.9375rem 3.125rem;
+    padding: 0.875rem 2.5rem;
     font-size: 0.75rem;
     letter-spacing: 0.25rem;
     font-weight: var(--font-weight-medium);
@@ -1057,6 +1065,7 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
     text-decoration: none;
     display: inline-block;
+    text-align: center;
 }
 
 .cta-button-large {
@@ -2386,7 +2395,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 0.75rem;
     font-size: var(--font-size-sm);
-    z-index: 9999;
+    z-index: 9990;
     box-shadow: var(--shadow-lg);
     transform: translateY(2rem);
     opacity: 0;
@@ -2664,7 +2673,7 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
     border: 1px solid var(--color-bronze);
     color: var(--color-bronze);
-    padding: 0.6rem 1rem;
+    padding: 0.75rem 1rem;
     font-family: var(--font-primary);
     font-size: var(--font-size-xs);
     letter-spacing: var(--letter-spacing-wide);
@@ -2672,6 +2681,7 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     transition: all var(--transition-base);
     width: 100%;
+    text-align: center;
 }
 
 .product-add-btn:hover {
@@ -4337,7 +4347,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     padding: 0.8rem 1rem;
     border: 1px solid var(--hos-black-muted);
-    background: var(--hos-black-surface);
+    background: var(--hos-black-border);
     font-family: var(--font-primary);
     font-size: var(--font-size-sm);
     color: var(--color-text-dark);
@@ -4403,6 +4413,11 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--color-gold-light);
 }
 
+.auth-submit-btn:focus-visible {
+    outline: 2px solid var(--color-bronze);
+    outline-offset: 2px;
+}
+
 .auth-submit-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -4434,6 +4449,10 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     transition: color var(--transition-base);
     letter-spacing: var(--letter-spacing-tight);
+    padding: 0.5rem 1rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .auth-link-btn:hover {
@@ -4855,6 +4874,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Auth responsive */
+@media (max-width: 768px) {
+    .address-modal-content {
+        max-width: 100%;
+        max-height: 85vh;
+        margin: var(--spacing-sm);
+    }
+
+    .auth-form .form-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 480px) {
     .auth-container {
         padding: 0 var(--spacing-xs);
@@ -4875,5 +4906,9 @@ h1, h2, h3, h4, h5, h6 {
 
     .order-item-price {
         min-width: auto;
+    }
+
+    .address-modal {
+        padding: var(--spacing-xs);
     }
 }
