@@ -2,3 +2,20 @@ node_modules/
 data/
 uploads/
 *.DS_Store
+
+# Environment variables (NEVER commit this!)
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

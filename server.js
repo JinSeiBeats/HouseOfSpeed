@@ -1,11 +1,21 @@
+// Load environment variables FIRST
+require('dotenv').config();
+
 const express = require('express');
 const Database = require('better-sqlite3');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+
+// Migrations
+const customerAuthMigration = require('./migrations/001_customer_auth');
 
 // ---------------------------------------------------------------------------
 // Directory setup
@@ -264,9 +274,9 @@ function initDatabase() {
 
     CREATE TABLE IF NOT EXISTS activity_log (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      entity_type TEXT NOT NULL CHECK(entity_type IN ('car','customer','inquiry','offer','sale','reservation')),
+      entity_type TEXT NOT NULL CHECK(entity_type IN ('car','customer','inquiry','offer','sale','reservation','user','system','customer_account')),
       entity_id INTEGER NOT NULL,
-      action TEXT NOT NULL CHECK(action IN ('created','updated','deleted','viewed','status_changed','note_added','email_sent','call_logged')),
+      action TEXT NOT NULL CHECK(action IN ('created','updated','deleted','viewed','status_changed','note_added','email_sent','call_logged','login_success','login_failed','logout','account_locked')),
       details TEXT,
       performed_by INTEGER,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -314,9 +324,17 @@ function initDatabase() {
   // Seed default admin if none exists
   const existing = db.prepare('SELECT id FROM users WHERE username = ?').get('admin');
   if (!existing) {
-    const hash = bcrypt.hashSync('HouseOfSpeed2024!', 12);
+    // Generate secure random password if not provided
+    let adminPassword = process.env.ADMIN_INITIAL_PASSWORD;
+    if (!adminPassword) {
+      adminPassword = crypto.randomBytes(16).toString('hex');
+      console.warn('\n⚠️  IMPORTANT: No ADMIN_INITIAL_PASSWORD set in .env');
+      console.warn('📝 Generated random admin password:', adminPassword);
+      console.warn('🔒 Please save this password and change it after first login!\n');
+    }
+    const hash = bcrypt.hashSync(adminPassword, 13);
     db.prepare('INSERT INTO users (username, password_hash, role, full_name) VALUES (?, ?, ?, ?)').run('admin', hash, 'admin', 'Administrator');
-    console.log('Default admin user created (admin / HouseOfSpeed2024!)');
+    console.log('✓ Default admin user created (username: admin)');
   }
 
   // Seed default settings
@@ -337,6 +355,14 @@ function initDatabase() {
 }
 
 initDatabase();
+
+// Run migrations
+try {
+  customerAuthMigration.runMigration(db);
+} catch (error) {
+  console.error('Failed to run customer auth migration:', error.message);
+  process.exit(1);
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -404,18 +430,104 @@ function logActivity(entityType, entityId, action, details, performedBy) {
 // ---------------------------------------------------------------------------
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+// Validate required environment variables
+if (!process.env.SESSION_SECRET) {
+  console.error('❌ ERROR: SESSION_SECRET environment variable is required!');
+  console.error('Generate one with: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"');
+  process.exit(1);
+}
 
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for now
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Allow inline scripts for now
+      scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers (onclick, etc.)
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+}));
+
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+  : ['http://localhost:3000'];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api/', limiter);
+
+// Stricter rate limiting for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: 'Too many login attempts, please try again later.',
+  skipSuccessfulRequests: true,
+});
+
+// Customer authentication rate limiter
+const customerAuthLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 login attempts
+  message: 'Too many login attempts, please try again later.',
+  skipSuccessfulRequests: true,
+});
+
+// Customer registration rate limiter
+const customerRegisterLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 3, // 3 registration attempts
+  message: 'Too many registration attempts, please try again later.',
+});
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Session configuration
+const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'houseofspeed-secret-change-in-production',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  name: 'hos_session_id', // Don't use default 'connect.sid'
   cookie: {
-    secure: false, // set true behind HTTPS proxy
+    secure: isProduction, // HTTPS only in production
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 8, // 8 hours
+    sameSite: 'strict',
+    maxAge: 1000 * 60 * 30, // 30 minutes
   },
 }));
 
@@ -476,6 +588,14 @@ function requireAuth(req, res, next) {
   return res.status(401).json({ error: 'Authentication required' });
 }
 
+// Customer authentication middleware
+function requireCustomerAuth(req, res, next) {
+  if (req.session && req.session.customerUserId) {
+    return next();
+  }
+  return res.status(401).json({ error: 'Authentication required' });
+}
+
 function requireRole(...roles) {
   return (req, res, next) => {
     if (!req.session || !req.session.userId) {
@@ -489,38 +609,127 @@ function requireRole(...roles) {
 }
 
 // ---------------------------------------------------------------------------
+// Input Validation Middleware
+// ---------------------------------------------------------------------------
+function validateRequest(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ error: 'Validation failed', details: errors.array() });
+  }
+  next();
+}
+
+// Sanitize HTML input to prevent XSS
+function sanitizeInput(input) {
+  if (typeof input !== 'string') return input;
+  return input
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+
+// Helper functions for customer authentication
+function isAccountLocked(account) {
+  if (!account.lockout_until) return false;
+  const lockoutTime = new Date(account.lockout_until);
+  if (lockoutTime > new Date()) {
+    return true;
+  }
+  // Lockout expired, clear it
+  db.prepare('UPDATE customer_accounts SET lockout_until = NULL, failed_login_attempts = 0 WHERE id = ?')
+    .run(account.id);
+  return false;
+}
+
+function handleFailedCustomerLogin(accountId) {
+  const stmt = db.prepare('SELECT failed_login_attempts FROM customer_accounts WHERE id = ?');
+  const account = stmt.get(accountId);
+  const newAttempts = (account.failed_login_attempts || 0) + 1;
+
+  if (newAttempts >= 5) {
+    const lockoutUntil = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+    db.prepare('UPDATE customer_accounts SET failed_login_attempts = ?, lockout_until = ? WHERE id = ?')
+      .run(newAttempts, lockoutUntil, accountId);
+    return { locked: true };
+  }
+
+  db.prepare('UPDATE customer_accounts SET failed_login_attempts = ? WHERE id = ?')
+    .run(newAttempts, accountId);
+  return { locked: false };
+}
+
+// ---------------------------------------------------------------------------
 // AUTH routes
 // ---------------------------------------------------------------------------
-app.post('/api/auth/login', (req, res) => {
-  try {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password are required' });
+app.post('/api/auth/login',
+  authLimiter,
+  [
+    body('username').trim().isLength({ min: 3, max: 50 }).escape(),
+    body('password').isLength({ min: 8, max: 100 }),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { username, password } = req.body;
+
+      const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+      if (!user) {
+        // Use same error message to prevent username enumeration
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Use async bcrypt compare for better security
+      const isValid = await bcrypt.compare(password, user.password_hash);
+      if (!isValid) {
+        // Log failed attempt
+        logActivity('user', user.id, 'login_failed', { ip: req.ip }, null);
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Regenerate session ID to prevent fixation attacks
+      req.session.regenerate((err) => {
+        if (err) {
+          console.error('Session regeneration error:', err);
+          return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.role = user.role;
+
+        // Log successful login
+        logActivity('user', user.id, 'login_success', { ip: req.ip }, user.id);
+
+        res.json({
+          message: 'Login successful',
+          user: {
+            id: user.id,
+            username: user.username,
+            role: user.role,
+            full_name: user.full_name
+          }
+        });
+      });
+    } catch (err) {
+      console.error('Login error:', err);
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
-    if (!user || !bcrypt.compareSync(password, user.password_hash)) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    req.session.userId = user.id;
-    req.session.username = user.username;
-    req.session.role = user.role;
-
-    res.json({ message: 'Login successful', user: { id: user.id, username: user.username, role: user.role, full_name: user.full_name } });
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ error: 'Internal server error' });
   }
-});
+);
 
 app.post('/api/auth/logout', (req, res) => {
+  const userId = req.session?.userId;
   req.session.destroy((err) => {
     if (err) {
       console.error('Logout error:', err);
       return res.status(500).json({ error: 'Logout failed' });
     }
-    res.clearCookie('connect.sid');
+    res.clearCookie('hos_session_id');
+    if (userId) {
+      logActivity('user', userId, 'logout', { ip: req.ip }, userId);
+    }
     res.json({ message: 'Logged out' });
   });
 });
@@ -530,6 +739,185 @@ app.get('/api/auth/check', (req, res) => {
     return res.json({ authenticated: true, user: { id: req.session.userId, username: req.session.username, role: req.session.role } });
   }
   res.status(401).json({ authenticated: false });
+});
+
+// ---------------------------------------------------------------------------
+// CUSTOMER AUTH routes
+// ---------------------------------------------------------------------------
+
+// POST /api/customer/register - Register new customer account
+app.post('/api/customer/register',
+  customerRegisterLimiter,
+  [
+    body('email').trim().toLowerCase().isEmail().normalizeEmail(),
+    body('password').isLength({ min: 8, max: 100 })
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+      .withMessage('Password must contain uppercase, lowercase, and number'),
+    body('first_name').optional().trim().isLength({ min: 2, max: 50 }).escape(),
+    body('last_name').optional().trim().isLength({ min: 2, max: 50 }).escape(),
+    body('phone').optional().trim().isLength({ max: 20 })
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { email, password, first_name, last_name, phone } = req.body;
+
+      // Check if email already exists (case-insensitive)
+      const existingUser = db.prepare('SELECT id FROM customer_accounts WHERE LOWER(email) = LOWER(?)').get(email);
+      if (existingUser) {
+        return res.status(409).json({ error: 'Email already registered' });
+      }
+
+      // Hash password with bcrypt (13 rounds)
+      const password_hash = await bcrypt.hash(password, 13);
+
+      // Insert new customer account
+      const result = db.prepare(
+        'INSERT INTO customer_accounts (email, password_hash, first_name, last_name, phone) VALUES (?, ?, ?, ?, ?)'
+      ).run(email, password_hash, first_name || null, last_name || null, phone || null);
+
+      const customerId = result.lastInsertRowid;
+
+      // Auto-login: Set session
+      req.session.regenerate((err) => {
+        if (err) {
+          console.error('Session regeneration error:', err);
+          return res.status(500).json({ error: 'Registration successful but login failed' });
+        }
+
+        req.session.customerUserId = customerId;
+        req.session.customerEmail = email;
+        req.session.isCustomer = true;
+
+        // Log account creation
+        logActivity('customer_account', customerId, 'created', { email, ip: req.ip }, null);
+
+        // Fetch and return user data
+        const user = db.prepare('SELECT id, email, first_name, last_name, phone, created_at FROM customer_accounts WHERE id = ?').get(customerId);
+
+        res.status(201).json({
+          message: 'Registration successful',
+          user: user
+        });
+      });
+    } catch (err) {
+      console.error('Registration error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+// POST /api/customer/login - Customer login
+app.post('/api/customer/login',
+  customerAuthLimiter,
+  [
+    body('email').trim().toLowerCase().isEmail(),
+    body('password').isLength({ min: 1 })
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      // Fetch user by email (case-insensitive)
+      const user = db.prepare('SELECT * FROM customer_accounts WHERE LOWER(email) = LOWER(?)').get(email);
+
+      if (!user) {
+        // Use same error message to prevent email enumeration
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Check lockout status
+      if (isAccountLocked(user)) {
+        return res.status(423).json({
+          error: 'Account is temporarily locked due to too many failed login attempts. Please try again later.'
+        });
+      }
+
+      // Compare password with bcrypt
+      const isValid = await bcrypt.compare(password, user.password_hash);
+
+      if (!isValid) {
+        // Handle failed login
+        const lockoutResult = handleFailedCustomerLogin(user.id);
+        logActivity('customer_account', user.id, 'login_failed', { ip: req.ip }, null);
+
+        if (lockoutResult.locked) {
+          logActivity('customer_account', user.id, 'account_locked', { ip: req.ip, reason: 'Too many failed login attempts' }, null);
+          return res.status(423).json({
+            error: 'Account locked due to too many failed login attempts. Please try again in 30 minutes.'
+          });
+        }
+
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Successful login - Reset failed attempts and lockout
+      db.prepare('UPDATE customer_accounts SET failed_login_attempts = 0, lockout_until = NULL, last_login_at = datetime(\'now\') WHERE id = ?')
+        .run(user.id);
+
+      // Regenerate session ID to prevent fixation attacks
+      req.session.regenerate((err) => {
+        if (err) {
+          console.error('Session regeneration error:', err);
+          return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        req.session.customerUserId = user.id;
+        req.session.customerEmail = user.email;
+        req.session.isCustomer = true;
+
+        // Log successful login
+        logActivity('customer_account', user.id, 'login_success', { ip: req.ip }, null);
+
+        res.json({
+          message: 'Login successful',
+          user: {
+            id: user.id,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            phone: user.phone
+          }
+        });
+      });
+    } catch (err) {
+      console.error('Login error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+// POST /api/customer/logout - Customer logout
+app.post('/api/customer/logout', (req, res) => {
+  const customerUserId = req.session?.customerUserId;
+
+  if (customerUserId) {
+    logActivity('customer_account', customerUserId, 'logout', { ip: req.ip }, null);
+  }
+
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.status(500).json({ error: 'Logout failed' });
+    }
+    res.clearCookie('hos_session_id');
+    res.json({ message: 'Logged out successfully' });
+  });
+});
+
+// GET /api/customer/check - Check customer authentication status
+app.get('/api/customer/check', (req, res) => {
+  if (req.session && req.session.customerUserId) {
+    // Fetch current user data from database
+    const user = db.prepare('SELECT id, email, first_name, last_name, phone FROM customer_accounts WHERE id = ?')
+      .get(req.session.customerUserId);
+
+    if (user) {
+      return res.json({ authenticated: true, user: user });
+    }
+  }
+  res.json({ authenticated: false });
 });
 
 // ===========================================================================
@@ -771,49 +1159,80 @@ app.get('/api/cars/:id/similar', (req, res) => {
   }
 });
 
-// POST /api/cars/:id/inquire - Public inquiry submission
-app.post('/api/cars/:id/inquire', (req, res) => {
-  try {
-    const car = db.prepare('SELECT * FROM cars WHERE id = ?').get(req.params.id);
-    if (!car) return res.status(404).json({ error: 'Car not found' });
-
-    const { first_name, last_name, email, phone, message, inquiry_type, preferred_contact_time, source } = req.body;
-    if (!first_name || !last_name || (!email && !phone)) {
-      return res.status(400).json({ error: 'Name and at least email or phone are required' });
-    }
-
-    // Find or create customer
-    let customer;
-    if (email) {
-      customer = db.prepare('SELECT * FROM customers WHERE email = ?').get(email);
-    }
-    if (!customer) {
-      const result = db.prepare(
-        'INSERT INTO customers (first_name, last_name, email, phone, lead_source) VALUES (?, ?, ?, ?, ?)'
-      ).run(first_name, last_name, email || null, phone || null, source || 'website');
-      customer = db.prepare('SELECT * FROM customers WHERE id = ?').get(result.lastInsertRowid);
-      logActivity('customer', customer.id, 'created', { source: 'public_inquiry' }, null);
-    }
-
-    // Create inquiry
-    const inqResult = db.prepare(
-      'INSERT INTO inquiries (car_id, customer_id, inquiry_type, message, preferred_contact_time, source) VALUES (?, ?, ?, ?, ?, ?)'
-    ).run(car.id, customer.id, inquiry_type || 'general', message || null, preferred_contact_time || null, source || 'website');
-
-    // Increment inquiry count on car
-    db.prepare('UPDATE cars SET inquiry_count = inquiry_count + 1 WHERE id = ?').run(car.id);
-
-    // Recalculate lead score
-    recalcLeadScore(customer.id);
-
-    logActivity('inquiry', inqResult.lastInsertRowid, 'created', { car_id: car.id, customer_id: customer.id }, null);
-
-    res.status(201).json({ message: 'Inquiry submitted successfully', inquiry_id: inqResult.lastInsertRowid });
-  } catch (err) {
-    console.error('POST /api/cars/:id/inquire error:', err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+// Rate limiter for inquiry submissions
+const inquiryLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3, // 3 inquiries per hour per IP
+  message: 'Too many inquiries from this IP, please try again later.',
+  skipSuccessfulRequests: false,
 });
+
+// POST /api/cars/:id/inquire - Public inquiry submission (PROTECTED)
+app.post('/api/cars/:id/inquire',
+  inquiryLimiter,
+  [
+    body('first_name').trim().isLength({ min: 2, max: 50 }).escape().withMessage('First name must be 2-50 characters'),
+    body('last_name').trim().isLength({ min: 2, max: 50 }).escape().withMessage('Last name must be 2-50 characters'),
+    body('email').optional({ checkFalsy: true }).trim().isEmail().normalizeEmail().withMessage('Invalid email'),
+    body('phone').optional({ checkFalsy: true }).trim().matches(/^[\d\s\+\-\(\)]+$/).withMessage('Invalid phone number'),
+    body('message').optional().trim().isLength({ max: 1000 }).withMessage('Message too long (max 1000 characters)'),
+    body('inquiry_type').optional().isIn(['general', 'viewing', 'test_drive', 'purchase', 'financing']).withMessage('Invalid inquiry type'),
+    body('preferred_contact_time').optional().trim().isLength({ max: 100 }),
+    body('source').optional().trim().isIn(['website', 'phone', 'email', 'referral', 'social']).withMessage('Invalid source'),
+  ],
+  validateRequest,
+  (req, res) => {
+    try {
+      const car = db.prepare('SELECT * FROM cars WHERE id = ?').get(req.params.id);
+      if (!car) return res.status(404).json({ error: 'Car not found' });
+
+      const { first_name, last_name, email, phone, message, inquiry_type, preferred_contact_time, source } = req.body;
+
+      // Require at least email OR phone
+      if (!email && !phone) {
+        return res.status(400).json({ error: 'Either email or phone is required' });
+      }
+
+      // Sanitize message to prevent XSS
+      const sanitizedMessage = message ? sanitizeInput(message) : null;
+
+      // Find or create customer
+      let customer;
+      if (email) {
+        customer = db.prepare('SELECT * FROM customers WHERE email = ?').get(email);
+      }
+      if (!customer && phone) {
+        customer = db.prepare('SELECT * FROM customers WHERE phone = ?').get(phone);
+      }
+
+      if (!customer) {
+        const result = db.prepare(
+          'INSERT INTO customers (first_name, last_name, email, phone, lead_source) VALUES (?, ?, ?, ?, ?)'
+        ).run(first_name, last_name, email || null, phone || null, source || 'website');
+        customer = db.prepare('SELECT * FROM customers WHERE id = ?').get(result.lastInsertRowid);
+        logActivity('customer', customer.id, 'created', { source: 'public_inquiry', ip: req.ip }, null);
+      }
+
+      // Create inquiry
+      const inqResult = db.prepare(
+        'INSERT INTO inquiries (car_id, customer_id, inquiry_type, message, preferred_contact_time, source) VALUES (?, ?, ?, ?, ?, ?)'
+      ).run(car.id, customer.id, inquiry_type || 'general', sanitizedMessage, preferred_contact_time || null, source || 'website');
+
+      // Increment inquiry count on car
+      db.prepare('UPDATE cars SET inquiry_count = inquiry_count + 1 WHERE id = ?').run(car.id);
+
+      // Recalculate lead score
+      recalcLeadScore(customer.id);
+
+      logActivity('inquiry', inqResult.lastInsertRowid, 'created', { car_id: car.id, customer_id: customer.id, ip: req.ip }, null);
+
+      res.status(201).json({ message: 'Inquiry submitted successfully', inquiry_id: inqResult.lastInsertRowid });
+    } catch (err) {
+      console.error('POST /api/cars/:id/inquire error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
 
 // ===========================================================================
 // ADMIN CAR ROUTES

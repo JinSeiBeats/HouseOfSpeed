@@ -171,7 +171,7 @@
     </footer>
 
 
-    <script src="auth.js"></script>
+    <script src="auth-backend.js"></script>
     <script src="shop.js" defer></script>
     <script src="scripts.js" defer></script>
     <script>
@@ -179,10 +179,13 @@
         'use strict';
 
         // Redirect if already logged in
-        if (HOS_AUTH.isLoggedIn()) {
-            window.location.href = 'account.html';
-            return;
-        }
+        (async function() {
+            var authCheck = await HOS_AUTH_BACKEND.checkAuth();
+            if (authCheck.authenticated) {
+                window.location.href = 'account.html';
+                return;
+            }
+        })();
 
         var loginForm = document.getElementById('loginForm');
         var resetForm = document.getElementById('resetForm');
@@ -191,6 +194,8 @@
         function showError(msg) {
             errorEl.textContent = msg;
             errorEl.style.display = 'block';
+            errorEl.style.borderColor = '#e74c3c';
+            errorEl.style.color = '#e74c3c';
         }
 
         function clearError() {
@@ -209,10 +214,26 @@
             try {
                 var email = document.getElementById('login-email').value.trim();
                 var password = document.getElementById('login-password').value;
-                await HOS_AUTH.signIn(email, password);
-                window.location.href = 'account.html';
+                await HOS_AUTH_BACKEND.signIn(email, password);
+
+                // Show success message
+                errorEl.style.display = 'block';
+                errorEl.style.borderColor = 'var(--hos-gold)';
+                errorEl.style.color = 'var(--hos-gold)';
+                errorEl.textContent = 'Welcome back!';
+
+                setTimeout(function() {
+                    window.location.href = 'account.html';
+                }, 500);
             } catch (err) {
-                showError(err.message || 'Invalid email or password');
+                var errorMsg = err.message || 'Invalid email or password';
+                // Handle specific error cases
+                if (errorMsg.includes('Too many')) {
+                    errorMsg = 'Too many login attempts. Please try again later.';
+                } else if (errorMsg.includes('Unable to connect')) {
+                    errorMsg = 'Unable to connect to server. Please check your connection.';
+                }
+                showError(errorMsg);
                 btn.disabled = false;
                 btn.textContent = 'SIGN IN';
             }
@@ -232,21 +253,14 @@
             clearError();
         });
 
-        // Reset password
+        // Reset password - Coming soon
         resetForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             clearError();
-            try {
-                var email = document.getElementById('reset-email').value.trim();
-                await HOS_AUTH.resetPassword(email);
-                showError(''); // Clear
-                errorEl.style.display = 'block';
-                errorEl.style.borderColor = 'var(--hos-gold)';
-                errorEl.style.color = 'var(--hos-gold)';
-                errorEl.textContent = 'If an account exists, a reset link has been sent.';
-            } catch (err) {
-                showError(err.message || 'Failed to send reset link');
-            }
+            errorEl.style.display = 'block';
+            errorEl.style.borderColor = 'var(--hos-gold)';
+            errorEl.style.color = 'var(--hos-gold)';
+            errorEl.textContent = 'Password reset coming soon. Please contact support.';
         });
     })();
     </script>

@@ -5,14 +5,31 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "build:css": "postcss styles.css --use cssnano -o styles.min.css",
+    "build:js": "terser scripts.js -o scripts.min.js --compress --mangle && terser shop.js -o shop.min.js --compress --mangle && terser auth-secure.js -o auth-secure.min.js --compress --mangle",
+    "build": "npm run build:css && npm run build:js",
+    "optimize": "bash scripts/optimize-assets.sh",
+    "test:perf": "echo 'Run: lighthouse http://localhost:3000 --view'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^11.7.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-rate-limit": "^7.1.5",
     "express-session": "^1.18.1",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
     "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "cssnano": "^6.0.3",
+    "dompurify": "^3.0.9",
+    "jsdom": "^24.0.0",
+    "postcss": "^8.4.35",
+    "postcss-cli": "^11.0.0",
+    "terser": "^5.27.0"
   }
 }

@@ -267,6 +267,7 @@
     </footer>
 
 
+    <script src="auth-backend.js"></script>
     <script src="auth.js"></script>
     <script src="shop.js" defer></script>
     <script src="scripts.js" defer></script>
@@ -274,14 +275,18 @@
     (function() {
         'use strict';
 
-        // Redirect if not logged in
-        if (!HOS_AUTH.isLoggedIn()) {
-            window.location.href = 'login.html';
-            return;
-        }
+        var user = null;
 
-        var user = HOS_AUTH.getUser();
-        document.getElementById('welcomeMsg').textContent = 'Welcome, ' + (user.email || '');
+        // Redirect if not logged in and initialize user data
+        (async function() {
+            var authCheck = await HOS_AUTH_BACKEND.checkAuth();
+            if (!authCheck.authenticated) {
+                window.location.href = 'login.html';
+                return;
+            }
+            user = authCheck.user;
+            var welcomeName = user.first_name || user.email || '';
+            document.getElementById('welcomeMsg').textContent = 'Welcome, ' + welcomeName;
 
         // ============================================================
         // TAB NAVIGATION
@@ -305,12 +310,23 @@
             });
         });
 
+            // Load initial data
+            loadOrders();
+            loadProfile();
+        })();
+
         // ============================================================
         // SIGN OUT
         // ============================================================
         document.getElementById('signOutBtn').addEventListener('click', async function() {
-            await HOS_AUTH.signOut();
-            window.location.href = 'index.html';
+            try {
+                await HOS_AUTH_BACKEND.signOut();
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error('Logout error:', err);
+                // Redirect anyway on error
+                window.location.href = 'index.html';
+            }
         });
 
         // ============================================================
@@ -511,21 +527,30 @@
         // PROFILE
         // ============================================================
         async function loadProfile() {
+            // Use backend user data as primary source
+            if (user) {
+                document.getElementById('profile-first').value = user.first_name || '';
+                document.getElementById('profile-last').value = user.last_name || '';
+                document.getElementById('profile-email').value = user.email || '';
+                document.getElementById('profile-phone').value = user.phone || '';
+            }
+
+            // Try to load additional profile data from Supabase if available
             try {
                 var profile = await HOS_AUTH.getProfile();
                 if (profile) {
-                    document.getElementById('profile-first').value = profile.first_name || '';
-                    document.getElementById('profile-last').value = profile.last_name || '';
-                    document.getElementById('profile-email').value = profile.email || '';
-                    document.getElementById('profile-phone').value = profile.phone || '';
+                    // Override with Supabase data if present
+                    if (profile.first_name) document.getElementById('profile-first').value = profile.first_name;
+                    if (profile.last_name) document.getElementById('profile-last').value = profile.last_name;
+                    if (profile.phone) document.getElementById('profile-phone').value = profile.phone;
                     // Update welcome message
                     if (profile.first_name) {
                         document.getElementById('welcomeMsg').textContent = 'Welcome, ' + profile.first_name;
                     }
                 }
             } catch (err) {
-                // Fallback to user email
-                document.getElementById('profile-email').value = user.email || '';
+                // Supabase profile not available, use backend user data
+                console.log('Supabase profile not available, using backend auth data');
             }
         }
 

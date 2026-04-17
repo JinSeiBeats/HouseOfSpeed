@@ -176,17 +176,21 @@
     </footer>
 
 
-    <script src="auth.js"></script>
+    <script src="auth-backend.js"></script>
     <script src="shop.js" defer></script>
     <script src="scripts.js" defer></script>
     <script>
     (function() {
         'use strict';
 
-        if (HOS_AUTH.isLoggedIn()) {
-            window.location.href = 'account.html';
-            return;
-        }
+        // Redirect if already logged in
+        (async function() {
+            var authCheck = await HOS_AUTH_BACKEND.checkAuth();
+            if (authCheck.authenticated) {
+                window.location.href = 'account.html';
+                return;
+            }
+        })();
 
         var form = document.getElementById('signupForm');
         var errorEl = document.getElementById('authError');
@@ -194,6 +198,15 @@
         function showError(msg) {
             errorEl.textContent = msg;
             errorEl.style.display = 'block';
+            errorEl.style.borderColor = '#e74c3c';
+            errorEl.style.color = '#e74c3c';
+        }
+
+        function showSuccess(msg) {
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+            errorEl.style.borderColor = 'var(--hos-gold)';
+            errorEl.style.color = 'var(--hos-gold)';
         }
 
         function clearError() {
@@ -212,6 +225,7 @@
             var confirm = document.getElementById('signup-confirm').value;
             var consent = document.getElementById('signup-consent').checked;
 
+            // Client-side validation
             if (!firstName || !lastName) {
                 showError('Please enter your name');
                 return;
@@ -222,6 +236,19 @@
             }
             if (password.length < 6) {
                 showError('Password must be at least 6 characters');
+                return;
+            }
+            // Check for password requirements
+            if (!/[A-Z]/.test(password)) {
+                showError('Password must contain at least one uppercase letter');
+                return;
+            }
+            if (!/[a-z]/.test(password)) {
+                showError('Password must contain at least one lowercase letter');
+                return;
+            }
+            if (!/[0-9]/.test(password)) {
+                showError('Password must contain at least one number');
                 return;
             }
             if (password !== confirm) {
@@ -238,10 +265,26 @@
             btn.textContent = 'CREATING ACCOUNT...';
 
             try {
-                await HOS_AUTH.signUp(email, password, firstName, lastName);
-                window.location.href = 'account.html';
+                // Note: phone is optional, pass empty string
+                await HOS_AUTH_BACKEND.signUp(email, password, firstName, lastName, '');
+
+                // Show success message
+                showSuccess('Account created successfully!');
+
+                setTimeout(function() {
+                    window.location.href = 'account.html';
+                }, 1000);
             } catch (err) {
-                showError(err.message || 'Failed to create account');
+                var errorMsg = err.message || 'Failed to create account';
+                // Handle specific error cases
+                if (errorMsg.includes('already registered') || errorMsg.includes('already exists')) {
+                    errorMsg = 'Email already registered. Please sign in instead.';
+                } else if (errorMsg.includes('Too many')) {
+                    errorMsg = 'Too many registration attempts. Please try again later.';
+                } else if (errorMsg.includes('Unable to connect')) {
+                    errorMsg = 'Unable to connect to server. Please check your connection.';
+                }
+                showError(errorMsg);
                 btn.disabled = false;
                 btn.textContent = 'CREATE ACCOUNT';
             }
