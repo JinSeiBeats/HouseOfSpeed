@@ -384,8 +384,8 @@
 
                 var response = await fetch(contactForm.action, {
                     method: 'POST',
-                    body: new FormData(contactForm),
-                    headers: { 'Accept': 'application/json' }
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {

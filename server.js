@@ -1330,6 +1330,60 @@ app.post('/api/cars/:id/inquire',
   }
 );
 
+// Rate limiter for contact form
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: 'Too many contact requests from this IP, please try again later.',
+  skipSuccessfulRequests: false,
+});
+
+// POST /api/contact - General contact form submission
+app.post('/api/contact',
+  contactLimiter,
+  [
+    body('name').trim().isLength({ min: 2, max: 100 }).escape().withMessage('Name must be 2-100 characters'),
+    body('email').trim().isEmail().normalizeEmail().withMessage('Valid email is required'),
+    body('message').trim().isLength({ min: 10, max: 2000 }).withMessage('Message must be 10-2000 characters'),
+    body('consent').custom(val => val === true || val === 'true' || val === 'on').withMessage('Consent is required'),
+  ],
+  validateRequest,
+  (req, res) => {
+    try {
+      const { name, email, message } = req.body;
+
+      const sanitizedMessage = sanitizeInput(message);
+
+      // Split name into first/last (best effort)
+      const nameParts = name.trim().split(/\s+/);
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ') || '-';
+
+      // Find or create customer record
+      let customer = db.prepare('SELECT * FROM customers WHERE email = ?').get(email);
+      if (!customer) {
+        const result = db.prepare(
+          'INSERT INTO customers (first_name, last_name, email, lead_source) VALUES (?, ?, ?, ?)'
+        ).run(firstName, lastName, email, 'website');
+        customer = db.prepare('SELECT * FROM customers WHERE id = ?').get(result.lastInsertRowid);
+        logActivity('customer', customer.id, 'created', { source: 'contact_form', ip: req.ip }, null);
+      }
+
+      const inqResult = db.prepare(
+        'INSERT INTO inquiries (car_id, customer_id, inquiry_type, message, source) VALUES (NULL, ?, ?, ?, ?)'
+      ).run(customer.id, 'general', sanitizedMessage, 'website');
+
+      recalcLeadScore(customer.id);
+      logActivity('inquiry', inqResult.lastInsertRowid, 'created', { source: 'contact_form', customer_id: customer.id, ip: req.ip }, null);
+
+      res.status(201).json({ message: 'Your message has been sent successfully.' });
+    } catch (err) {
+      console.error('POST /api/contact error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
 // ===========================================================================
 // ADMIN CAR ROUTES
 // ===========================================================================
