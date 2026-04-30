@@ -3168,6 +3168,30 @@ app.put('/api/admin/reservations/:id', requireAuth, (req, res) => {
   }
 });
 
+// GET /api/admin/backup-db - Download SQLite database backup
+app.get('/api/admin/backup-db', requireAuth, (req, res) => {
+  try {
+    const dbPath = process.env.DATABASE_PATH || './data/houseofspeed.db';
+    const absPath = path.resolve(dbPath);
+
+    if (!fs.existsSync(absPath)) {
+      return res.status(404).json({ error: 'Database file not found' });
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `houseofspeed-backup-${timestamp}.db`;
+
+    logActivity('system', 0, 'backup_downloaded', { filename, ip: req.ip }, req.session.userId);
+
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Type', 'application/octet-stream');
+    fs.createReadStream(absPath).pipe(res);
+  } catch (err) {
+    console.error('GET /api/admin/backup-db error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // ---------------------------------------------------------------------------
 // Multer error handler
 // ---------------------------------------------------------------------------

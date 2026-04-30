@@ -998,6 +998,17 @@
             .modal-header-row { flex-direction: column; }
         }
     </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Luxury & Classic Cars for Sale — House Of Speed",
+      "description": "Browse our curated collection of luxury and classic vehicles available for sale at House Of Speed in Almere, The Netherlands.",
+      "url": "https://www.houseofspeed.nl/cars.html",
+      "itemListElement": []
+    }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -1704,6 +1715,7 @@
                     if (updateFilters) populateFiltersFromCars(cars);
                     computeStatsFromCars(cars);
                     renderCars(cars);
+                    updateCarsJsonLd(cars);
                 })
                 .catch(function (err) {
                     console.error('Error loading cars:', err);
@@ -2063,6 +2075,42 @@
             statusSelect.value = 'available';
             fetchCars(true);
         });
+
+        function updateCarsJsonLd(cars) {
+            var ldScript = document.querySelector('script[type="application/ld+json"]');
+            if (!ldScript) return;
+            try {
+                var schema = JSON.parse(ldScript.textContent);
+                schema.itemListElement = cars.slice(0, 50).map(function(car, i) {
+                    var item = {
+                        "@type": "ListItem",
+                        "position": i + 1,
+                        "item": {
+                            "@type": "Car",
+                            "name": car.title || (car.brand + ' ' + car.model),
+                            "url": "https://www.houseofspeed.nl/cars.html",
+                            "brand": { "@type": "Brand", "name": car.brand },
+                            "vehicleModelDate": String(car.year || ''),
+                            "mileageFromOdometer": {
+                                "@type": "QuantitativeValue",
+                                "value": car.mileage || 0,
+                                "unitCode": "KMT"
+                            },
+                            "offers": {
+                                "@type": "Offer",
+                                "priceCurrency": "EUR",
+                                "price": car.price || 0,
+                                "availability": "https://schema.org/InStock",
+                                "seller": { "@type": "AutoDealer", "name": "House Of Speed B.V." }
+                            }
+                        }
+                    };
+                    if (car.images && car.images[0]) item.item.image = car.images[0];
+                    return item;
+                });
+                ldScript.textContent = JSON.stringify(schema, null, 2);
+            } catch(e) {}
+        }
 
         // ── Init ──
         loadFiltersFromUrl();
