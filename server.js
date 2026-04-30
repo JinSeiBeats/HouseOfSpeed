@@ -524,6 +524,9 @@ const unifiedLoginLimiter = rateLimit({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Trust Railway's reverse proxy so secure cookies work correctly
+app.set('trust proxy', 1);
+
 // Session configuration
 const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
