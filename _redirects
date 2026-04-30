@@ -4,6 +4,9 @@
 # Redirect www to non-www (301 permanent redirect)
 https://www.houseofspeed.dk/* https://houseofspeed.dk/:splat 301!
 
+# Redirect old admin login page to unified login
+/admin-login.html /login.html 301
+
 # Redirect old URLs (if migrating from old site)
 # /old-page.html /new-page.html 301
 # /services/sales /services.html#sales 301

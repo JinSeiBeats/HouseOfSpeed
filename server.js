@@ -513,6 +513,14 @@ const customerRegisterLimiter = rateLimit({
   message: 'Too many registration attempts, please try again later.',
 });
 
+// Unified login rate limiter
+const unifiedLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many login attempts, please try again later.',
+  skipSuccessfulRequests: true,
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -533,6 +541,11 @@ app.use(session({
 
 // Serve uploaded images and documents
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Redirect old admin login page to unified login
+app.get('/admin-login.html', (req, res) => {
+  res.redirect(301, '/login.html');
+});
 
 // Serve frontend static files
 app.use(express.static(__dirname, { index: 'index.html' }));
@@ -740,6 +753,86 @@ app.get('/api/auth/check', (req, res) => {
   }
   res.status(401).json({ authenticated: false });
 });
+
+// ---------------------------------------------------------------------------
+// UNIFIED LOGIN route
+// ---------------------------------------------------------------------------
+app.post('/api/auth/unified-login',
+  unifiedLoginLimiter,
+  [
+    body('identifier').trim().isLength({ min: 3, max: 254 }),
+    body('password').isLength({ min: 1, max: 100 }),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { identifier, password } = req.body;
+      const isEmail = identifier.includes('@');
+
+      if (isEmail) {
+        // Customer login path
+        const user = db.prepare('SELECT * FROM customer_accounts WHERE LOWER(email) = LOWER(?)').get(identifier);
+
+        if (!user) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        if (isAccountLocked(user)) {
+          return res.status(423).json({ error: 'Account is temporarily locked due to too many failed login attempts. Please try again later.' });
+        }
+
+        const isValid = await bcrypt.compare(password, user.password_hash);
+
+        if (!isValid) {
+          const lockoutResult = handleFailedCustomerLogin(user.id);
+          logActivity('customer_account', user.id, 'login_failed', { ip: req.ip }, null);
+          if (lockoutResult.locked) {
+            return res.status(423).json({ error: 'Account locked due to too many failed login attempts. Please try again in 30 minutes.' });
+          }
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        db.prepare('UPDATE customer_accounts SET failed_login_attempts = 0, lockout_until = NULL, last_login_at = datetime(\'now\') WHERE id = ?').run(user.id);
+
+        req.session.regenerate((err) => {
+          if (err) return res.status(500).json({ error: 'Internal server error' });
+          req.session.customerUserId = user.id;
+          req.session.customerEmail = user.email;
+          req.session.isCustomer = true;
+          logActivity('customer_account', user.id, 'login_success', { ip: req.ip }, null);
+          res.json({ message: 'Login successful', role: 'customer', redirectTo: 'account.html' });
+        });
+
+      } else {
+        // Admin login path
+        const user = db.prepare('SELECT * FROM users WHERE username = ?').get(identifier);
+
+        if (!user) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const isValid = await bcrypt.compare(password, user.password_hash);
+
+        if (!isValid) {
+          logActivity('user', user.id, 'login_failed', { ip: req.ip }, null);
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        req.session.regenerate((err) => {
+          if (err) return res.status(500).json({ error: 'Internal server error' });
+          req.session.userId = user.id;
+          req.session.username = user.username;
+          req.session.role = user.role;
+          logActivity('user', user.id, 'login_success', { ip: req.ip }, user.id);
+          res.json({ message: 'Login successful', role: 'admin', redirectTo: 'admin.html' });
+        });
+      }
+    } catch (err) {
+      console.error('Unified login error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
 
 // ---------------------------------------------------------------------------
 // CUSTOMER AUTH routes

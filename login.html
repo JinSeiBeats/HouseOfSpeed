@@ -57,8 +57,8 @@
 
                 <form id="loginForm" class="auth-form" novalidate>
                     <div class="form-group">
-                        <label for="login-email">EMAIL</label>
-                        <input type="email" id="login-email" name="email" required autocomplete="email">
+                        <label for="login-identifier">EMAIL OR USERNAME</label>
+                        <input type="text" id="login-identifier" name="identifier" required autocomplete="username" inputmode="email">
                     </div>
                     <div class="form-group">
                         <label for="login-password">PASSWORD</label>
@@ -178,13 +178,22 @@
     (function() {
         'use strict';
 
-        // Redirect if already logged in
+        // Redirect if already logged in (check both customer and admin sessions)
         (async function() {
             var authCheck = await HOS_AUTH_BACKEND.checkAuth();
             if (authCheck.authenticated) {
                 window.location.href = 'account.html';
                 return;
             }
+            // Also check admin session
+            try {
+                var adminCheck = await fetch('/api/auth/check', { credentials: 'include' });
+                var adminData = await adminCheck.json();
+                if (adminData.authenticated) {
+                    window.location.href = 'admin.html';
+                    return;
+                }
+            } catch (e) {}
         })();
 
         var loginForm = document.getElementById('loginForm');
@@ -212,24 +221,36 @@
             btn.textContent = 'SIGNING IN...';
 
             try {
-                var email = document.getElementById('login-email').value.trim();
+                var identifier = document.getElementById('login-identifier').value.trim();
                 var password = document.getElementById('login-password').value;
-                await HOS_AUTH_BACKEND.signIn(email, password);
 
-                // Show success message
+                var response = await fetch('/api/auth/unified-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ identifier: identifier, password: password })
+                });
+
+                var data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Invalid credentials');
+                }
+
                 errorEl.style.display = 'block';
                 errorEl.style.borderColor = 'var(--hos-gold)';
                 errorEl.style.color = 'var(--hos-gold)';
                 errorEl.textContent = 'Welcome back!';
 
                 setTimeout(function() {
-                    window.location.href = 'account.html';
+                    window.location.href = data.redirectTo;
                 }, 500);
             } catch (err) {
-                var errorMsg = err.message || 'Invalid email or password';
-                // Handle specific error cases
+                var errorMsg = err.message || 'Invalid credentials';
                 if (errorMsg.includes('Too many')) {
                     errorMsg = 'Too many login attempts. Please try again later.';
+                } else if (errorMsg.includes('locked')) {
+                    errorMsg = 'Account is temporarily locked. Please try again later.';
                 } else if (errorMsg.includes('Unable to connect')) {
                     errorMsg = 'Unable to connect to server. Please check your connection.';
                 }
