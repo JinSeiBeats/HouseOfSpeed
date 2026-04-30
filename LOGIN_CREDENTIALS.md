@@ -1,4 +1,4 @@
-# 🔐 HouseOfSpeed - Login Credentials Guide
+﻿# 🔐 HouseOfSpeed - Login Credentials Guide
 
 ## Quick Reference
 
@@ -10,7 +10,7 @@
 
 ### 👤 **CLIENT PORTAL** (Customer Access)
 - **URL**: http://localhost:3000/client-login.html
-- **Email**: `customer@houseofspeed.dk`
+- **Email**: `customer@houseofspeed.nl`
 - **Password**: `Customer123!`
 - **Purpose**: Customer account and orders
 
@@ -71,7 +71,7 @@ Role:     Administrator
 ### Access Information
 ```
 URL:      http://localhost:3000/client-login.html
-Email:    customer@houseofspeed.dk
+Email:    customer@houseofspeed.nl
 Password: Customer123!
 Role:     Customer
 ```
@@ -164,7 +164,7 @@ VALUES (
   '$2a$13$HASH_HERE',  -- Use bcrypt to generate hash
   'admin',
   'New Administrator',
-  'admin@houseofspeed.dk'
+  'admin@houseofspeed.nl'
 );
 ```
 
@@ -296,7 +296,7 @@ open http://localhost:3000/admin-login.html
 ### Open Client Portal:
 ```bash
 open http://localhost:3000/client-login.html
-# Login: customer@houseofspeed.dk / Customer123!
+# Login: customer@houseofspeed.nl / Customer123!
 ```
 
 ### Open Testing Dashboard:
@@ -318,7 +318,7 @@ curl http://localhost:3000/api/cars/stats
 | Portal | URL | Username/Email | Password | Purpose |
 |--------|-----|----------------|----------|---------|
 | **Admin** | `/admin-login.html` | `admin` | `AdminPass2024` | Business management |
-| **Client** | `/client-login.html` | `customer@houseofspeed.dk` | `Customer123!` | Customer portal |
+| **Client** | `/client-login.html` | `customer@houseofspeed.nl` | `Customer123!` | Customer portal |
 | **Public** | `/` | None | None | Browse & shop |
 | **Demo** | `demo-website.html` | Various | Various | Testing |
 
