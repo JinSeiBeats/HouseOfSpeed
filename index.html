@@ -563,14 +563,29 @@
                 validateField(this, document.getElementById('newsletterError'), 'email');
             });
 
-            newsletterForm.addEventListener('submit', function(e) {
+            newsletterForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-
-                if (validateField(newsletterEmail, document.getElementById('newsletterError'), 'email')) {
+                if (!validateField(newsletterEmail, document.getElementById('newsletterError'), 'email')) return;
+                const btn = newsletterForm.querySelector('.newsletter-btn');
+                btn.disabled = true;
+                btn.textContent = '...';
+                try {
+                    const res = await fetch('/api/newsletter', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: newsletterEmail.value.trim() })
+                    });
+                    const data = await res.json();
                     newsletterStatus.className = 'newsletter-status success';
-                    newsletterStatus.textContent = 'Thank you for subscribing!';
+                    newsletterStatus.textContent = data.message || 'Thank you for subscribing!';
                     newsletterForm.reset();
                     newsletterEmail.classList.remove('valid');
+                } catch (err) {
+                    newsletterStatus.className = 'newsletter-status error';
+                    newsletterStatus.textContent = 'Something went wrong. Please try again.';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'SUBSCRIBE';
                 }
             });
         })();

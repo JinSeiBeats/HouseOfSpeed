@@ -13,6 +13,7 @@ const { body, validationResult } = require('express-validator');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const morgan = require('morgan');
 
 // Migrations
 const customerAuthMigration = require('./migrations/001_customer_auth');
@@ -430,6 +431,20 @@ function logActivity(entityType, entityId, action, details, performedBy) {
 // ---------------------------------------------------------------------------
 const app = express();
 
+// ---------------------------------------------------------------------------
+// Logging
+// ---------------------------------------------------------------------------
+function serverLog(emoji, category, message, extra) {
+  const ts = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  console.log(`[${ts}] ${emoji} ${category.padEnd(14)} ${message}${extra ? ' | ' + extra : ''}`);
+}
+
+// HTTP request log — skip static assets to keep it readable
+morgan.token('ts', () => new Date().toISOString().replace('T', ' ').substring(0, 19));
+app.use(morgan('[:ts] → :method :url :status :response-time ms', {
+  skip: (req) => /\.(css|js|jpg|jpeg|png|gif|ico|woff|woff2|svg|map|webp|mp4|ttf|otf)$/i.test(req.url)
+}));
+
 // Validate required environment variables
 if (!process.env.SESSION_SECRET) {
   console.error('❌ ERROR: SESSION_SECRET environment variable is required!');
@@ -482,11 +497,14 @@ app.use(cors({
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-  message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  handler: (req, res) => {
+    serverLog('🚨', 'RATE LIMIT', `${req.method} ${req.url}`, `ip=${req.ip}`);
+    res.status(429).json({ error: 'Too many requests from this IP, please try again later.' });
+  }
 });
 app.use('/api/', limiter);
 
@@ -701,6 +719,7 @@ app.post('/api/auth/login',
       if (!isValid) {
         // Log failed attempt
         logActivity('user', user.id, 'login_failed', { ip: req.ip }, null);
+        serverLog('⚠️ ', 'LOGIN FAIL', `admin username="${username}"`, `ip=${req.ip}`);
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
@@ -717,6 +736,7 @@ app.post('/api/auth/login',
 
         // Log successful login
         logActivity('user', user.id, 'login_success', { ip: req.ip }, user.id);
+        serverLog('🔑', 'ADMIN LOGIN', `username="${user.username}" role="${user.role}"`, `ip=${req.ip}`);
 
         res.json({
           message: 'Login successful',
@@ -745,6 +765,7 @@ app.post('/api/auth/logout', (req, res) => {
     res.clearCookie('hos_session_id');
     if (userId) {
       logActivity('user', userId, 'logout', { ip: req.ip }, userId);
+      serverLog('👋', 'ADMIN LOGOUT', `userId=${userId}`, `ip=${req.ip}`);
     }
     res.json({ message: 'Logged out' });
   });
@@ -887,6 +908,7 @@ app.post('/api/customer/register',
 
         // Log account creation
         logActivity('customer_account', customerId, 'created', { email, ip: req.ip }, null);
+        serverLog('👤', 'NEW CUSTOMER', `email="${email}"`, `ip=${req.ip}`);
 
         // Fetch and return user data
         const user = db.prepare('SELECT id, email, first_name, last_name, phone, created_at FROM customer_accounts WHERE id = ?').get(customerId);
@@ -937,9 +959,11 @@ app.post('/api/customer/login',
         // Handle failed login
         const lockoutResult = handleFailedCustomerLogin(user.id);
         logActivity('customer_account', user.id, 'login_failed', { ip: req.ip }, null);
+        serverLog('⚠️ ', 'LOGIN FAIL', `customer email="${email}"`, `ip=${req.ip}`);
 
         if (lockoutResult.locked) {
           logActivity('customer_account', user.id, 'account_locked', { ip: req.ip, reason: 'Too many failed login attempts' }, null);
+          serverLog('🔒', 'ACCT LOCKED', `email="${email}"`, `ip=${req.ip}`);
           return res.status(423).json({
             error: 'Account locked due to too many failed login attempts. Please try again in 30 minutes.'
           });
@@ -965,6 +989,7 @@ app.post('/api/customer/login',
 
         // Log successful login
         logActivity('customer_account', user.id, 'login_success', { ip: req.ip }, null);
+        serverLog('🔐', 'CUST LOGIN', `email="${user.email}"`, `ip=${req.ip}`);
 
         res.json({
           message: 'Login successful',
@@ -990,6 +1015,7 @@ app.post('/api/customer/logout', (req, res) => {
 
   if (customerUserId) {
     logActivity('customer_account', customerUserId, 'logout', { ip: req.ip }, null);
+    serverLog('👋', 'CUST LOGOUT', `customerId=${customerUserId}`, `ip=${req.ip}`);
   }
 
   req.session.destroy((err) => {
@@ -1187,6 +1213,7 @@ app.get('/api/cars/:idOrSlug', (req, res) => {
     // Increment views
     db.prepare('UPDATE cars SET views_count = views_count + 1 WHERE id = ?').run(car.id);
     car.views_count += 1;
+    serverLog('🚗', 'CAR VIEW', `"${car.title}" (id=${car.id}, total=${car.views_count})`, `ip=${req.ip}`);
 
     // Attach images
     const images = db.prepare('SELECT * FROM car_images WHERE car_id = ? ORDER BY is_primary DESC, sort_order ASC').all(car.id);
@@ -1321,6 +1348,7 @@ app.post('/api/cars/:id/inquire',
       recalcLeadScore(customer.id);
 
       logActivity('inquiry', inqResult.lastInsertRowid, 'created', { car_id: car.id, customer_id: customer.id, ip: req.ip }, null);
+      serverLog('🔍', 'CAR INQUIRY', `car="${car.title}" from="${first_name} ${last_name}" contact="${email || phone}"`, `ip=${req.ip}`);
 
       res.status(201).json({ message: 'Inquiry submitted successfully', inquiry_id: inqResult.lastInsertRowid });
     } catch (err) {
@@ -1375,10 +1403,48 @@ app.post('/api/contact',
 
       recalcLeadScore(customer.id);
       logActivity('inquiry', inqResult.lastInsertRowid, 'created', { source: 'contact_form', customer_id: customer.id, ip: req.ip }, null);
+      serverLog('📧', 'CONTACT FORM', `from="${name}" <${email}>`, `ip=${req.ip}`);
 
       res.status(201).json({ message: 'Your message has been sent successfully.' });
     } catch (err) {
       console.error('POST /api/contact error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+// POST /api/newsletter - Newsletter subscription
+const newsletterLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  message: 'Too many newsletter requests from this IP.',
+});
+
+app.post('/api/newsletter',
+  newsletterLimiter,
+  [body('email').trim().isEmail().normalizeEmail().withMessage('Valid email is required')],
+  validateRequest,
+  (req, res) => {
+    try {
+      const { email } = req.body;
+      const existing = db.prepare('SELECT id, newsletter_subscribed FROM customers WHERE LOWER(email) = LOWER(?)').get(email);
+      if (existing) {
+        if (existing.newsletter_subscribed) {
+          return res.json({ message: 'You are already subscribed to our newsletter.' });
+        }
+        db.prepare('UPDATE customers SET newsletter_subscribed = 1 WHERE id = ?').run(existing.id);
+        logActivity('customer', existing.id, 'newsletter_subscribe', { email, ip: req.ip }, null);
+        serverLog('📰', 'NEWSLETTER', `re-subscribed email="${email}"`, `ip=${req.ip}`);
+      } else {
+        const result = db.prepare(
+          'INSERT INTO customers (first_name, last_name, email, lead_source, newsletter_subscribed) VALUES (?, ?, ?, ?, 1)'
+        ).run('', '', email, 'newsletter');
+        logActivity('customer', result.lastInsertRowid, 'newsletter_subscribe', { email, ip: req.ip }, null);
+        serverLog('📰', 'NEWSLETTER', `new subscriber email="${email}"`, `ip=${req.ip}`);
+      }
+      res.json({ message: 'Successfully subscribed to our newsletter!' });
+    } catch (err) {
+      console.error('POST /api/newsletter error:', err);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -3193,9 +3259,20 @@ app.get('/api/admin/backup-db', requireAuth, (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// Multer error handler
+// 404 handler
 // ---------------------------------------------------------------------------
-app.use((err, _req, res, next) => {
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    serverLog('❓', '404', `${req.method} ${req.url}`, `ip=${req.ip}`);
+    return res.status(404).json({ error: 'Endpoint not found' });
+  }
+  next();
+});
+
+// ---------------------------------------------------------------------------
+// Error handler
+// ---------------------------------------------------------------------------
+app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({ error: 'File too large. Maximum size is 10 MB for images, 25 MB for documents.' });
@@ -3203,6 +3280,7 @@ app.use((err, _req, res, next) => {
     return res.status(400).json({ error: err.message });
   }
   if (err) {
+    serverLog('❌', 'SERVER ERROR', `${req.method} ${req.url} — ${err.message}`, `ip=${req.ip}`);
     console.error('Unhandled error:', err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }
