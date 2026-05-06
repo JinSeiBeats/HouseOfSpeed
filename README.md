@@ -1,4 +1,4 @@
-# House Of Speed Website
+﻿# House Of Speed Website
 
 A high-performance, accessible website for House Of Speed - a sanctuary for motor connoisseurs in Vejle, Denmark.
 
@@ -172,7 +172,7 @@ terser scripts.js -o scripts.min.js --compress --mangle
    Create `_redirects` file:
    ```
    # Redirect www to non-www
-   https://www.houseofspeed.dk/* https://houseofspeed.dk/:splat 301!
+   https://www.houseofspeed.nl/* https://houseofspeed.nl/:splat 301!
 
    # 404 handling
    /* /404.html 404
@@ -329,7 +329,7 @@ vercel --prod
 ```bash
 # Lighthouse CLI
 npm install -g lighthouse
-lighthouse https://houseofspeed.dk --view
+lighthouse https://houseofspeed.nl --view
 
 # Target Scores:
 # Performance: >90
@@ -434,4 +434,4 @@ Built with vanilla HTML, CSS, and JavaScript - no frameworks, maximum performanc
 
 ---
 
-For questions or support, contact: info@houseofspeed.dk
+For questions or support, contact: info@houseofspeed.nl

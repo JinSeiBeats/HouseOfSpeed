@@ -51,8 +51,8 @@ const HOS_AUTH_BACKEND = (function() {
         body: JSON.stringify({
           email,
           password,
-          firstName,
-          lastName,
+          first_name: firstName,
+          last_name: lastName,
           phone
         })
       });

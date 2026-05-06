@@ -384,8 +384,8 @@
 
                 var response = await fetch(contactForm.action, {
                     method: 'POST',
-                    body: new FormData(contactForm),
-                    headers: { 'Accept': 'application/json' }
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {
@@ -663,32 +663,32 @@
             nav_contact: 'CONTACT',
 
             // Hero
-            hero_title: 'WELCOME TO HOUSE OF SPEED',
+            hero_title: 'WHERE THE FINEST AUTOMOBILES FIND THEIR NEXT OWNER',
 
             // About Section
-            about_title: 'A SANCTUARY FOR MOTOR CONNOISSEURS',
-            about_intro1: 'At HOUSE OF SPEED, we treasure international clients and partnerships. Therefore, we encourage you to reach out to us by using our contact form, sending us an e-mail, or giving us a call.',
-            about_intro2: 'In the meantime, you can read more about HOUSE OF SPEED right here.',
-            about_quote: '"Since I was a child, cars have been a significant part of my life. I treasure the mechanic, the exclusivity, the design, and the overwhelming power of the engine. At my estate, Rohden Gods, we have had our family garage for many years and held many events for other enthusiasts. It was here the idea of HOUSE OF SPEED arose."',
-            about_mission1: 'A garage is more than just a place to store your car. It is a place to share your passion. And that is why HOUSE OF SPEED was created to behold all elements that an assembly point for motor connoisseurs must hold.',
-            about_mission2: 'We have endeavored to develop supreme frames for ideal storage, modern workshops, social gatherings, and a space for inspiration and room to focus on the vehicle as a passion. HOUSE OF SPEED is an exclusive network with space to immerse in those elements which make each car unique. Furthermore, we provide easy access to world-class professionals who help solve all your wishes and ambitions for your vehicle.',
-            about_focus: 'Our activities focus on four main areas: Sales, Service, Storage, and Social.',
+            about_title: 'HOUSE OF SPEED',
+            about_intro1: 'House Of Speed was founded by Louaie El Rowidi and Kevin Maas — two entrepreneurs who share an unconditional passion for the exceptional automobile. Their conviction: the world\'s finest cars deserve more than a transaction.',
+            about_intro2: 'From Almere, The Netherlands, we source and deliver exclusive vehicles to collectors and enthusiasts across the globe. Every acquisition is personal. Every detail is handled with discretion.',
+            about_quote: '',
+            about_mission1: 'House Of Speed is not a showroom. It is a destination — for those who understand that an exceptional automobile is not merely purchased, but found.',
+            about_mission2: 'We have built an international network of partners, collectors, and specialists to ensure every client finds exactly what they seek. Whether you are acquiring, consigning, storing, or simply exploring — we handle everything with the care your vehicle deserves.',
+            about_focus: 'Everything we do centres on four pillars: Sales, Service, Storage, and Private Events.',
 
             // Sales Section
             sales_title: 'SALES',
-            sales_text: 'At HOUSE OF SPEED, we collaborate with a range of carefully selected business partners who offers sales and leasing of classic- and luxury vehicles. Besides our external partners, we furthermore operate our own sales department, SALES GARAGE, as well as an official dealership of brands such as Rolls-Royce, Lotus, KALMAR Automotive, Dallara Stradale, and Morgan.',
+            sales_text: 'House Of Speed represents the full spectrum of the world\'s most exclusive automotive marques. We source, verify, and deliver — from our facility in Almere to any destination worldwide. Whether you seek a specific model or wish to explore what is currently available, our team handles every detail with complete discretion.',
 
             // Service Section
             service_title: 'SERVICE',
-            service_text: 'Our world-class workshop facilities provide comprehensive service for classic and luxury vehicles. From routine maintenance to complete restorations, our expert technicians deliver exceptional craftsmanship and attention to detail.',
+            service_text: 'Every vehicle that enters our workshop leaves in better condition than it arrived. Our technicians work exclusively with exceptional automobiles — the expertise, tools, and standards that entails are not found elsewhere.',
 
             // Storage Section
             storage_title: 'STORAGE',
-            storage_text: 'Our exclusive storage facility offers the perfect environment for your prized vehicles. Climate-controlled spaces, 24/7 security monitoring, and discrete access ensure your collection is preserved in optimal conditions. Each space is designed to accommodate the unique needs of classic and luxury automobile enthusiasts.',
+            storage_text: 'Your vehicle deserves more than a parking space. Our climate-controlled facility offers secure, monitored storage with limited availability — each car receives individual attention, regular condition checks, and battery conditioning. Enquire for terms and availability.',
 
             // Social Section
-            social_title: 'SOCIAL',
-            social_text: 'HOUSE OF SPEED is more than a garage -- it\'s a community. Join fellow enthusiasts for exclusive events, car meets, and social gatherings. From intimate dinner parties surrounded by automotive excellence to larger networking events, we create moments that celebrate the passion we all share for exceptional automobiles.',
+            social_title: 'PRIVATE EVENTS',
+            social_text: 'House Of Speed opens its doors to a select circle. Our private events bring together collectors, connoisseurs, and those who simply appreciate the extraordinary — for viewings, networking, and moments worth sharing. Invitation and appointment only.',
 
             // Contact Section
             contact_title: 'CONTACT US',
@@ -723,7 +723,7 @@
             newsletter_btn: 'SUBSCRIBE',
 
             // Footer
-            footer_tagline: 'A sanctuary for motor connoisseurs since 2016',
+            footer_tagline: 'Where the finest automobiles find their next owner',
             footer_quick_links: 'QUICK LINKS',
             footer_about: 'About Us',
             footer_storage: 'Storage',
@@ -744,19 +744,19 @@
             footer_copyright: '\u00A9 2025 House Of Speed B.V. All rights reserved.',
 
             // About Page
-            about_hero_title: 'A SANCTUARY FOR MOTORCONNAISSEURS',
-            about_focus_text: 'Our activities focus on the following four main areas:',
+            about_hero_title: 'WHERE THE FINEST AUTOMOBILES FIND THEIR NEXT OWNER',
+            about_focus_text: 'Everything we do centres on four pillars:',
             about_card_sales: 'Sales',
-            about_card_sales_text: 'Carefully curated classic and luxury vehicles from trusted partners and our own exclusive dealership.',
+            about_card_sales_text: 'Every vehicle we represent is hand-selected. We source and deliver the world\'s most exclusive marques to clients across the globe.',
             about_card_learn_more: 'Learn More \u2192',
             about_card_storage: 'Storage',
-            about_card_storage_text: 'Premium climate-controlled storage facilities for your most prized vehicles.',
+            about_card_storage_text: 'Climate-controlled, monitored storage in Almere for vehicles that demand the finest care. Limited availability.',
             about_card_learn_more2: 'Learn More \u2192',
             about_card_service: 'Service',
-            about_card_service_text: 'World-class workshop with expert technicians for maintenance and restoration.',
+            about_card_service_text: 'Expert technicians working exclusively with exceptional automobiles \u2014 from scheduled maintenance to full restoration.',
             about_card_learn_more3: 'Learn More \u2192',
-            about_card_events: 'Events',
-            about_card_events_text: 'Exclusive gatherings for motor enthusiasts to share their passion.',
+            about_card_events: 'Private Events',
+            about_card_events_text: 'Private gatherings at our facility for collectors and connoisseurs. By invitation and appointment only.',
             about_card_learn_more4: 'Learn More \u2192',
 
             // Cart Page
@@ -829,8 +829,8 @@
 
             // Partners Page
             partners_hero_title: 'OUR PARTNERS',
-            partners_section_title: 'OFFICIAL DEALERSHIP & PARTNERSHIPS',
-            partners_intro: 'House Of Speed is proud to serve as an official dealership for some of the world\'s most prestigious automotive brands. Our partnerships ensure access to exclusive vehicles and world-class service.',
+            partners_section_title: 'OUR NETWORK',
+            partners_intro: 'House Of Speed sources and represents vehicles across the full spectrum of the world\'s most exclusive marques. Our network spans manufacturers, private collections, and specialist partners — giving our clients access to automobiles rarely found through conventional channels.',
             partners_rr_text: 'Official dealer for Rolls-Royce Motor Cars, offering the pinnacle of luxury automotive excellence.',
             partners_lotus_text: 'Authorized Lotus dealer, bringing British engineering and performance to the Netherlands.',
             partners_morgan_text: 'Exclusive Morgan dealership, celebrating timeless British craftsmanship.',
@@ -866,27 +866,27 @@
 
             // Services Page
             services_sales_title: 'SALES',
-            services_sales_text: 'At HOUSE OF SPEED, we collaborate with a range of carefully selected business partners who offers sales and leasing of classic- and luxury vehicles. Besides our external partners, we furthermore operate our own sales department, SALES GARAGE, as well as an official dealership of brands such as Rolls-Royce, Lotus, KALMAR Automotive, Dallara Stradale, and Morgan.',
-            services_sales_cta: 'Inquire About Available Vehicles',
+            services_sales_text: 'House Of Speed sources and represents the full spectrum of the world\'s most exclusive automotive marques. We handle acquisition, consignment, and delivery — from our facility in Almere to any destination worldwide. Every transaction is managed with absolute discretion.',
+            services_sales_cta: 'Enquire About a Vehicle',
             services_service_title: 'SERVICE',
-            services_service_text: 'Our world-class workshop facilities provide comprehensive service for classic and luxury vehicles. From routine maintenance to complete restorations, our expert technicians deliver exceptional craftsmanship and attention to detail.',
-            services_service_item1: 'Regular maintenance and servicing',
-            services_service_item2: 'Complete restoration projects',
-            services_service_item3: 'Performance upgrades',
-            services_service_item4: 'Paint and bodywork',
+            services_service_text: 'Every vehicle that enters our workshop leaves in better condition than it arrived. Our technicians work exclusively with exceptional automobiles — the expertise, tools, and standards required cannot be substituted.',
+            services_service_item1: 'Scheduled maintenance and technical inspection',
+            services_service_item2: 'Full restoration and recommissioning',
+            services_service_item3: 'Performance optimisation',
+            services_service_item4: 'Paint correction and bodywork',
             services_service_item5: 'Interior refurbishment',
-            services_service_item6: 'Pre-purchase inspections',
-            services_service_cta: 'Schedule Service',
-            services_events_title: 'MEETINGS & EVENTS',
-            services_events_text: 'House Of Speed hosts exclusive events for motor enthusiasts throughout the year. From intimate gatherings to large-scale exhibitions, our facilities provide the perfect backdrop for celebrating automotive excellence.',
+            services_service_item6: 'Pre-purchase inspection',
+            services_service_cta: 'Request a Service Appointment',
+            services_events_title: 'PRIVATE EVENTS',
+            services_events_text: 'House Of Speed opens its doors to a select circle of automotive enthusiasts. Our private events bring together collectors, connoisseurs, and those who simply appreciate the extraordinary — for viewings, networking, and experiences that cannot be found elsewhere.',
             services_event_private: 'Private Viewings',
-            services_event_private_text: 'Exclusive access to our collection and available vehicles for serious collectors.',
-            services_event_meets: 'Car Meets',
-            services_event_meets_text: 'Monthly gatherings where enthusiasts share their passion and showcase their vehicles.',
-            services_event_workshop: 'Workshop Events',
-            services_event_workshop_text: 'Educational sessions with our expert technicians and industry professionals.',
-            services_events_cta_text: 'Interested in attending our next event?',
-            services_events_cta_btn: 'Get in Touch',
+            services_event_private_text: 'Exclusive access to exceptional vehicles, available by appointment for serious collectors and buyers.',
+            services_event_meets: 'Networking Events',
+            services_event_meets_text: 'Intimate gatherings at our facility — where collectors meet, conversation happens, and deals are made.',
+            services_event_workshop: 'Specialist Evenings',
+            services_event_workshop_text: 'In-depth sessions with industry specialists — for those who want to go deeper into automotive knowledge and provenance.',
+            services_events_cta_text: 'Interested in joining our next private event?',
+            services_events_cta_btn: 'Request an Invitation',
 
             // Shop Page
             shop_hero_title: 'THE HOUSE OF SPEED STORE',
@@ -908,19 +908,19 @@
             shop_banner_secure_text: 'Encrypted payment processing',
 
             // Storage Page
-            storage_hero_title: 'PREMIUM VEHICLE STORAGE',
-            storage_section_title: 'SECURE & CLIMATE-CONTROLLED FACILITIES',
-            storage_intro: 'Our state-of-the-art storage facilities provide the perfect environment for preserving your prized vehicles. Each space is carefully monitored and maintained to ensure your investment remains in pristine condition.',
+            storage_hero_title: 'YOUR VEHICLE. PRESERVED.',
+            storage_section_title: 'STORAGE FOR VEHICLES THAT DESERVE IT',
+            storage_intro: 'Our climate-controlled facility in Almere provides secure, monitored storage for vehicles that demand the finest care. Availability is limited. Each stored vehicle receives individual attention, regular condition checks, and battery conditioning throughout its time with us.',
             storage_climate_title: 'Climate Control',
-            storage_climate_text: 'Temperature and humidity controlled environment',
+            storage_climate_text: 'Constant temperature and humidity — optimal conditions for paint, leather, and mechanical components.',
             storage_security_title: '24/7 Security',
-            storage_security_text: 'Advanced surveillance and access control systems',
+            storage_security_text: '24/7 surveillance, controlled access, and full insurance coverage.',
             storage_maintenance_title: 'Maintenance Service',
-            storage_maintenance_text: 'Regular checks and battery conditioning available',
+            storage_maintenance_text: 'Regular condition checks, battery conditioning, and tyre pressure monitoring.',
             storage_access_title: 'Flexible Access',
-            storage_access_text: 'Visit your vehicle anytime with advance notice',
-            storage_cta_text: 'Inquire about storage availability and pricing',
-            storage_cta_btn: 'Contact Us',
+            storage_access_text: 'Access your vehicle when you need it — with prior arrangement.',
+            storage_cta_text: 'Enquire about availability and terms',
+            storage_cta_btn: 'Get in Touch',
 
             // Terms Page
             terms_title: 'TERMS & CONDITIONS',
@@ -961,32 +961,32 @@
             nav_contact: 'CONTACT',
 
             // Hero
-            hero_title: 'WELKOM BIJ HOUSE OF SPEED',
+            hero_title: 'WAAR DE MOOISTE AUTO\'S HUN VOLGENDE EIGENAAR VINDEN',
 
             // About Section
-            about_title: 'EEN TOEVLUCHTSOORD VOOR AUTOLIEFHEBBERS',
-            about_intro1: 'Bij HOUSE OF SPEED koesteren wij internationale klanten en partnerschappen. Daarom moedigen wij u aan om contact met ons op te nemen via ons contactformulier, een e-mail te sturen of ons te bellen.',
-            about_intro2: 'In de tussentijd kunt u hier meer lezen over HOUSE OF SPEED.',
-            about_quote: '"Sinds mijn kindertijd zijn auto\'s een belangrijk onderdeel van mijn leven geweest. Ik koester de techniek, de exclusiviteit, het design en de overweldigende kracht van de motor. Op mijn landgoed, Rohden Gods, hebben we al jarenlang onze familiegarage gehad en vele evenementen georganiseerd voor andere enthousiastelingen. Hier ontstond het idee van HOUSE OF SPEED."',
-            about_mission1: 'Een garage is meer dan alleen een plek om je auto te stallen. Het is een plek om je passie te delen. En daarom is HOUSE OF SPEED opgericht om alle elementen te bevatten die een ontmoetingspunt voor autoliefhebbers moet hebben.',
-            about_mission2: 'Wij hebben ons ingespannen om uitstekende faciliteiten te ontwikkelen voor ideale opslag, moderne werkplaatsen, sociale bijeenkomsten en een ruimte voor inspiratie en aandacht voor het voertuig als passie. HOUSE OF SPEED is een exclusief netwerk met ruimte om je te verdiepen in de elementen die elke auto uniek maken. Bovendien bieden wij gemakkelijk toegang tot professionals van wereldklasse die helpen al uw wensen en ambities voor uw voertuig te vervullen.',
-            about_focus: 'Onze activiteiten richten zich op vier hoofdgebieden: Verkoop, Service, Opslag en Sociaal.',
+            about_title: 'HOUSE OF SPEED',
+            about_intro1: 'House Of Speed is opgericht door Louaie El Rowidi en Kevin Maas — twee ondernemers die een onvoorwaardelijke passie delen voor de uitzonderlijke automobiel. Hun overtuiging: de mooiste auto\'s ter wereld verdienen meer dan een transactie.',
+            about_intro2: 'Vanuit Almere leveren wij exclusieve voertuigen aan verzamelaars en enthousiastelingen wereldwijd. Elke acquisitie is persoonlijk. Elk detail wordt met discretie afgehandeld.',
+            about_quote: '',
+            about_mission1: 'House Of Speed is geen showroom. Het is een bestemming — voor degenen die begrijpen dat een uitzonderlijke automobiel niet simpelweg wordt gekocht, maar gevonden.',
+            about_mission2: 'Wij hebben een internationaal netwerk opgebouwd van partners, verzamelaars en specialisten om elke klant te helpen precies te vinden wat hij zoekt. Of u nu wilt aankopen, in consignatie geven, opslaan of simpelweg verkennen — wij regelen alles met de zorg die uw voertuig verdient.',
+            about_focus: 'Alles wat wij doen draait om vier pijlers: Verkoop, Service, Opslag en Privé-evenementen.',
 
             // Sales Section
             sales_title: 'VERKOOP',
-            sales_text: 'Bij HOUSE OF SPEED werken wij samen met een reeks zorgvuldig geselecteerde zakenpartners die verkoop en leasing van klassieke en luxe voertuigen aanbieden. Naast onze externe partners beheren wij bovendien onze eigen verkoopafdeling, SALES GARAGE, evenals een officieel dealerschap van merken zoals Rolls-Royce, Lotus, KALMAR Automotive, Dallara Stradale en Morgan.',
+            sales_text: 'House Of Speed vertegenwoordigt het volledige spectrum van \'s werelds meest exclusieve automerken. Wij sourcen, verifiëren en leveren — vanuit onze vestiging in Almere naar elke bestemming wereldwijd. Of u nu een specifiek model zoekt of onze huidige collectie wilt verkennen, ons team handelt elk detail af met volledige discretie.',
 
             // Service Section
             service_title: 'SERVICE',
-            service_text: 'Onze werkplaatsfaciliteiten van wereldklasse bieden uitgebreide service voor klassieke en luxe voertuigen. Van routinematig onderhoud tot volledige restauraties, onze deskundige technici leveren uitzonderlijk vakmanschap en oog voor detail.',
+            service_text: 'Elk voertuig dat onze werkplaats binnenkomt, verlaat die in betere staat dan het aankwam. Onze technici werken uitsluitend met uitzonderlijke auto\'s — de expertise, gereedschappen en standaarden die dat vereist, zijn nergens anders te vinden.',
 
             // Storage Section
             storage_title: 'OPSLAG',
-            storage_text: 'Onze exclusieve opslagfaciliteit biedt de perfecte omgeving voor uw gekoesterde voertuigen. Klimaatgecontroleerde ruimtes, 24/7 beveiligingsbewaking en discrete toegang zorgen ervoor dat uw collectie in optimale omstandigheden bewaard blijft. Elke ruimte is ontworpen om aan de unieke behoeften van klassieke en luxe autoliefhebbers te voldoen.',
+            storage_text: 'Uw voertuig verdient meer dan een parkeerplaats. Onze klimaatgecontroleerde faciliteit biedt beveiligde, bewaakte opslag met beperkte beschikbaarheid — elk voertuig ontvangt individuele aandacht, regelmatige conditiecontroles en batterijconditionering. Informeer naar voorwaarden en beschikbaarheid.',
 
             // Social Section
-            social_title: 'SOCIAAL',
-            social_text: 'HOUSE OF SPEED is meer dan een garage -- het is een gemeenschap. Sluit u aan bij mede-enthousiastelingen voor exclusieve evenementen, autobijeenkomsten en sociale bijeenkomsten. Van intieme dinnerparty\'s omringd door automobiele excellentie tot grotere netwerkevenementen, wij creeren momenten die de passie vieren die wij allen delen voor uitzonderlijke auto\'s.',
+            social_title: 'PRIVÉ-EVENEMENTEN',
+            social_text: 'House Of Speed opent zijn deuren voor een selecte kring. Onze privé-evenementen brengen verzamelaars, kenners en liefhebbers samen — voor bezichtigingen, netwerken en momenten die het waard zijn te delen. Alleen op uitnodiging en afspraak.',
 
             // Contact Section
             contact_title: 'NEEM CONTACT OP',
@@ -1021,7 +1021,7 @@
             newsletter_btn: 'INSCHRIJVEN',
 
             // Footer
-            footer_tagline: 'Een toevluchtsoord voor autoliefhebbers sinds 2016',
+            footer_tagline: 'Waar de mooiste auto\'s hun volgende eigenaar vinden',
             footer_quick_links: 'SNELLE LINKS',
             footer_about: 'Over Ons',
             footer_storage: 'Opslag',
@@ -1042,19 +1042,19 @@
             footer_copyright: '\u00A9 2025 House Of Speed B.V. Alle rechten voorbehouden.',
 
             // About Page
-            about_hero_title: 'EEN TOEVLUCHTSOORD VOOR AUTOLIEFHEBBERS',
-            about_focus_text: 'Onze activiteiten richten zich op de volgende vier hoofdgebieden:',
+            about_hero_title: 'WAAR DE MOOISTE AUTO\'S HUN VOLGENDE EIGENAAR VINDEN',
+            about_focus_text: 'Alles wat wij doen draait om vier pijlers:',
             about_card_sales: 'Verkoop',
-            about_card_sales_text: 'Zorgvuldig geselecteerde klassieke en luxe voertuigen van vertrouwde partners en ons eigen exclusieve dealerschap.',
+            about_card_sales_text: 'Elk voertuig dat wij vertegenwoordigen is met de hand geselecteerd. Wij sourcen en leveren de meest exclusieve merken ter wereld aan klanten wereldwijd.',
             about_card_learn_more: 'Meer informatie \u2192',
             about_card_storage: 'Opslag',
-            about_card_storage_text: 'Premium klimaatgecontroleerde opslagfaciliteiten voor uw meest gekoesterde voertuigen.',
+            about_card_storage_text: 'Klimaatgecontroleerde, bewaakte opslag in Almere voor voertuigen die de allerbeste zorg verdienen. Beperkte beschikbaarheid.',
             about_card_learn_more2: 'Meer informatie \u2192',
             about_card_service: 'Service',
-            about_card_service_text: 'Werkplaats van wereldklasse met deskundige technici voor onderhoud en restauratie.',
+            about_card_service_text: 'Deskundige technici die uitsluitend met uitzonderlijke auto\'s werken \u2014 van gepland onderhoud tot volledige restauratie.',
             about_card_learn_more3: 'Meer informatie \u2192',
-            about_card_events: 'Evenementen',
-            about_card_events_text: 'Exclusieve bijeenkomsten voor autoliefhebbers om hun passie te delen.',
+            about_card_events: 'Priv\u00e9-evenementen',
+            about_card_events_text: 'Priv\u00e9-bijeenkomsten op onze locatie voor verzamelaars en kenners. Alleen op uitnodiging en afspraak.',
             about_card_learn_more4: 'Meer informatie \u2192',
 
             // Cart Page
@@ -1127,8 +1127,8 @@
 
             // Partners Page
             partners_hero_title: 'ONZE PARTNERS',
-            partners_section_title: 'OFFICIEEL DEALERSCHAP & PARTNERSCHAPPEN',
-            partners_intro: 'House Of Speed is er trots op als officieel dealerschap te dienen voor enkele van de meest prestigieuze automerken ter wereld. Onze partnerschappen garanderen toegang tot exclusieve voertuigen en service van wereldklasse.',
+            partners_section_title: 'ONS NETWERK',
+            partners_intro: 'House Of Speed sourceert en vertegenwoordigt voertuigen van het volledige spectrum van \'s werelds meest exclusieve merken. Ons netwerk omvat fabrikanten, privécollecties en gespecialiseerde partners — waardoor onze klanten toegang krijgen tot auto\'s die via conventionele kanalen zelden te vinden zijn.',
             partners_rr_text: 'Officieel dealer voor Rolls-Royce Motor Cars, het toppunt van luxe automobiele excellentie.',
             partners_lotus_text: 'Geautoriseerd Lotus-dealer, Britse engineering en prestaties naar Nederland brengend.',
             partners_morgan_text: 'Exclusief Morgan-dealerschap, een viering van tijdloos Brits vakmanschap.',
@@ -1164,27 +1164,27 @@
 
             // Services Page
             services_sales_title: 'VERKOOP',
-            services_sales_text: 'Bij HOUSE OF SPEED werken wij samen met een reeks zorgvuldig geselecteerde zakenpartners die verkoop en leasing van klassieke en luxe voertuigen aanbieden. Naast onze externe partners beheren wij bovendien onze eigen verkoopafdeling, SALES GARAGE, evenals een officieel dealerschap van merken zoals Rolls-Royce, Lotus, KALMAR Automotive, Dallara Stradale en Morgan.',
-            services_sales_cta: 'Informeer naar beschikbare voertuigen',
+            services_sales_text: 'House Of Speed sourceert en vertegenwoordigt het volledige spectrum van \'s werelds meest exclusieve automerken. Wij regelen acquisitie, consignatie en levering \u2014 vanuit onze vestiging in Almere naar elke bestemming wereldwijd. Elke transactie wordt afgehandeld met volledige discretie.',
+            services_sales_cta: 'Informeer naar een voertuig',
             services_service_title: 'SERVICE',
-            services_service_text: 'Onze werkplaatsfaciliteiten van wereldklasse bieden uitgebreide service voor klassieke en luxe voertuigen. Van routinematig onderhoud tot volledige restauraties, onze deskundige technici leveren uitzonderlijk vakmanschap en oog voor detail.',
-            services_service_item1: 'Regulier onderhoud en service',
-            services_service_item2: 'Volledige restauratieprojecten',
-            services_service_item3: 'Prestatie-upgrades',
-            services_service_item4: 'Spuit- en carrosseriewerk',
-            services_service_item5: 'Interieurrestauratie',
-            services_service_item6: 'Aankoopkeuringen',
-            services_service_cta: 'Service plannen',
-            services_events_title: 'BIJEENKOMSTEN & EVENEMENTEN',
-            services_events_text: 'House Of Speed organiseert het hele jaar door exclusieve evenementen voor autoliefhebbers. Van intieme bijeenkomsten tot grootschalige tentoonstellingen, onze faciliteiten bieden het perfecte decor om automobiele excellentie te vieren.',
+            services_service_text: 'Elk voertuig dat onze werkplaats binnenkomt, verlaat die in betere staat dan het aankwam. Onze technici werken uitsluitend met uitzonderlijke auto\'s \u2014 de vereiste expertise, gereedschappen en standaarden zijn niet te vervangen.',
+            services_service_item1: 'Gepland onderhoud en technische inspectie',
+            services_service_item2: 'Volledige restauratie en inbedrijfstelling',
+            services_service_item3: 'Prestatieoptimalisatie',
+            services_service_item4: 'Lakcorrectie en carrosserie',
+            services_service_item5: 'Interieur restauratie',
+            services_service_item6: 'Aankoopinspectie',
+            services_service_cta: 'Service afspraak aanvragen',
+            services_events_title: 'PRIV\u00C9-EVENEMENTEN',
+            services_events_text: 'House Of Speed opent zijn deuren voor een selecte kring van autoliefhebbers. Onze priv\u00E9-evenementen brengen verzamelaars, kenners en liefhebbers samen \u2014 voor bezichtigingen, netwerken en ervaringen die nergens anders te vinden zijn.',
             services_event_private: 'Priv\u00E9bezichtigingen',
-            services_event_private_text: 'Exclusieve toegang tot onze collectie en beschikbare voertuigen voor serieuze verzamelaars.',
-            services_event_meets: 'Autotreffen',
-            services_event_meets_text: 'Maandelijkse bijeenkomsten waar enthousiastelingen hun passie delen en hun voertuigen tonen.',
-            services_event_workshop: 'Workshop evenementen',
-            services_event_workshop_text: 'Educatieve sessies met onze deskundige technici en professionals uit de branche.',
-            services_events_cta_text: 'Ge\u00EFnteresseerd in deelname aan ons volgende evenement?',
-            services_events_cta_btn: 'Neem contact op',
+            services_event_private_text: 'Exclusieve toegang tot uitzonderlijke voertuigen, op afspraak beschikbaar voor serieuze verzamelaars en kopers.',
+            services_event_meets: 'Netwerkevenementen',
+            services_event_meets_text: 'Intieme bijeenkomsten op onze locatie \u2014 waar verzamelaars elkaar ontmoeten, gesprekken plaatsvinden en deals worden gesloten.',
+            services_event_workshop: 'Specialistenavonden',
+            services_event_workshop_text: 'Diepgaande sessies met branchespecialisten \u2014 voor wie meer wil weten over automotive kennis en herkomst.',
+            services_events_cta_text: 'Ge\u00EFnteresseerd in ons volgende priv\u00E9-evenement?',
+            services_events_cta_btn: 'Uitnodiging aanvragen',
 
             // Shop Page
             shop_hero_title: 'DE HOUSE OF SPEED WINKEL',
@@ -1206,9 +1206,9 @@
             shop_banner_secure_text: 'Versleutelde betalingsverwerking',
 
             // Storage Page
-            storage_hero_title: 'PREMIUM VOERTUIGOPSLAG',
-            storage_section_title: 'BEVEILIGDE & KLIMAATGECONTROLEERDE FACILITEITEN',
-            storage_intro: 'Onze ultramoderne opslagfaciliteiten bieden de perfecte omgeving voor het behoud van uw gekoesterde voertuigen. Elke ruimte wordt zorgvuldig bewaakt en onderhouden om ervoor te zorgen dat uw investering in onberispelijke staat blijft.',
+            storage_hero_title: 'UW VOERTUIG. BEWAARD.',
+            storage_section_title: 'OPSLAG VOOR VOERTUIGEN DIE HET VERDIENEN',
+            storage_intro: 'Onze klimaatgecontroleerde faciliteit in Almere biedt beveiligde, bewaakte opslag voor voertuigen die de allerbeste zorg verdienen. De beschikbaarheid is beperkt. Elk opgeslagen voertuig ontvangt individuele aandacht, regelmatige conditiecontroles en batterijconditionering.',
             storage_climate_title: 'Klimaatbeheersing',
             storage_climate_text: 'Temperatuur- en vochtigheidsgecontroleerde omgeving',
             storage_security_title: '24/7 Beveiliging',
@@ -1216,8 +1216,8 @@
             storage_maintenance_title: 'Onderhoudsservice',
             storage_maintenance_text: 'Regelmatige controles en accuconditionering beschikbaar',
             storage_access_title: 'Flexibele toegang',
-            storage_access_text: 'Bezoek uw voertuig op elk moment met voorafgaande kennisgeving',
-            storage_cta_text: 'Informeer naar beschikbaarheid en prijzen van opslag',
+            storage_access_text: 'Toegang tot uw voertuig wanneer u het nodig heeft — op voorafgaande afspraak.',
+            storage_cta_text: 'Informeer naar beschikbaarheid en voorwaarden',
             storage_cta_btn: 'Neem contact op',
 
             // Terms Page

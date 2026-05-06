@@ -1,4 +1,4 @@
-# 🏢 What Are These Admin Portals?
+﻿# 🏢 What Are These Admin Portals?
 
 ## Simple Answer: You Have 3 Different Systems
 
@@ -214,7 +214,7 @@ Anyone can:
 ## 🎯 Visual Flow - How They Connect
 
 ```
-PUBLIC WEBSITE (www.houseofspeed.dk)
+PUBLIC WEBSITE (www.houseofspeed.nl)
 ↓
 Customer browses cars
 ↓
@@ -317,7 +317,7 @@ Sees:
 
 **Customer side (Public Website):**
 ```
-1. Visit www.houseofspeed.dk
+1. Visit www.houseofspeed.nl
 2. Browse vehicles
 3. Click on Ferrari F8 Tributo
 4. Fill inquiry form:
@@ -366,13 +366,13 @@ Login: admin / AdminPass2024
 ```
 Direct URL: http://localhost:3000/client-login.html
 Or from website: "My Account" link in header
-Login: customer@houseofspeed.dk / Customer123!
+Login: customer@houseofspeed.nl / Customer123!
 ```
 
 ### **Public Website** (Everyone)
 ```
 Direct URL: http://localhost:3000/
-Or: www.houseofspeed.dk (when deployed)
+Or: www.houseofspeed.nl (when deployed)
 No login needed
 ```
 
@@ -459,7 +459,7 @@ Try: Add a test vehicle
 **2. Test Client Portal:**
 ```bash
 open http://localhost:3000/client-login.html
-Login: customer@houseofspeed.dk / Customer123!
+Login: customer@houseofspeed.nl / Customer123!
 Try: Browse account features
 ```
 

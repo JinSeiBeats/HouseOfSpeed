@@ -228,7 +228,7 @@ async function api(url, options) {
     }
     try {
         const res = await fetch(url, options);
-        if (res.status === 401) { window.location.href = '/admin-login.html'; return null; }
+        if (res.status === 401) { window.location.href = '/login.html'; return null; }
         const data = await res.json().catch(function() { return null; });
         if (!res.ok) { showToast((data && data.error) || 'Request failed', 'error'); return null; }
         return data;
@@ -244,20 +244,20 @@ async function api(url, options) {
 async function checkAuth() {
     try {
         const res = await fetch('/api/auth/check', { credentials: 'include' });
-        if (!res.ok) { window.location.href = '/admin-login.html'; return; }
+        if (!res.ok) { window.location.href = '/login.html'; return; }
         const data = await res.json();
-        if (!data || !data.authenticated) { window.location.href = '/admin-login.html'; return; }
+        if (!data || !data.authenticated) { window.location.href = '/login.html'; return; }
         currentUser = data.user || data;
         document.getElementById('user-name').textContent = currentUser.name || currentUser.username || 'Admin';
         loadView('dashboard');
     } catch (e) {
-        window.location.href = '/admin-login.html';
+        window.location.href = '/login.html';
     }
 }
 
 async function handleLogout() {
     await api('/api/auth/logout', { method: 'POST' });
-    window.location.href = '/admin-login.html';
+    window.location.href = '/login.html';
 }
 
 // ============================================================

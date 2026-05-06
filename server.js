@@ -513,8 +513,19 @@ const customerRegisterLimiter = rateLimit({
   message: 'Too many registration attempts, please try again later.',
 });
 
+// Unified login rate limiter
+const unifiedLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many login attempts, please try again later.',
+  skipSuccessfulRequests: true,
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Trust Railway's reverse proxy so secure cookies work correctly
+app.set('trust proxy', 1);
 
 // Session configuration
 const isProduction = process.env.NODE_ENV === 'production';
@@ -533,6 +544,11 @@ app.use(session({
 
 // Serve uploaded images and documents
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Redirect old admin login page to unified login
+app.get('/admin-login.html', (req, res) => {
+  res.redirect(301, '/login.html');
+});
 
 // Serve frontend static files
 app.use(express.static(__dirname, { index: 'index.html' }));
@@ -740,6 +756,86 @@ app.get('/api/auth/check', (req, res) => {
   }
   res.status(401).json({ authenticated: false });
 });
+
+// ---------------------------------------------------------------------------
+// UNIFIED LOGIN route
+// ---------------------------------------------------------------------------
+app.post('/api/auth/unified-login',
+  unifiedLoginLimiter,
+  [
+    body('identifier').trim().isLength({ min: 3, max: 254 }),
+    body('password').isLength({ min: 1, max: 100 }),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { identifier, password } = req.body;
+      const isEmail = identifier.includes('@');
+
+      if (isEmail) {
+        // Customer login path
+        const user = db.prepare('SELECT * FROM customer_accounts WHERE LOWER(email) = LOWER(?)').get(identifier);
+
+        if (!user) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        if (isAccountLocked(user)) {
+          return res.status(423).json({ error: 'Account is temporarily locked due to too many failed login attempts. Please try again later.' });
+        }
+
+        const isValid = await bcrypt.compare(password, user.password_hash);
+
+        if (!isValid) {
+          const lockoutResult = handleFailedCustomerLogin(user.id);
+          logActivity('customer_account', user.id, 'login_failed', { ip: req.ip }, null);
+          if (lockoutResult.locked) {
+            return res.status(423).json({ error: 'Account locked due to too many failed login attempts. Please try again in 30 minutes.' });
+          }
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        db.prepare('UPDATE customer_accounts SET failed_login_attempts = 0, lockout_until = NULL, last_login_at = datetime(\'now\') WHERE id = ?').run(user.id);
+
+        req.session.regenerate((err) => {
+          if (err) return res.status(500).json({ error: 'Internal server error' });
+          req.session.customerUserId = user.id;
+          req.session.customerEmail = user.email;
+          req.session.isCustomer = true;
+          logActivity('customer_account', user.id, 'login_success', { ip: req.ip }, null);
+          res.json({ message: 'Login successful', role: 'customer', redirectTo: 'account.html' });
+        });
+
+      } else {
+        // Admin login path
+        const user = db.prepare('SELECT * FROM users WHERE username = ?').get(identifier);
+
+        if (!user) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const isValid = await bcrypt.compare(password, user.password_hash);
+
+        if (!isValid) {
+          logActivity('user', user.id, 'login_failed', { ip: req.ip }, null);
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        req.session.regenerate((err) => {
+          if (err) return res.status(500).json({ error: 'Internal server error' });
+          req.session.userId = user.id;
+          req.session.username = user.username;
+          req.session.role = user.role;
+          logActivity('user', user.id, 'login_success', { ip: req.ip }, user.id);
+          res.json({ message: 'Login successful', role: 'admin', redirectTo: 'admin.html' });
+        });
+      }
+    } catch (err) {
+      console.error('Unified login error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
 
 // ---------------------------------------------------------------------------
 // CUSTOMER AUTH routes
@@ -1229,6 +1325,60 @@ app.post('/api/cars/:id/inquire',
       res.status(201).json({ message: 'Inquiry submitted successfully', inquiry_id: inqResult.lastInsertRowid });
     } catch (err) {
       console.error('POST /api/cars/:id/inquire error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+// Rate limiter for contact form
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: 'Too many contact requests from this IP, please try again later.',
+  skipSuccessfulRequests: false,
+});
+
+// POST /api/contact - General contact form submission
+app.post('/api/contact',
+  contactLimiter,
+  [
+    body('name').trim().isLength({ min: 2, max: 100 }).escape().withMessage('Name must be 2-100 characters'),
+    body('email').trim().isEmail().normalizeEmail().withMessage('Valid email is required'),
+    body('message').trim().isLength({ min: 10, max: 2000 }).withMessage('Message must be 10-2000 characters'),
+    body('consent').custom(val => val === true || val === 'true' || val === 'on').withMessage('Consent is required'),
+  ],
+  validateRequest,
+  (req, res) => {
+    try {
+      const { name, email, message } = req.body;
+
+      const sanitizedMessage = sanitizeInput(message);
+
+      // Split name into first/last (best effort)
+      const nameParts = name.trim().split(/\s+/);
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ') || '-';
+
+      // Find or create customer record
+      let customer = db.prepare('SELECT * FROM customers WHERE email = ?').get(email);
+      if (!customer) {
+        const result = db.prepare(
+          'INSERT INTO customers (first_name, last_name, email, lead_source) VALUES (?, ?, ?, ?)'
+        ).run(firstName, lastName, email, 'website');
+        customer = db.prepare('SELECT * FROM customers WHERE id = ?').get(result.lastInsertRowid);
+        logActivity('customer', customer.id, 'created', { source: 'contact_form', ip: req.ip }, null);
+      }
+
+      const inqResult = db.prepare(
+        'INSERT INTO inquiries (car_id, customer_id, inquiry_type, message, source) VALUES (NULL, ?, ?, ?, ?)'
+      ).run(customer.id, 'general', sanitizedMessage, 'website');
+
+      recalcLeadScore(customer.id);
+      logActivity('inquiry', inqResult.lastInsertRowid, 'created', { source: 'contact_form', customer_id: customer.id, ip: req.ip }, null);
+
+      res.status(201).json({ message: 'Your message has been sent successfully.' });
+    } catch (err) {
+      console.error('POST /api/contact error:', err);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -3014,6 +3164,30 @@ app.put('/api/admin/reservations/:id', requireAuth, (req, res) => {
     res.json(db.prepare('SELECT * FROM reservations WHERE id = ?').get(req.params.id));
   } catch (err) {
     console.error('PUT /api/admin/reservations/:id error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /api/admin/backup-db - Download SQLite database backup
+app.get('/api/admin/backup-db', requireAuth, (req, res) => {
+  try {
+    const dbPath = process.env.DATABASE_PATH || './data/houseofspeed.db';
+    const absPath = path.resolve(dbPath);
+
+    if (!fs.existsSync(absPath)) {
+      return res.status(404).json({ error: 'Database file not found' });
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `houseofspeed-backup-${timestamp}.db`;
+
+    logActivity('system', 0, 'backup_downloaded', { filename, ip: req.ip }, req.session.userId);
+
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Type', 'application/octet-stream');
+    fs.createReadStream(absPath).pipe(res);
+  } catch (err) {
+    console.error('GET /api/admin/backup-db error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
