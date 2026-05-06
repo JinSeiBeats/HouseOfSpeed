@@ -372,7 +372,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .logo {
     text-decoration: none;
-    transition: transform var(--transition-base);
 }
 
 .logo-img {
@@ -389,7 +388,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo:hover {
-    transform: scale(1.05);
 }
 
 .logo-text {
@@ -1347,6 +1345,10 @@ h1, h2, h3, h4, h5, h6 {
     .navbar {
         padding: 0.75rem var(--spacing-sm);
         height: var(--nav-height);
+    }
+
+    .logo-img {
+        display: none;
     }
 
     .nav-left,
